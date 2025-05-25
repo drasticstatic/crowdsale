@@ -51,7 +51,7 @@ In the Progress.js component:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <em>This visual example shows correctly in VScode's .md preview but not on GitHub<p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Added Emoji-based representation to .md reference:</em>
+Added Emoji-based representation to .md for reference:</em>
 
         🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦⬜⬜⬜⬜⬜⬜⬜ 25%
 
