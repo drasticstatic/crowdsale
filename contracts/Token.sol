@@ -2,7 +2,8 @@
 pragma solidity ^0.8.0;
 
 // Note DAPPU Token from blockchain-developer-bootcamp repository:
-    // Deployed to: 0x202Be008122ba0EeedAe74Fe81D398f11c5534a8
+    // Deployed to: 0x202Be008122ba0EeedAe74Fe81D398f11c5534a8 on Sepolia
+// Initial deploymeent in hardhat is set to 0x5FbDB2315678afecb367f032d93F642f64180aa3
 
 import "hardhat/console.sol";
 

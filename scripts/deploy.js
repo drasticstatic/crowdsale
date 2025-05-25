@@ -19,7 +19,7 @@
             getContractFactory = Function to get a contract factory (used to deploy contracts) */
       
       /* HOW TO RUN THIS SCRIPT:
-       * npx hardhat run scripts/deploy.js --network localhost
+       ***** npx hardhat run scripts/deploy.js --network localhost *****
           ↑ This command runs the deploy.js script using Hardhat
           --network localhost = Specifies the network to use for deployment
             localhost = Local Ethereum network provided by Hardhat (for testing)
