@@ -1,5 +1,5 @@
 # App.js Documentation
-
+&nbsp;&nbsp;&nbsp;&nbsp;visit '../components/_w_notes/"".js' for code w/ embedded notes
 ## Overview
 The main React component for our DApp that handles:
 - Connecting to the Ethereum blockchain

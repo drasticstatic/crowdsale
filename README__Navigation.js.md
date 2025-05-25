@@ -1,5 +1,5 @@
 # Navigation.js Documentation
-
+&nbsp;&nbsp;&nbsp;&nbsp;visit '../components/_w_notes/"".js' for code w/ embedded notes
 ## Overview
 This file creates the navigation bar component that appears at the top of the DApp. It's a simple component that displays the logo and the name of the application, creating a consistent header across all pages.
 

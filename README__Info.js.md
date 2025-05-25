@@ -1,5 +1,5 @@
 # Info.js Documentation
-
+&nbsp;&nbsp;&nbsp;&nbsp;visit '../components/_w_notes/"".js' for code w/ embedded notes
 ## Overview
 This is a simple component that displays the user's Ethereum account address and token balance. It's a small but important part of the UI that shows users their blockchain information.
 

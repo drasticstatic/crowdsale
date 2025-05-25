@@ -1,4 +1,5 @@
 # Progress.js Documentation
+&nbsp;&nbsp;&nbsp;&nbsp;visit '../components/_w_notes/"".js' for code w/ embedded notes
 
 ## Overview
 This component shows a progress bar that visualizes how many tokens have been sold in the crowdsale. It helps users understand how much of the token sale is complete by providing both a visual representation and exact numbers.

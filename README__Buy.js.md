@@ -1,5 +1,5 @@
 # Buy.js Documentation
-
+&nbsp;&nbsp;&nbsp;&nbsp;visit '../components/_w_notes/"".js' for code w/ embedded notes
 ## Overview
 This component handles the token purchase functionality in the crowdsale application. It provides a user interface for buying tokens with ETH (Ethereum) and manages the transaction process.
 

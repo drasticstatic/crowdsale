@@ -1,5 +1,5 @@
 # Loading.js Documentation
-
+&nbsp;&nbsp;&nbsp;&nbsp;visit '../components/_w_notes/"".js' for code w/ embedded notes
 ## Overview
 This is a simple Loading component that shows a spinner and text to indicate that data is being loaded from the blockchain.
 
