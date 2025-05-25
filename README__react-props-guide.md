@@ -49,9 +49,9 @@ In the Progress.js component:
 </div>
 <p style="text-align:center;">250000 / 1000000 Tokens sold</p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<em>This visual example shows correctly in VScode .md preview but not on GitHub<p>
+<em>This visual example shows correctly in VScode's .md preview but not on GitHub<p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Added Emoji-based representation for .md reference:</em>
+Added Emoji-based representation to .md reference:</em>
 
         🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦⬜⬜⬜⬜⬜⬜⬜ 25%
 
