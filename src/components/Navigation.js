@@ -1,7 +1,11 @@
 import { Navbar, Container, Button } from 'react-bootstrap';
 import logo from '../logo.png';
 
-const Navigation = ({ account, isConnected, connectWallet, disconnectWallet }) => {
+//import { useState } from 'react';
+
+const Navigation = ({ account, isConnected, connectWallet, disconnectWallet, setAppIsLoading }) => {
+    //const [isLoading, setIsLoading] = useState(false);
+    // 'setAppIsLoading' used for manual reload button
     return (
         <Navbar className='my-3'>
             <img
@@ -59,6 +63,33 @@ const Navigation = ({ account, isConnected, connectWallet, disconnectWallet }) =
                     </Button>
                     </div>
                 )}
+                {/*button to manually reload blackcahin data*/}
+                <div className="ms-2"> {/* ms-2 adds margin-left */}
+                    <Button 
+                        variant="outline-warning" 
+                        size="sm"
+                        style={{ 
+                            whiteSpace: 'normal', 
+                            maxWidth: '120px',
+                            fontSize: '0.75rem',
+                            padding: '4px 8px'
+                        }}
+                        onClick={() => {
+                            if (typeof setAppIsLoading === 'function') {
+                                console.log("Manually reloading blockchain data...");
+                                setAppIsLoading(false); // First reset loading state
+                                setTimeout(() => {
+                                    setAppIsLoading(true); // Then set it to true to trigger loading
+                                }, 100);
+                            } else {
+                                console.log("setAppIsLoading is not a function:", setAppIsLoading);
+                                alert("Reload function not available");
+                            }
+                        }}
+                    >
+                        Manually Reload Blockchain Data
+                    </Button>
+                    </div>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

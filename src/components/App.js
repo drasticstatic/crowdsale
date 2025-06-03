@@ -94,7 +94,8 @@ function App() {
       }
       if (accounts.length > 0) {
         setIsConnected(true);  // Make sure this is called to remove 'Connect Wallet' button
-        setIsLoading(true);
+        //setIsLoading(true);
+        loadBlockchainData(); // Directly call loadBlockchainData instead
       }
       
       setIsConnected(true);
@@ -141,6 +142,26 @@ function App() {
   
   // *** Add state for checking if user is owner
   const [isOwner, setIsOwner] = useState(false);
+
+  const checkOwnerStatus = useCallback(async () => {
+    try {
+      if (crowdsale && account) {
+        console.log("Checking owner status for account:", account);
+        const owner = await crowdsale.owner();
+        console.log("Contract owner:", owner);
+        const isCurrentUserOwner = account.toLowerCase() === owner.toLowerCase();
+        console.log("Is current user owner?", isCurrentUserOwner);
+        setIsOwner(isCurrentUserOwner);
+        return isCurrentUserOwner;
+      } else {
+        console.log("Cannot check owner: crowdsale or account not available");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error checking owner status:", error);
+      return false;
+    }
+  }, [account, crowdsale]);
 
   // ===== BLOCKCHAIN CONNECTION FUNCTION =====
     // This function connects to the blockchain and loads all necessary data
@@ -260,20 +281,29 @@ function App() {
 
       setCrowdsale(crowdsale)
       console.log(`crowdsale: ${crowdsale}`) // Log the crowdsale contract instance to the console for debugging
+      await checkOwnerStatus();// Check owner status
 
       // *** Add check if the user is the owner of the crowdsale contract
         // This is used to determine if the user has admin privileges for whitelisting
-      const owner = await crowdsale.owner();
-      setIsOwner(account.toLowerCase() === owner.toLowerCase());
-        //  ↑ Compare the user's account with the owner address from the crowdsale contract
-      const isCurrentUserOwner = account.toLowerCase() === owner.toLowerCase();
-      console.log(`isOwner: ${isCurrentUserOwner}`);// Log if the user is the owner
-      // ↑ Log the owner status to the console for debugging
-      // If the user is the owner, show the Admin component
-      if (isCurrentUserOwner) {
-        console.log('User IS the owner of the crowdsale contract');
-      } else {
-        console.log('User is NOT the owner of the crowdsale contract');
+      try {
+        const owner = await crowdsale.owner();
+        console.log("Contract owner:", owner);
+        console.log("Current account:", account);
+        setIsOwner(account.toLowerCase() === owner.toLowerCase());
+          //  ↑ Compare the user's account with the owner address from the crowdsale contract in lowercase format
+        const isCurrentUserOwner = account.toLowerCase() === owner.toLowerCase();
+        setIsOwner(isCurrentUserOwner);// Added after wallet connect useEffect caused Admin panel not to display
+        console.log(`isOwner: ${isCurrentUserOwner}`);// Log if the user is the owner
+        // ↑ Log the owner status to the console for debugging
+        // If the user is the owner, show the Admin component
+        if (isCurrentUserOwner) {
+          console.log('User IS the owner of the crowdsale contract');
+        } else {
+          console.log('User is NOT the owner of the crowdsale contract');
+        }
+      } catch (error) {
+        console.error("Error checking owner status:", error);
+        setIsOwner(false);
       }
       
       // Fetch state of whitelist from the crowdsale contract
@@ -315,13 +345,19 @@ function App() {
       } else {
         alert("\n Something went wrong.\n   Please try reconnecting your wallet");
       }
+      console.log("Blockchain data loading complete");
       setIsLoading(false);
     }
     return;
+  } finally {
+    // This code always runs, regardless of whether there was an error
+    console.log("Blockchain data loading complete - finally block");
+    setIsLoading(false); // Always set loading to false when done
+  }
   }
     //console.error("Blockchain data loading failed:", error);
-    setIsLoading(false); // Data loading complete, hide the loading spinner
-  }, [account, isConnected]); // useCallback to memoize the function so it doesn't change on every render
+    //setIsLoading(false); // Data loading complete, hide the loading spinner
+  , [account, checkOwnerStatus, isConnected]); // useCallback to memoize the function so it doesn't change on every render
   // ↑ useCallback is used to prevent unnecessary re-renders of the component
     // The empty dependency array means this function will only run once when the component mounts
     // Since this function does not depend on any state or props and only runs once, we can safely use it in the useEffect hook without causing an infinite loop
@@ -330,8 +366,8 @@ function App() {
     // This runs when the component mounts or when 'isLoading' changes
       // It's like an automatic trigger for the 'loadBlockchainData' function
   useEffect(() => {
-    if (isLoading) {
-      console.log("Loading triggered");
+    if (isLoading && window.ethereum) {
+      console.log("Loading blockchain data...");
       loadBlockchainData().catch(error => {
         console.error('Error loading blockchain data:', error)
         setIsLoading(false) // Stop loading if there's an error
@@ -390,9 +426,12 @@ function App() {
           const accounts = await window.ethereum.request({ method: 'eth_accounts' });
           if (accounts && accounts.length > 0) {
             console.log("Already connected to account:", accounts[0]);
+            const connectedAccount = ethers.utils.getAddress(accounts[0]);
+            setAccount(connectedAccount);
             setIsConnected(true);
-            setAccount(ethers.utils.getAddress(accounts[0]));
-            setIsLoading(true); // This will trigger loadBlockchainData
+            if (!isLoading) {
+              setIsLoading(true); // Only trigger loadBlockchainData if not already loading
+            }
           } else {
             console.log("No connected accounts found");
             setIsConnected(false);
@@ -402,9 +441,8 @@ function App() {
         console.error("Error checking connection:", error);
       }
     };
-    
     checkConnection();
-  }, []);
+  }, [isLoading]);
 
   // ===== USER INTERFACE =====
     // (What gets displayed on the webpage)
@@ -416,6 +454,7 @@ function App() {
         isConnected={isConnected} 
         connectWallet={connectWallet} 
         disconnectWallet={disconnectWallet}
+        setAppIsLoading={setIsLoading} // Pass the App's setIsLoading function
       />
 
       <h2 className="text-center mb-3">
@@ -539,8 +578,23 @@ function App() {
         <Info account={account} accountBalance={accountBalance} />
       )}
 
+      {console.log("Rendering check - isOwner:", isOwner, "account:", account, "owner address:", crowdsale ? "loaded" : "not loaded")}
+      {/* UI for debugging */}
+      <div className="text-center mt-3">
+      <Button 
+        variant="outline-secondary" 
+        size="sm"
+        onClick={async () => {
+          const isOwner = await checkOwnerStatus();
+          alert(`Owner check: ${isOwner}\nYour address: ${account}\nCrowdsale loaded: ${crowdsale ? 'Yes' : 'No'}`);
+        }}
+      >
+        Log Owner Status 4 Debugging
+      </Button>
+      </div>
+
       {/* *** Add 'Admin' component - only show if user is the owner of the crowdsale contract */}
-      {isOwner && (
+      {isOwner && account && crowdsale && (
         <Admin 
           provider={provider} 
           crowdsale={crowdsale} 
