@@ -1,0 +1,281 @@
+// ========== ADMIN.JS ==========
+
+/* This component is part of a DApp that allows an admin to manage a whitelist for a crowdsale contract
+    by adding or removing addresses, and toggling the whitelist status */
+
+import { useState, useEffect, useCallback } from 'react';
+import { Form, Button, Card } from 'react-bootstrap';
+
+const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelistStatus }) => {
+    const [address, setAddress] = useState('');
+    const [isWhitelistEnabled, setIsWhitelistEnabled] = useState(whitelistStatus);
+        // ↑ Pass in state from parent component to manage loading state (loadblockchaindata)
+
+    const [whitelistedAddresses, setWhitelistedAddresses] = useState([]);// State to hold the list of whitelisted addresses
+
+    const addToWhitelistHandler = async (e) => {
+        e.preventDefault();
+        
+        try {
+            const signer = await provider.getSigner();
+            const transaction = await crowdsale.connect(signer).addToWhitelist(address);
+            await transaction.wait();
+            alert(`\n Address ${address} \n     added to whitelist`);
+            setAddress('');
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert('\n Failed to add address to whitelist');
+            setIsLoading(false);
+        }
+    };
+
+    const removeFromWhitelistHandler = async (e) => {
+        e.preventDefault();
+        
+        try {
+            const signer = await provider.getSigner();
+            const transaction = await crowdsale.connect(signer).removeFromWhitelist(address);
+            await transaction.wait();
+
+            // Immediately fetch the updated list
+            await fetchWhitelistedAddresses();
+
+            alert(`\n Address ${address} \n     removed from whitelist`);
+            setAddress('');
+            window.location.reload(); 
+        } catch (error) {
+            console.error(error);
+            alert('\n Failed to remove address from whitelist');
+            setIsLoading(false);
+        }
+    };
+
+    const toggleWhitelistHandler = async () => {
+        try {
+            // Get the current state from the contract first
+            const currentState = await crowdsale.whitelistEnabled();
+            console.log(`Current whitelist state: ${currentState}`);
+            
+            // Toggle to the opposite state
+            const newState = !currentState; // new state to be !-opposite
+            console.log(`Toggling to: ${newState}`);
+            
+            const signer = await provider.getSigner();
+            //const transaction = await crowdsale.connect(signer).toggleWhitelist(newState);
+            
+            // Add gas limit and price to avoid circuit breaker issues
+            const gasEstimate = await crowdsale.estimateGas.toggleWhitelist(newState);
+            const gasLimit = gasEstimate.mul(120).div(100); // Add 20% buffer
+            const transaction = await crowdsale.connect(signer).toggleWhitelist(newState, {
+                gasLimit: gasLimit
+            });
+            
+            console.log("Transaction sent:", transaction.hash);
+            alert(`\n Transaction sent!\n   Please wait for confirmation...`);
+            
+            // Wait for transaction to be mined
+            await transaction.wait();
+            console.log("Transaction confirmed");
+
+            // Read the new state directly from the contract
+            const updatedState = await crowdsale.whitelistEnabled();
+            console.log(`Updated contract whitelist state: ${updatedState}`);
+            
+            // Update both local and parent state based on the contract's state
+            setIsWhitelistEnabled(updatedState);
+            setWhitelistStatus(updatedState);
+
+            // Refresh the whitelist addresses list
+            await fetchWhitelistedAddresses();
+            
+            alert(`\n Whitelist is now ${updatedState ? 'ENABLED' : 'DISABLED'}`);
+            // Reload data but don't leave in loading state
+            /*setIsLoading(true);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 3000);*/ // Set a timeout to ensure loading state is reset
+            //window.location.reload();// Force page reload instead of using loading state
+            //document.location.href = document.location.href;// DIRECT FIX: Force a hard reload of the page
+            //window.location.href = window.location.pathname + window.location.search;
+            window.location.reload(true); // true forces a reload from the server, not from cache
+        } catch (error) {
+            console.error("Toggle whitelist error:", error);
+            
+            // More detailed error logging
+            if (error.code) console.error(`Error code: ${error.code}`);
+            if (error.message) console.error(`Error message: ${error.message}`);
+            if (error.data) console.error(`Error data:`, error.data);
+            
+            // Suggest solutions based on error
+            if (error.message.includes('circuit breaker')) {
+                alert('\n Network error:\n   Please try again in a few moments or restart your Hardhat node');
+            } else {
+                alert('\n Failed to toggle whitelist: ' + error.message);
+                setIsLoading(false); // Make sure to reset loading state on error
+            }
+        }
+    };
+
+    // Function to fetch whitelisted addresses:
+    const fetchWhitelistedAddresses = useCallback(async () => {
+        try {
+            const signer = await provider.getSigner();
+            const addresses = await crowdsale.connect(signer).getWhitelistedAddresses();
+            setWhitelistedAddresses(addresses);
+        } catch (error) {
+            console.error("Error fetching whitelisted addresses:", error);
+        }
+    }, [provider, crowdsale]);
+// Call this function when the component mounts or when needed
+useEffect(() => {
+    if (provider && crowdsale) {
+      fetchWhitelistedAddresses();
+    }
+  }, [provider, crowdsale, fetchWhitelistedAddresses]);
+
+// Added a dependency on whitelistStatus
+    // State wasn't being properly synchronized when switching accounts
+    // Update this line to sync with parent state when it changes
+useEffect(() => {
+    setIsWhitelistEnabled(whitelistStatus);
+  }, [whitelistStatus]);
+
+useEffect(() => {
+const updateWhitelistStatus = async () => {
+    if (provider && crowdsale) {
+    try {
+        // Get the current whitelist status directly from the contract
+        const contractWhitelistStatus = await crowdsale.whitelistEnabled();
+        console.log("Contract whitelist status:", contractWhitelistStatus);
+        
+        // Update both local and parent state
+        setIsWhitelistEnabled(contractWhitelistStatus);
+        if (setWhitelistStatus) {
+        setWhitelistStatus(contractWhitelistStatus);
+        }
+    } catch (error) {
+        console.error("Error fetching whitelist status:", error);
+    }
+    }
+};
+
+updateWhitelistStatus();
+}, [provider, crowdsale, setWhitelistStatus]);
+
+    return (
+        <Card className="my-4">
+            <Card.Header>Admin Panel - Whitelist Management</Card.Header>
+            <Card.Body>
+                <Form onSubmit={addToWhitelistHandler}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Investor Address</Form.Label>
+                        <Form.Control 
+                            type="text" 
+                            placeholder="0x..." 
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                        />
+                    </Form.Group>
+
+                    <div className="text-center">
+                        <Button variant="success" type="submit" className="me-2">
+                            <strong>ADD</strong> <small>to Whitelist</small>
+                        </Button>
+                        <Button variant="danger" onClick={removeFromWhitelistHandler}>
+                        <strong>REMOVE</strong> <small>from Whitelist</small>
+                        </Button>
+                        <hr />
+                        {isWhitelistEnabled && (
+                            <p className="text-info mb-2">
+                                <small><i className="bi bi-info-circle"></i> <br /><strong>Whitelist</strong> is currently  
+                                <strong><span style={{ 
+                                    color: '#008000', 
+                                    textShadow: '0.5px 0.5px 0.5px rgba(0,0,0,0.5)',
+                                    fontWeight: 'bold'
+                                }}>
+                                    <big> ACTIVE</big><br />
+                                    </span></strong><strong style={{ fontSize: '1.1em' }}>↑</strong><br />
+                                <u><strong style={{ fontSize: '1.1em' }}>ONLY</strong></u>
+                                <span style={{ fontSize: '1.1em' }}> </span>
+                                <u><strong style={{ fontSize: '0.9em' }}>whitelisted addresses</strong></u>
+                                <span style={{ fontSize: '0.9em' }}> can buy tokens</span></small>
+                            </p>
+                        )}
+                        {!isWhitelistEnabled && (
+                            <p className="text-danger mt-2">
+                                <small><i className="bi bi-exclamation-triangle"></i> <br /><em><u><strong>WARNING</strong></u>
+                                <strong>: </strong></em> 
+                                <strong>Whitelist</strong> is currently <strong><span style={{ 
+                                    color: '#f00', 
+                                    textShadow: '0.5px 0.5px 0.5px rgba(0,0,0,0.5)',
+                                    fontWeight: 'bold'
+                                }}>
+                                    <big> DISABLED</big><br />
+                                </span></strong><strong style={{ fontSize: '1.1em' }}>↑</strong><br />
+                                <u><strong style={{ fontSize: '0.9em' }}>ANYONE</strong></u>
+                                <span style={{ fontSize: '0.9em' }}> can buy tokens</span></small>
+                            </p>
+                        )}
+                        <Button 
+                            variant={isWhitelistEnabled ? "warning" : "primary"}
+                            className="mt-3"
+                            // ternary operator: warning=yellow, primary=blue
+                            onClick={toggleWhitelistHandler}
+                        >
+                            {isWhitelistEnabled ? (
+                                <>Toggle <strong style={{ letterSpacing: '2px' }}><small>WHITELIST</small></strong>
+                                Feature<br /><strong style={{ letterSpacing: '5px' }}><big>- OFF -</big></strong>
+                                <br /><em style={{ 
+                                    color: '#f00', 
+                                    textShadow: '0.5px 0.5px 0.5px rgba(0,0,0,0.5)',
+                                }}>
+                                    <small>warning: <u>anyone</u> will be able to purchase tokens</small>
+                                </em></>
+                            ) : (
+                                <>Toggle <strong style={{ letterSpacing: '2px' }}><small>WHITELIST</small></strong>
+                                Feature<br /><strong style={{ letterSpacing: '5px' }}><big>- ON -</big></strong>
+                                <br /><em style={{
+                                    color: '#00ff00', 
+                                    textShadow: '0.5px 0.5px 0.5px rgba(0,0,0,0.5)',
+                                }}>
+                                    <small>resume | re-enable whitelist</small></em></>
+                            )}
+                        </Button>
+                        <br /><br />
+                        <div className="text-muted mb-2">
+                            <p style={{ fontSize: '0.6em' }}><i className="bi bi-info-circle"></i> <em>whitelist=enabled - default state upon deployment</em></p>
+                        </div>
+                    </div>
+                    <hr />
+                    <div className="mt-4">
+                        <h5><u>Whitelisted Addresses:</u></h5>
+                        <Button 
+                            variant="outline-secondary" 
+                            size="sm" 
+                            onClick={fetchWhitelistedAddresses}
+                            className="mb-2"
+                        >
+                        Refresh List
+                        </Button>
+                        {whitelistedAddresses.length > 0 ? (
+                            <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #ddd', padding: '10px' }}>
+                                {whitelistedAddresses.map((addr, index) => (
+                                    <div key={index} className="mb-1 text-start">
+                                    <small>{addr}</small>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-muted"><small>No addresses whitelisted yet</small></p>
+                    )}
+                </div>
+                </Form>
+            </Card.Body>
+        </Card>
+    );
+};
+
+export default Admin;
+
+// ========== END OF ADMIN.JS ==========

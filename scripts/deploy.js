@@ -1,4 +1,5 @@
 const hre = require("hardhat");
+const { ethers } = require("hardhat");
 
 async function main() {
   // Configuration/Token Properties
@@ -34,6 +35,13 @@ async function main() {
   await transaction.wait()
   console.log(`Tokens transferred to Crowdsale\n`)
   console.log("Deployment complete! Token sale is now live.")
+
+  // Step 4: Add Deployer to Whitelist:
+  console.log("Adding deployer to whitelist...");
+  const [deployer] = await ethers.getSigners();// Get the deployer's address
+  const whitelistTx = await crowdsale.addToWhitelist(deployer.address);// Add the deployer to the whitelist
+  await whitelistTx.wait();
+  console.log(`Address ${deployer.address} added to whitelist\n`);
 }
 
 main().catch((error) => {

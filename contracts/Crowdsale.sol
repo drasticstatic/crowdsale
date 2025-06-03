@@ -5,6 +5,13 @@ pragma solidity ^0.8.0; // '^' means use at least this version
     It manages the sale of tokens, tracks how many are sold, and handles the funds
     The owner can set the price and finalize the sale when it's complete */
 
+    /* *** = Addeded Whitelist functionality:
+        - Require that investors get whitelisted to buy tokens
+        - Add investors to the whitelist from a special script or from a separate user interface
+        - Store whitelisted users in smart contract
+        - Create function to allow only owner to add people to whitelist
+        - Only let people who are whitelisted buy tokens*/
+
 import "hardhat/console.sol";
 import "./Token.sol"; // Importing our custom token contract
 
@@ -14,6 +21,8 @@ contract Crowdsale {
     uint256 public price; // Price of each token in wei (1 ETH = 10^18 wei)
     uint256 public maxTokens; // Maximum number of tokens available for sale
     uint256 public tokensSold; // Tracks how many tokens have been sold so far
+    bool public whitelistEnabled; // Flag to enable/disable whitelist functionality
+    address[] private allAddresses;// to track all addresses
 
     /* More variables to track:
         uint256 public tokensRemaining; // amount of tokens remaining
@@ -36,6 +45,13 @@ contract Crowdsale {
     event Buy(uint256 amount, address buyer); // Emitted when someone buys tokens
     event Finalize(uint256 tokensSold, uint256 ethRaised); // Emitted when the sale ends m- how much ETH was raised
 
+    // *** Added mapping to manage a whitelist of addresses
+    mapping(address => bool) public whitelist;
+    // mapping not gas efficient, switch to merkle proofs for larger whitelists
+    // Mapping is like a dictionary that stores addresses and whether they are whitelisted (true/false)
+    // Mekle tree is a data structure that allows efficient and secure verification of large sets of data
+    // Merkle proofs are used to verify that an address is part of a whitelist without storing all addresses on-chain
+
     // Constructor runs once when the contract is deployed
     constructor(
         Token _token, // Address of the token contract
@@ -46,25 +62,80 @@ contract Crowdsale {
         token = _token; // Store the token contract reference
         price = _price; // Set the initial token price
         maxTokens = _maxTokens; // Set the maximum tokens available
+        whitelistEnabled = true; // Start with whitelist enabled
     }
 
     // Modifiers are used to change the behavior of functions
     modifier onlyOwner() {
         require(msg.sender == owner, "Caller is not and must be the owner"); // Check if caller is owner
         // prevents a non-owner from calling the function
-        _; // Continue executing the function body below
+        _; // '_;' = Continue executing the function body below
+    }
+    modifier onlyWhitelisted() {
+    if (whitelistEnabled) { //Updated: now will only check 'if' the sender is whitelisted WHEN the whitelist feature IS enabled
+        // If whitelist is disabled, it will skip the check and allow anyone to proceed
+        require(whitelist[msg.sender] == true, "Address not whitelisted");
+    } // Check if caller is whitelisted
+        // == is comparison operator, checks if the address is whitelisted*/
+        // prevents a non-whitelisted address from calling the function
+        _; //
+    }
+    
+    // === Whitelist functionality === to restrict who can buy tokens
+        // *** Added this function to allow only owner to add people to whitelist
+    function addToWhitelist(address _address) public onlyOwner {
+        if (!whitelist[_address]) {
+            allAddresses.push(_address);
+        }
+        whitelist[_address] = true;//The contract's 'getWhitelistedAddresses' only returns addresses where whitelist[address] == true
+    }
+        // *** Added this function to allow only owner to remove people from whitelist
+    function removeFromWhitelist(address _address) public onlyOwner {
+        require(whitelist[_address], "Address not whitelisted"); // Check if address is already whitelisted
+        whitelist[_address] = false;
+    }
+        // *** Added this function to allow only owner to toggle whitelist requirement
+    function toggleWhitelist(bool _enabled) public onlyOwner {
+        whitelistEnabled = _enabled;
+    }
+
+    // Function to get Whitelisted addresses
+        // This function returns an array of all whitelisted addresses
+        // Note: This is not gas efficient for large whitelists, consider using Merkle proofs for larger whitelists
+    function getWhitelistedAddresses() public view returns (address[] memory) {
+        // Count whitelisted addresses first
+        uint256 count = 0;
+        for (uint256 i = 0; i < allAddresses.length; i++) {
+            if (whitelist[allAddresses[i]]) {
+                count++;
+            }
+        }
+        // Create result array with ONLY ACTIVE whitelist entries
+        address[] memory result = new address[](count);
+        uint256 index = 0;
+        for (uint256 i = 0; i < allAddresses.length; i++) {
+            if (whitelist[allAddresses[i]]) {
+                result[index] = allAddresses[i];
+                index++;
+            }
+        }
+        return result;
     }
 
     // Special function that runs when someone sends ETH directly to the contract to buy tokens
     // --> https://docs.soliditylang.org/en/v0.8.15/contracts.html#receive-ether-function
-    receive() external payable { //external = only callable from outside the contract, visible in both the contract and the blockchain
+    receive() external payable onlyWhitelisted { //external = only callable from outside the contract, visible in both the contract and the blockchain
+        // Added modifier: onlyWhitelisted = only whitelisted addresses can call this function
+        
         uint256 amount = msg.value / price; // Calculate how many tokens they can buy
         buyTokens(amount * 1e18); // Buy the tokens (converting to token decimal format)
         // 1e18 (10^18) is used to convert the amount of tokens to the same decimal format as the token contract
     }
 
     // Function to buy tokens by sending ETH
-    function buyTokens(uint256 _amount) public payable { // payable (modifyer) allows to send ether to smart contract
+    function buyTokens(uint256 _amount) public payable onlyWhitelisted { // payable (modifyer) allows to send ether to smart contract
+        // Added modifier: onlyWhitelisted = only whitelisted addresses can call this function
+    
         // Check that enough ETH was sent:
         require(msg.value == (_amount / 1e18) * price, "Incorrect ETH amount"); // <-- added error message to require statement
             // amount of ether sent in with transaction - must be equal to the amount of tokens bought

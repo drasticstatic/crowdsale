@@ -3,8 +3,20 @@
     "tokenSymbol": "DAPPU",
     "initialSupply": 1000000,
 
+    "31337": {
+        "chainId": 31337,
+        "token": {
+            "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        },
+        "crowdsale": {
+            "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+        }
+    },  
+    
     "localDevelopmentNetwork": {
     "": " ↑ Network ID for local development was changed from '31337' to 'localDevelopmentNetwork' to improve readability and maintainability.",
+        "chainId": 31337,
+        "": " ↑ The chain ID '31337' is commonly used for local Ethereum development networks like Hardhat or Ganache",
         "token": {
             "address": "${TOKEN_ADDRESS}" 
         },

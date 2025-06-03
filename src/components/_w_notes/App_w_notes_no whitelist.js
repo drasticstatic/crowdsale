@@ -16,6 +16,7 @@ import Buy from './Buy'; // Component for buying tokens
 import Progress from './Progress'; // Progress bar showing token sale status
 import Info from './Info'; // Component showing account information
 import Loading from './Loading'; // Loading spinner component
+import Admin from './Admin'; // *** Add 'Admin' component for managing the crowdsale whitelist
 
 // Artifacts - These are the compiled smart contract files
   // They contain the ABI (Application Binary Interface) which tells our app how to interact with the contracts
@@ -47,6 +48,9 @@ function App() {
   
   // UI state
   const [isLoading, setIsLoading] = useState(true)      // Controls showing loading spinner
+
+  // *** Add state for checking if user is owner
+  const [isOwner, setIsOwner] = useState(false);
 
   // ===== BLOCKCHAIN CONNECTION FUNCTION =====
     // This function connects to the blockchain and loads all necessary data
@@ -110,6 +114,20 @@ function App() {
     const account = ethers.utils.getAddress(accounts[0])  // Get the first account and format it
     setAccount(account)
     console.log (`account: ${account}`) // Log the user's account address to the console for debugging
+
+    // *** Add check if the user is the owner of the crowdsale contract
+      // This is used to determine if the user has admin privileges for whitelisting
+    const owner = await crowdsale.owner();
+    setIsOwner(account.toLowerCase() === owner.toLowerCase());
+      //  ↑ Compare the user's account with the owner address from the crowdsale contract
+    console.log(`isOwner: ${isOwner}`) // Log if the user is the owner
+      // ↑ Log the owner status to the console for debugging
+      // If the user is the owner, show the Admin component
+    if (isOwner) {
+      console.log('User is the owner of the crowdsale contract');
+    } else {
+      console.log('User is NOT the owner of the crowdsale contract');
+    }
     
     // Get the user's token balance
     const accountBalance = ethers.utils.formatUnits(await token.balanceOf(account), 18)
@@ -177,6 +195,17 @@ function App() {
       {account && (
         <Info account={account} accountBalance={accountBalance} />
       )}
+
+      {/* *** Add 'Admin' component - only show if user is the owner of the crowdsale contract */}
+      {isOwner && (
+        <Admin 
+          provider={provider} 
+          crowdsale={crowdsale} 
+          setIsLoading={setIsLoading} 
+        />
+      )}
+    {/* ↑ Admin component allows the owner to manage the whitelist */}
+
     </Container>
   );
 }

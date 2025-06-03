@@ -57,7 +57,7 @@ const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
             await transaction.wait() // Wait for the transaction to be confirmed on the blockchain
         } catch {
             //Error handling: (try and catch block)
-            window.alert('User rejected or transaction reverted |or| not enough funds')
+            window.alert('User rejected, transaction reverted, or not enough funds')
             // ↑ Show and alert upon error (ex: user rejecting the transaction or the transaction fails - ex: not enough ETH in wallet)
         }
         setIsLoading(true) // Tell the parent component to refresh data/page - updating UI to show the new state
