@@ -41,17 +41,17 @@ The component maintains several state variables:
 ### fetchWhitelistedAddresses
 &nbsp;&nbsp;&nbsp;&nbsp;Retrieves the current list of whitelisted addresses from the smart contract.
 &nbsp;&nbsp;&nbsp;&nbsp;This function is critical for keeping the UI in sync with the blockchain state.
-&nbsp;&nbsp;&nbsp;&nbsp;```javascript
-&nbsp;&nbsp;&nbsp;&nbsp;const fetchWhitelistedAddresses = useCallback(async () => {
-&nbsp;&nbsp;&nbsp;&nbsp;  try {
-&nbsp;&nbsp;&nbsp;&nbsp;    const signer = await provider.getSigner();
-&nbsp;&nbsp;&nbsp;&nbsp;    const addresses = await crowdsale.connect(signer).getWhitelistedAddresses();
-&nbsp;&nbsp;&nbsp;&nbsp;    setWhitelistedAddresses(addresses);
-&nbsp;&nbsp;&nbsp;&nbsp;  } catch (error) {
-&nbsp;&nbsp;&nbsp;&nbsp;    console.error("Error fetching whitelisted addresses:", error);
-&nbsp;&nbsp;&nbsp;&nbsp;  }
-&nbsp;&nbsp;&nbsp;&nbsp;}, [provider, crowdsale]);
-&nbsp;&nbsp;&nbsp;&nbsp;```
+```javascript
+const fetchWhitelistedAddresses = useCallback(async () => {
+  try {
+    const signer = await provider.getSigner();
+    const addresses = await crowdsale.connect(signer).getWhitelistedAddresses();
+    setWhitelistedAddresses(addresses);
+  } catch (error) {
+    console.error("Error fetching whitelisted addresses:", error);
+  }
+}, [provider, crowdsale]);
+```
 
 ## UI Elements
 
@@ -107,7 +107,7 @@ The component includes comprehensive error handling for:
      ```javascript
      // In toggleWhitelistHandler:
      await transaction.wait();
-     // Refresh the whitelist addresses list
+     // Refresh the whitelist addresses list upon toggle
      await fetchWhitelistedAddresses();
      
      // In removeFromWhitelistHandler:
