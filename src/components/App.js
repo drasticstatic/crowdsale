@@ -380,6 +380,32 @@ function App() {
     }
   }, [isLoading]);
 
+  // To prevent wallet connect button from NOT showing "connected" status when connected=true
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        // Check if MetaMask is installed
+        if (typeof window.ethereum !== 'undefined') {
+          // Check if already connected
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts && accounts.length > 0) {
+            console.log("Already connected to account:", accounts[0]);
+            setIsConnected(true);
+            setAccount(ethers.utils.getAddress(accounts[0]));
+            setIsLoading(true); // This will trigger loadBlockchainData
+          } else {
+            console.log("No connected accounts found");
+            setIsConnected(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking connection:", error);
+      }
+    };
+    
+    checkConnection();
+  }, []);
+
   // ===== USER INTERFACE =====
     // (What gets displayed on the webpage)
   return (

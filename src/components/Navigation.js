@@ -46,7 +46,9 @@ const Navigation = ({ account, isConnected, connectWallet, disconnectWallet }) =
                         className="me-2"
                     >
                         <span className="me-2">✓ Connected</span>
-                        <small>{account.slice(0, 6) + '...' + account.slice(-4)}</small>
+                        <small>{account ? (account.slice(0, 6) + '...' + account.slice(-4)) : 'Loading...'}</small>
+                        {/*Added 'account ? ' prefix and 'Loading...' */}
+                        {/*To help prevent wallet connect button from NOT showing "connected" status when connected=true*/}
                     </Button>
                     <Button 
                         variant="outline-danger" 
