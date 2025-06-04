@@ -67,9 +67,12 @@ function App() {
   // UI state
   const [isLoading, setIsLoading] = useState(true)      // Controls showing loading spinner
 
-  // Add state for modal
+  // Add state for modals
   const [showDisconnectModal, setShowDisconnectModal] = useState(false);
   const [isConnected, setIsConnected] = useState(false) // Whether the user is connected to MetaMask
+  const [showWhitelistCheckModal, setShowWhitelistCheckModal] = useState(false);
+  const [whitelistCheckResult, setWhitelistCheckResult] = useState(null);
+
   const connectWallet = async () => {
     try {
       // Check if MetaMask is installed FIRST
@@ -590,11 +593,87 @@ function App() {
         <Info account={account} accountBalance={accountBalance} />
       )}
 
-      <div className={`text-center py-2 ${whitelistEnabled ? 'bg-warning text-black' : 'bg-success text-white'}`}>
-          <strong>Current Status:</strong> {whitelistEnabled ? 
-              'Whitelist ENABLED - Must be a whitelisted address to buy tokens' : 
-              'Whitelist DISABLED - Anyone can buy tokens! - Live for public sale!'}
-      </div>
+        {/* Show whitelist status to ALL*/}
+        {/* OR: connect prompt based on connection status */}
+
+        {isConnected && crowdsale ? (
+            <div className="d-flex justify-content-center align-items-center mb-3">
+              {/* Show whitelist status and check button on the same line as status indicator */}
+            <span 
+              className={`py-2 px-4 rounded ${whitelistEnabled ? 'bg-warning text-black' : 'bg-success text-white'}`}
+            >
+              <strong>Current Status:</strong> {whitelistEnabled ? 
+                'Whitelist ENABLED - Must be a whitelisted address to buy tokens' : 
+                'Whitelist DISABLED - Anyone can buy tokens! - Live for public sale!'}
+            </span>
+        {/* Adds modal check after the whitelist status display */}
+            <Button 
+              variant="outline-primary" 
+              size="sm"
+              className="ms-3"
+              onClick={async () => {
+                try {
+                  const signer = await provider.getSigner();
+                  const address = await signer.getAddress();
+                  const isWhitelisted = await crowdsale.whitelist(address);
+                  setShowWhitelistCheckModal(true);
+                  setWhitelistCheckResult({
+                    address: address,
+                    isWhitelisted: isWhitelisted,
+                    whitelistEnabled: whitelistEnabled
+                  });
+                } catch (error) {
+                  console.error("Error checking whitelist status:", error);
+                  alert("Error checking whitelist status");
+                }
+              }}
+              >
+              Check If You're Whitelisted
+            </Button>
+          </div>
+        ) : (
+          <div className="text-center">
+            <span 
+              className="d-inline-block py-2 px-4 rounded bg-info text-white"
+              style={{ margin: '10px auto' }}
+              >
+              <strong>Whitelist Status:</strong> Connect your wallet to view current whitelist status
+            </span>
+          </div>
+        )}
+
+        {/* This modal at the bottom of your component, next to the disconnect modal */}
+        <Modal show={showWhitelistCheckModal} onHide={() => setShowWhitelistCheckModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Whitelist Status Check</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {whitelistCheckResult && (
+              <>
+                <p><strong>Your Address:</strong> {whitelistCheckResult.address}</p>
+                <p><strong>Whitelist Status:</strong> {whitelistCheckResult.isWhitelisted ? 
+                  <span className="text-success">✓ You are whitelisted</span> : 
+                  <span className="text-danger">✗ You are not whitelisted</span>}
+                </p>
+                <p><strong>Whitelist Feature:</strong> {whitelistCheckResult.whitelistEnabled ? 
+                  <span className="text-success">✓ Currently ENABLED - Only whitelisted addresses can buy tokens</span> : 
+                  <span className="text-warning">✗ Currently DISABLED - Anyone can buy tokens</span>}
+                </p>
+                <div className="alert alert-info">
+                  {whitelistCheckResult.whitelistEnabled && !whitelistCheckResult.isWhitelisted ? 
+                    "You cannot buy tokens until you are added to the whitelist or the whitelist is disabled." : 
+                    "You can buy tokens!"
+                  }
+                </div>
+              </>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowWhitelistCheckModal(false)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
       {/* *** Add 'Admin' component - only show if user is the owner of the crowdsale contract */}
       {isOwner && account && crowdsale && (

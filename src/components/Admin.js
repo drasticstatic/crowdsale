@@ -65,10 +65,14 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             //const transaction = await crowdsale.connect(signer).toggleWhitelist(newState);
             
             // Add gas limit and price to avoid circuit breaker issues
-            const gasEstimate = await crowdsale.estimateGas.toggleWhitelist(newState);
+            /*const gasEstimate = await crowdsale.estimateGas.toggleWhitelist(newState);
             const gasLimit = gasEstimate.mul(120).div(100); // Add 20% buffer
             const transaction = await crowdsale.connect(signer).toggleWhitelist(newState, {
                 gasLimit: gasLimit
+            });*/
+            // Skip gas estimation causing JSON-RPC-error:
+            const transaction = await crowdsale.connect(signer).toggleWhitelist(newState, {
+                gasLimit: 200000 // Set a fixed gas limit instead of estimating
             });
             
             console.log("Transaction sent:", transaction.hash);
