@@ -442,7 +442,7 @@ function App() {
             setIsConnected(true);
             /*if (!isLoading) {
               setIsLoading(true); // Only trigger loadBlockchainData if not already loading
-            }*/
+            }*///had to remove this to avoid loading loop
           } else {
             console.log("No connected accounts found");
             setIsConnected(false);
@@ -590,7 +590,6 @@ function App() {
         <Info account={account} accountBalance={accountBalance} />
       )}
 
-      <hr />
       <div className={`text-center py-2 ${whitelistEnabled ? 'bg-warning text-black' : 'bg-success text-white'}`}>
           <strong>Current Status:</strong> {whitelistEnabled ? 
               'Whitelist ENABLED - Must be a whitelisted address to buy tokens' : 
