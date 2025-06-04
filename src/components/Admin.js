@@ -123,6 +123,7 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             const signer = await provider.getSigner();
             const addresses = await crowdsale.connect(signer).getWhitelistedAddresses();
             setWhitelistedAddresses(addresses);
+            console.log("Fetched whitelisted addresses:", addresses);
         } catch (error) {
             console.error("Error fetching whitelisted addresses:", error);
         }
@@ -248,16 +249,38 @@ updateWhitelistStatus();
                         </div>
                     </div>
                     <hr />
-                    <div className="mt-4">
-                        <h5><u>Whitelisted Addresses:</u></h5>
+                    <div className="d-flex justify-content-between mb-2">
                         <Button 
                             variant="outline-secondary" 
                             size="sm" 
                             onClick={fetchWhitelistedAddresses}
-                            className="mb-2"
                         >
-                        Refresh List
+                            <big>Force Refresh the Array  </big><small>+ log console</small>
                         </Button>
+                        
+                        <Button 
+                            variant="outline-info" 
+                            size="sm"
+                            onClick={async () => {
+                            try {
+                                const signer = await provider.getSigner();
+                                const signerAddress = await signer.getAddress();
+                                const owner = await crowdsale.owner();
+                                const isOwner = signerAddress.toLowerCase() === owner.toLowerCase();
+                                
+                                alert(`Owner check: ${isOwner ? 'Yes' : 'No'}\nYour address: ${signerAddress}\nOwner address: ${owner}`);
+                                console.log(`Owner check: ${isOwner ? 'Yes' : 'No'}\nYour address: ${signerAddress}\nOwner address: ${owner}`);
+                            } catch (error) {
+                                console.error("Error checking owner status:", error);
+                                alert("Error checking owner status");
+                            }
+                            }}
+                        >
+                            <big>Log Owner Status  </big><small>4 Debugging</small>
+                        </Button>
+                        </div>
+                    <div className="mt-4">
+                        <h5><u>Whitelisted Addresses:</u></h5>
                         {whitelistedAddresses.length > 0 ? (
                             <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #ddd', padding: '10px' }}>
                                 {whitelistedAddresses.map((addr, index) => (
@@ -269,7 +292,7 @@ updateWhitelistStatus();
                     ) : (
                         <p className="text-muted"><small>No addresses whitelisted yet</small></p>
                     )}
-                </div>
+                </div>               
                 </Form>
             </Card.Body>
         </Card>

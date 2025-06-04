@@ -152,19 +152,30 @@ function App() {
         const isCurrentUserOwner = account.toLowerCase() === owner.toLowerCase();
         console.log("Is current user owner?", isCurrentUserOwner);
         setIsOwner(isCurrentUserOwner);
-        return isCurrentUserOwner;
+        return {
+          isOwner: isCurrentUserOwner,
+          account: account,
+          owner: owner
+        };
       } else {
-        console.log("Cannot check owner: crowdsale or account not available");
-        return false;
+        return {
+          isOwner: false,
+          account: account || 'Not connected',
+          owner: crowdsale ? await crowdsale.owner() : 'Contract not loaded'
+        };
       }
     } catch (error) {
       console.error("Error checking owner status:", error);
-      return false;
+      return {
+        isOwner: false,
+        account: account || 'Not connected',
+        owner: 'Error fetching owner'
+      };
     }
   }, [account, crowdsale]);
 
   // ===== BLOCKCHAIN CONNECTION FUNCTION =====
-    // This function connects to the blockchain and loads all necessary data
+    // This function connxects to the blockchain and loads all necessary data
   const loadBlockchainData = useCallback(async () => {
     console.log("Loading blockchain data...");
     try {        
@@ -429,9 +440,9 @@ function App() {
             const connectedAccount = ethers.utils.getAddress(accounts[0]);
             setAccount(connectedAccount);
             setIsConnected(true);
-            if (!isLoading) {
+            /*if (!isLoading) {
               setIsLoading(true); // Only trigger loadBlockchainData if not already loading
-            }
+            }*/
           } else {
             console.log("No connected accounts found");
             setIsConnected(false);
@@ -455,6 +466,7 @@ function App() {
         connectWallet={connectWallet} 
         disconnectWallet={disconnectWallet}
         setAppIsLoading={setIsLoading} // Pass the App's setIsLoading function
+        checkOwnerStatus={checkOwnerStatus}
       />
 
       <h2 className="text-center mb-3">
@@ -578,19 +590,11 @@ function App() {
         <Info account={account} accountBalance={accountBalance} />
       )}
 
-      {console.log("Rendering check - isOwner:", isOwner, "account:", account, "owner address:", crowdsale ? "loaded" : "not loaded")}
-      {/* UI for debugging */}
-      <div className="text-center mt-3">
-      <Button 
-        variant="outline-secondary" 
-        size="sm"
-        onClick={async () => {
-          const isOwner = await checkOwnerStatus();
-          alert(`Owner check: ${isOwner}\nYour address: ${account}\nCrowdsale loaded: ${crowdsale ? 'Yes' : 'No'}`);
-        }}
-      >
-        Log Owner Status 4 Debugging
-      </Button>
+      <hr />
+      <div className={`text-center py-2 ${whitelistEnabled ? 'bg-warning text-black' : 'bg-success text-white'}`}>
+          <strong>Current Status:</strong> {whitelistEnabled ? 
+              'Whitelist ENABLED - Must be a whitelisted address to buy tokens' : 
+              'Whitelist DISABLED - Anyone can buy tokens! - Live for public sale!'}
       </div>
 
       {/* *** Add 'Admin' component - only show if user is the owner of the crowdsale contract */}
