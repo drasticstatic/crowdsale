@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import { ethers } from 'ethers'
 
-const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
+const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion }) => {
     const [amount, setAmount] = useState('0')
     const [isWaiting, setIsWaiting] = useState(false)
 
@@ -68,27 +68,40 @@ const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
         }
 
     return (
-        <Form onSubmit={buyHandler} style={{ maxWidth: '800px', margin: '50px auto' }}>
+        <Form onSubmit={buyHandler} style={navbarVersion ? { margin: '0' } : { maxWidth: '800px', margin: '50px auto' }}>
             <Form.Group as={Row}>
                 <Col>
-                    <Form.Control 
-                        type="number"
-                        min="1"
-                        placeholder="Enter amount"
-                        onChange={(e) => setAmount(e.target.value)}
-                    />
+                <Form.Control 
+                    type="number"
+                    min="1"
+                    placeholder="Enter amount"
+                    onChange={(e) => setAmount(e.target.value)}
+                    size={navbarVersion ? "sm" : "md"}
+                />
                 </Col>
                 <Col className='text-center'>
-                    {isWaiting ? (
-                        <Spinner animation="border" />
-                    ) : (
-                        <Button variant="primary" type="submit" style={{ width: '100%' }}>
-                            Buy Tokens
-                        </Button>
-                    )}
+                {isWaiting ? (
+                    <Spinner animation="border" size={navbarVersion ? "sm" : "md"} />
+                ) : (
+                    <Button 
+                    variant="danger" // Change from primary to danger (red)
+                    type="submit" 
+                    style={{ 
+                        width: '100%',
+                        fontWeight: 'bold',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                        background: 'linear-gradient(45deg, #ff5e62, #ff9966)', // Gradient background
+                        border: 'none',
+                        transform: 'scale(1.05)' // Make it slightly larger
+                    }}
+                    size={navbarVersion ? "sm" : "md"}
+                    >
+                    🔥 BUY TOKENS 🔥
+                    </Button>
+                )}
                 </Col>
             </Form.Group>
-        </Form>
+            </Form>
     );
 }
 

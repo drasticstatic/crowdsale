@@ -29,10 +29,10 @@ import { ethers } from 'ethers' // Library for interacting with Ethereum
 
 // COMPONENTS: - the UI building blocks of our application
 import Navigation from './Navigation'; // Navigation bar component
-import Buy from './Buy'; // Component for buying tokens
-import Progress from './Progress'; // Progress bar showing token sale status
+//import Buy from './Buy'; // Component for buying tokens
+//import Progress from './Progress'; // Progress bar showing token sale status
 import Info from './Info'; // Component showing account information
-import Loading from './Loading'; // Loading spinner component
+//import Loading from './Loading'; // Loading spinner component
 import Admin from './Admin'; // *** Add 'Admin' component for managing the crowdsale whitelist
 
 // Artifacts - These are the compiled smart contract files
@@ -461,8 +461,9 @@ function App() {
   // ===== USER INTERFACE =====
     // (What gets displayed on the webpage)
   return (
-    <Container>
+    <Container style={{ paddingTop: '170px' }}>
       {/* 'Navigation' component - bar always shows at the top */}
+      {/* padding to the top of content so it's not hidden behind the frozen navbar */}      
       <Navigation 
         account={account} 
         isConnected={isConnected} 
@@ -470,6 +471,12 @@ function App() {
         disconnectWallet={disconnectWallet}
         setAppIsLoading={setIsLoading} // Pass the App's setIsLoading function
         checkOwnerStatus={checkOwnerStatus}
+        price={price}
+        provider={provider}
+        crowdsale={crowdsale}
+        setIsLoading={setIsLoading}
+        maxTokens={maxTokens}
+        tokensSold={tokensSold}
       />
 
       <h2 className="text-center mb-3">
@@ -545,27 +552,6 @@ function App() {
               </button>
             )}
           </div>
-
-      {/* 'Loading' component - conditional rendering - show loading spinner or main content */}
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <>
-          {/* Token price display */}
-          <p className='text-center'><strong>Current Price:</strong> {price} ETH</p>
-          
-          {/* 'Buy component' - allows users to purchase tokens */}
-          <Buy 
-            provider={provider} 
-            price={price} 
-            crowdsale={crowdsale} 
-            setIsLoading={setIsLoading} 
-          />
-          
-          {/* 'Progress' component - bar showing token sale status */}
-          <Progress maxTokens={maxTokens} tokensSold={tokensSold} />
-        </>
-      )}
 
       {/* Introduction text */}
       <div className="my-4 p-3 border rounded bg-light">
@@ -661,8 +647,8 @@ function App() {
                 </p>
                 <div className="alert alert-info">
                   {whitelistCheckResult.whitelistEnabled && !whitelistCheckResult.isWhitelisted ? 
-                    "You cannot buy tokens until you are added to the whitelist or the whitelist is disabled." : 
-                    "You can buy tokens!"
+                    "The wallet currently connected is NOT able to purchase tokens until added to the whitelist or the whitelist is disabled." : 
+                    "Congrats! You ARE allowed to purchase tokens!"
                   }
                 </div>
               </>

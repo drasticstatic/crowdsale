@@ -1,9 +1,25 @@
+import { useState } from 'react';
 import { Navbar, Container, Button, Modal } from 'react-bootstrap';
 import logo from '../logo.png';
 
-import { useState } from 'react';
+import Buy from './Buy'; //moved to nav bar
+//import Progress from './Progress'; //moved to nav bar
 
-const Navigation = ({ account, isConnected, connectWallet, disconnectWallet, setAppIsLoading, checkOwnerStatus }) => {
+const Navigation = ({
+    account, 
+    isConnected, 
+    connectWallet, 
+    disconnectWallet, 
+    setAppIsLoading, 
+    checkOwnerStatus,
+    price,
+    provider,
+    crowdsale,
+    setIsLoading,
+    maxTokens,
+    tokensSold,
+    isLoading
+}) => {
     //const [isLoading, setIsLoading] = useState(false);
     // 'setAppIsLoading' used for manual reload button
 
@@ -28,7 +44,14 @@ const Navigation = ({ account, isConnected, connectWallet, disconnectWallet, set
     };
 
     return (
-        <Navbar className='my-3'>
+        <Navbar 
+            className='my-0 pb-3' // Add padding-bottom (pb-3)
+            fixed="top" 
+            bg="light" 
+            expand="lg"
+            style={{ paddingBottom: '40px' }} // Add extra padding to ensure enough space
+        >
+            {/*freeze header during scroll w/ fixed="top" bg="light"*/}
             <img
                 alt="logo"
                 src={logo}
@@ -55,8 +78,29 @@ const Navigation = ({ account, isConnected, connectWallet, disconnectWallet, set
                     <br/><em><small style={{ color: '#00008B' }}>that's revolutionizing Blockchain Learning</small></em>
                 </Navbar.Brand>
 
-                <Navbar.Collapse className="justify-content-end">
-                <div>{/*button to manually reload blackcahin data*/}
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                {/* Moved Buy component here: */}
+                <div className="d-flex flex-column flex-lg-row align-items-center mx-auto">
+                {isConnected && !isLoading && provider && crowdsale && (
+                    <div className="d-flex align-items-center">
+                        <small className="text-muted me-2">Price:<strong> {price} ETH</strong></small>
+                        <Buy 
+                        provider={provider} 
+                        price={price} 
+                        crowdsale={crowdsale} 
+                        setIsLoading={setIsLoading}
+                        navbarVersion={true}
+                        />
+                    </div>
+                    )}
+                </div>
+                <div className="d-flex align-items-center">
+                </div>
+                </Navbar.Collapse>
+
+                <Navbar.Collapse className="ms-4">
+                <div>{/*button to manually reload blackchain data*/}
                     <Button 
                         variant="outline-warning" 
                         size="sm"
@@ -150,7 +194,64 @@ const Navigation = ({ account, isConnected, connectWallet, disconnectWallet, set
                 )}
                 </div>
                 </Navbar.Collapse>
-            </Container>
+                {/* Progress bar at the bottom of navbar, full width */}
+                </Container> {/* Close the main container */}
+
+                {isConnected && !isLoading && maxTokens && tokensSold && (
+                <div 
+                    className="position-absolute" 
+                    style={{ 
+                    bottom: '-10px', 
+                    left: '50%', 
+                    transform: 'translateX(-50%)', 
+                    width: '80%', 
+                    maxWidth: '1000px'
+                    }}
+                >
+                <div className="progress" style={{ height: '20px', borderRadius: '10px' }}>
+                    <div 
+                        className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                        role="progressbar" 
+                        style={{ 
+                        width: `${(tokensSold / maxTokens) * 100}%`, 
+                        borderRadius: (tokensSold / maxTokens) * 100 < 100 ? '10px 0 0 10px' : '10px'
+                        }}
+                        aria-valuenow={(tokensSold / maxTokens) * 100}
+                        aria-valuemin="0" 
+                        aria-valuemax="100"
+                    >
+                        <span style={{ 
+                        position: 'absolute', 
+                        width: '100%', 
+                        left: 0, 
+                        fontWeight: 'bold',
+                        fontSize: '12px',
+                        textAlign: 'center',
+                        lineHeight: '20px',
+                        color: 'black',
+                        letterSpacing: '0.7px',
+                        textShadow: '1px 1px 4px rgba(255,255,255,0.9)' // Increased blur radius and opacity
+                        }}>
+                        Sale Progress: {tokensSold} / {maxTokens} Tokens Sold
+                        </span>
+                    </div>
+                    {/* Add percentage label inside the progress bar */}
+                    <span style={{
+                    position: 'absolute',
+                    right: '10px',
+                    top: '0',
+                    lineHeight: '20px',
+                    fontWeight: 'bold',
+                    fontSize: '12px',
+                    color: 'black',
+                    textShadow: '1px 1px 4px rgba(255,255,255,0.9)' // Increased blur radius and opacity
+                    }}>
+                    {Math.round((tokensSold / maxTokens) * 100)}%
+                    </span>
+                </div>
+                </div>
+
+                )}
         </Navbar>
     );
 }

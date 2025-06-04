@@ -1,13 +1,23 @@
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const Progress = ({ maxTokens, tokensSold }) => {
+const Progress = ({ maxTokens, tokensSold, navbarVersion }) => {
     return (
-        <div className='my-3'>
+        <div className={navbarVersion ? "mb-0" : "my-3"}>
+            {!navbarVersion && (
+            <div className='text-center'>
+                <p>{tokensSold} / {maxTokens} tokens sold</p>
+            </div>
+            )}
             <ProgressBar 
-                now={((tokensSold / maxTokens) * 100)}
-                label={`${(tokensSold / maxTokens) * 100}%`}
+            now={(tokensSold / maxTokens) * 100} 
+            label={`${Math.round((tokensSold / maxTokens) * 100)}%`}
+            style={navbarVersion ? { height: '10px' } : {}}
             />
-            <p className='text-center my-3'>{tokensSold} / {maxTokens} Tokens sold</p>
+            {navbarVersion && (
+            <div className='text-center'>
+                <small>{tokensSold} / {maxTokens}</small>
+            </div>
+            )}
         </div>
     );
 }
