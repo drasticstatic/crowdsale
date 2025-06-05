@@ -96,7 +96,7 @@ const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion }) => {
                     }}
                     size={navbarVersion ? "sm" : "md"}
                     >
-                    🔥 BUY TOKENS 🔥
+                    <big>🔥 BUY TOKENS 🔥</big>
                     </Button>
                 )}
                 </Col>
