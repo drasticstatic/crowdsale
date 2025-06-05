@@ -4,9 +4,10 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
-import { ethers } from 'ethers'
+import { ethers } from 'ethers';
+import './DarkMode.css';
 
-const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion }) => {
+const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion, darkMode }) => {
     const [amount, setAmount] = useState('0')
     const [isWaiting, setIsWaiting] = useState(false)
 
@@ -69,17 +70,18 @@ const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion }) => {
 
     return (
         <Form onSubmit={buyHandler} style={navbarVersion ? { margin: '0' } : { maxWidth: '800px', margin: '50px auto' }}>
-            <Form.Group as={Row}>
-                <Col>
+            <Form.Group as={Row} className="mb-2">
+                <Col className='text-center ms-2'>
                 <Form.Control 
                     type="number"
                     min="1"
                     placeholder="Enter amount"
                     onChange={(e) => setAmount(e.target.value)}
                     size={navbarVersion ? "sm" : "md"}
+                    className={darkMode ? "bg-dark text-light border-secondary dark-placeholder" : ""}
                 />
                 </Col>
-                <Col className='text-center'>
+                <Col className='text-center ms-3'>
                 {isWaiting ? (
                     <Spinner animation="border" size={navbarVersion ? "sm" : "md"} />
                 ) : (
@@ -89,10 +91,10 @@ const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion }) => {
                     style={{ 
                         width: '100%',
                         fontWeight: 'bold',
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                        boxShadow: darkMode ? '0 4px 8px rgba(255,255,255,0.2)' : '0 4px 8px rgba(0,0,0,0.2)',
                         background: 'linear-gradient(45deg, #ff5e62, #ff9966)', // Gradient background
                         border: 'none',
-                        transform: 'scale(1.05)' // Make it slightly larger
+                        transform: 'scale(1.2)' // Make it slightly larger
                     }}
                     size={navbarVersion ? "sm" : "md"}
                     >

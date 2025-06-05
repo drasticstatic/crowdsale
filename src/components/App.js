@@ -34,6 +34,7 @@ import Navigation from './Navigation'; // Navigation bar component
 import Info from './Info'; // Component showing account information
 //import Loading from './Loading'; // Loading spinner component
 import Admin from './Admin'; // *** Add 'Admin' component for managing the crowdsale whitelist
+import TransactionLedger from './TransactionLedger';
 
 // Artifacts - These are the compiled smart contract files
   // They contain the ABI (Application Binary Interface) which tells our app how to interact with the contracts
@@ -65,6 +66,7 @@ function App() {
   const [whitelistEnabled, setWhitelistEnabled] = useState(null) // Whether the whitelist is enabled or not
   
   // UI state
+  const [darkMode, setDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true)      // Controls showing loading spinner
 
   // Add state for modals
@@ -458,10 +460,27 @@ function App() {
     checkConnection();
   }, [isLoading]);
 
+  // Dark Mode L/R margins useEffect
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
+
   // ===== USER INTERFACE =====
     // (What gets displayed on the webpage)
   return (
-    <Container style={{ paddingTop: '170px' }}>
+    <Container style={{ 
+      paddingTop: '255px',
+      backgroundColor: darkMode ? '#121212' : 'white',
+      color: darkMode ? 'white' : 'black',
+      minHeight: '100vh',
+      transition: 'background-color 0.5s, color 1.0s'
+    }}
+  >
       {/* 'Navigation' component - bar always shows at the top */}
       {/* padding to the top of content so it's not hidden behind the frozen navbar */}      
       <Navigation 
@@ -477,69 +496,30 @@ function App() {
         setIsLoading={setIsLoading}
         maxTokens={maxTokens}
         tokensSold={tokensSold}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
-
-      <h2 className="text-center mb-3">
-        <span style={{ 
+      <h3 className="text-center mb-3">
+      <br/>
+      <br/>
+      <h4 className="text-center mb-3">Introducing:</h4>
+      <span style={{ 
           display: 'inline-block',
           background: 'linear-gradient(45deg,rgb(83, 200, 255),rgb(254, 107, 225))',
           color: 'white',
           padding: '5px 15px',
-          borderRadius: '20px',
+          borderRadius: '17px',
           fontWeight: 'bold',
           textTransform: 'uppercase',
           letterSpacing: '2px',
           boxShadow: '0 4px 6px rgba(0,0,0,0.2)',
           marginBottom: '10px'
         }}>
-          Introducing
+          <big>🚀</big> A Learning-by-Doing Crypto Asset! <big>🚀</big>
         </span>
-        <br/><big>🚀</big>
-        <br/>
-        <span style={{ 
-          color: '#0066cc', 
-          fontWeight: 'bold', 
-          fontSize: '1.5em',
-          letterSpacing: '1px',
-          textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-        }}> <span style={{ 
-          display: 'inline-block',
-          marginBottom: '10px'
-        }}>
-          <svg width="250" height="155" viewBox="0 0 250 145" xmlns="http://www.w3.org/2000/svg">
-            {/* Outer shadow for 3D effect */}
-            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-              <feOffset dx="2" dy="4" />
-              <feComponentTransfer>
-                <feFuncA type="linear" slope="0.6" />
-              </feComponentTransfer>
-              <feMerge>
-                <feMergeNode />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            
-            {/* Gradient for 3D effect */}
-            <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0088ff" />
-              <stop offset="100%" stopColor="#004488" />
-            </linearGradient>
-            
-            {/* Circle background with 3D effect */}
-            <circle cx="125" cy="70" r="70" fill="url(#circleGradient)" filter="url(#shadow)" />
-            
-            {/* Highlight for 3D effect */}
-            <circle cx="115" cy="44" r="88" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="5" />
-            
-            {/* DAPPU text */}
-            <text x="125" y="88" fontFamily="Arial" fontSize="32" fontWeight="bold" fill="white" textAnchor="middle">DAPPU</text>
-          </svg>
-        </span> </span>
-        
-      </h2>
-      <h5 className="text-center mb-3">A Learning-by-Doing Crypto Asset!</h5>
-      {/* ↑ h1 header with margin for spacing - centered title */}
+        <br/>        
+      </h3>
+      {/* ↑ h3 header with margin for spacing - centered title */}
 
           {/* 'Cancel Loading' button - only show if loading is in progress */}
           <div className="text-center mb-3">
@@ -554,8 +534,8 @@ function App() {
           </div>
 
       {/* Introduction text */}
-      <div className="my-4 p-3 border rounded bg-light">
-        <p>DAPPU is a <strong>test token</strong> designed <em>purely for educational purposes.</em></p>
+      <div className={`my-4 p-3 border rounded ${darkMode ? 'bg-dark' : 'bg-light'}`}>
+        <p className={darkMode ? 'text-light' : ''}>DAPPU is a <strong>test token</strong> designed <em>purely for educational purposes.</em></p>
         <p style={{ textIndent: '33px' }}>No monetary value, no speculation — just real-world blockchain learning in a safe, controlled environment.</p>
         <p>Join our <strong>DAPPU crowdsale</strong> to gain hands-on experience in:</p>
         <ul style={{ listStyleType: 'none' }}>
@@ -567,9 +547,17 @@ function App() {
         
         <p>Whether you're a developer, student, or curious builder, DAPPU gives you the keys to <em>practice before you launch</em>.</p>
         
-        <p className="text-center"><strong>🚀 No risk. All learning. Full decentralization.</strong></p>
+        <p className="text-center"><strong>
+          <big>🙅</big>&nbsp;&nbsp;No risk&nbsp;&nbsp;
+          <big>📚</big>&nbsp;&nbsp;All learning&nbsp;&nbsp;
+          <big>🛜</big>&nbsp;&nbsp;Full decentralization&nbsp;&nbsp;
+          <big>🔗</big></strong></p>
         
-        <h5 className="text-center">Claim your test tokens. Join the experiment. Learn with DAPPU!</h5>
+        <h5 className="text-center">
+          <big>📌</big>&nbsp;&nbsp;Claim your test tokens&nbsp;&nbsp;
+          <big>🤝</big>&nbsp;&nbsp;Join the experiment&nbsp;&nbsp;
+          <big>₿</big>&nbsp;&nbsp;Learn with DAPPU!&nbsp;&nbsp;
+          <big>🧑‍💻</big></h5>
       </div>
 
       <hr /> {/* Separator line for visual clarity */}
@@ -669,9 +657,22 @@ function App() {
           setIsLoading={setIsLoading}
           whitelistStatus={whitelistEnabled}
           setWhitelistStatus={setWhitelistEnabled}
+          darkMode={darkMode}
         />
       )}
     {/* ↑ Admin component allows the owner to manage the whitelist */}
+    
+    <hr />
+
+      {/* Add Transaction Ledger */}
+      {isConnected && crowdsale && (
+        <TransactionLedger 
+          provider={provider}
+          crowdsale={crowdsale}
+          account={account}
+          darkMode={darkMode}
+        />
+      )}
 
     <Modal show={showDisconnectModal} onHide={() => setShowDisconnectModal(false)}>
       <Modal.Header closeButton>

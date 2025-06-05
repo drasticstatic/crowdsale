@@ -18,7 +18,9 @@ const Navigation = ({
     setIsLoading,
     maxTokens,
     tokensSold,
-    isLoading
+    isLoading,
+    darkMode,
+    setDarkMode
 }) => {
     //const [isLoading, setIsLoading] = useState(false);
     // 'setAppIsLoading' used for manual reload button
@@ -47,9 +49,14 @@ const Navigation = ({
         <Navbar 
             className='my-0 pb-3' // Add padding-bottom (pb-3)
             fixed="top" 
-            bg="light" 
+            bg={darkMode ? "dark" : "light"}  // Change bg based on dark mode
+            variant={darkMode ? "dark" : "light"}  // Add variant for text color
             expand="lg"
-            style={{ paddingBottom: '40px' }} // Add extra padding to ensure enough space
+            style={{
+                paddingBottom: '40px', // Add extra padding & wrap to ensure enough space
+                flexWrap: 'wrap',
+                transition: 'background-color 0.3s'  // Add smooth transition
+                }} 
         >
             {/*freeze header during scroll w/ fixed="top" bg="light"*/}
             <img
@@ -62,44 +69,68 @@ const Navigation = ({
             <Container>
                 <Navbar.Brand href="#">
                 <strong>
-                    <span style={{ 
-                    color: '#0066cc', 
+                <span style={{ 
+                    color: darkMode ? '#66b3ff' : '#0066cc', // Lighter blue in dark mode
                     fontWeight: 'bold', 
                     fontSize: '1.2em',
                     letterSpacing: '1px',
                     textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-                    }}>DAPPU</span><span style={{ 
-                        fontVariant: 'small-caps',
-                        fontSize: '0.9em',
-                        letterSpacing: '1px'
-                    }}> ICO Crowdsale</span>
+                }}>DAPPU</span>
+                <span style={{ 
+                    fontVariant: 'small-caps',
+                    fontSize: '0.9em',
+                    letterSpacing: '1px',
+                    color: darkMode ? '#f8f9fa' : 'inherit' // Light color in dark mode
+                }}> ICO Crowdsale</span>
                 </strong><br />
                     <small >An <strong>ERC20</strong> Token</small>
-                    <br/><em><small style={{ color: '#00008B' }}>that's revolutionizing Blockchain Learning</small></em>
+                    <br/><em><small style={{ color: darkMode ? '#66b3ff' : '#00008B' }}>that's revolutionizing Blockchain Learning</small></em>
                 </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                {/* Moved Buy component here: */}
-                <div className="d-flex flex-column flex-lg-row align-items-center mx-auto">
-                {isConnected && !isLoading && provider && crowdsale && (
-                    <div className="d-flex align-items-center">
-                        <small className="text-muted me-2">Price:<strong> {price} ETH</strong></small>
-                        <Buy 
-                        provider={provider} 
-                        price={price} 
-                        crowdsale={crowdsale} 
-                        setIsLoading={setIsLoading}
-                        navbarVersion={true}
-                        />
-                    </div>
-                    )}
-                </div>
-                <div className="d-flex align-items-center">
-                </div>
-                </Navbar.Collapse>
-
                 <Navbar.Collapse className="ms-4">
+
+                <span style={{ 
+                color: '#0066cc', 
+                fontWeight: 'bold', 
+                fontSize: '1.5em',
+                letterSpacing: '1px',
+                textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                }}> <span style={{ 
+                display: 'inline-block',
+                marginBottom: '10px'
+                }}>
+                <svg width="250" height="155" viewBox="0 0 250 145" xmlns="http://www.w3.org/2000/svg">
+                    {/* Outer shadow for 3D effect */}
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+                    <feOffset dx="2" dy="4" />
+                    <feComponentTransfer>
+                        <feFuncA type="linear" slope="0.6" />
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                    </filter>
+                    
+                    {/* Gradient for 3D effect */}
+                    <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#0088ff" />
+                    <stop offset="100%" stopColor="#004488" />
+                    </linearGradient>
+                    
+                    {/* Circle background with 3D effect */}
+                    <circle cx="125" cy="70" r="60" fill="url(#circleGradient)" filter="url(#shadow)" />
+                    
+                    {/* Highlight for 3D effect */}
+                    <circle cx="115" cy="44" r="75" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="5" />
+                    
+                    {/* DAPPU text */}
+                    <text x="125" y="88" fontFamily="Arial" fontSize="25" fontWeight="bold" fill="white" textAnchor="middle">DAPPU</text>
+                </svg>
+                </span> </span>
+
                 <div>{/*button to manually reload blackchain data*/}
                     <Button 
                         variant="outline-warning" 
@@ -161,7 +192,7 @@ const Navigation = ({
                 </Modal>
 
                 {/* Connect/Disconnect button group - always on the far right */}
-                <div>
+                <div className="d-flex align-items-center">
                 {!isConnected ? (
                     <Button 
                     variant="primary" 
@@ -190,13 +221,53 @@ const Navigation = ({
                     >
                         Disconnect
                     </Button>
+                </div>
+            )} 
+                    {/* Dark mode toggle button */}
+                    <Button
+                    variant={darkMode ? "light" : "dark"}
+                    size="sm"
+                    className="ms-5"
+                    onClick={() => setDarkMode(!darkMode)}
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    >
+                    {darkMode ? (
+                        <>
+                        <span role="img" aria-label="sun" className="me-1">☀️</span>
+                        <span className="d-none d-md-inline">Light</span>
+                        </>
+                    ) : (
+                        <>
+                        <span role="img" aria-label="moon" className="me-1">🌙</span>
+                        <span className="d-none d-md-inline">Dark</span>
+                        </>
+                    )}
+                    </Button>
+                </div>
+                </Navbar.Collapse>
+
+                {/* Force a new line with flex-column */}
+                <div className="d-flex flex-column align-items-center w-100 mt-3">
+                {/* Buy Tokens button - centered below everything */}
+                {isConnected && !isLoading && provider && crowdsale && (
+                    <div className="d-flex justify-content-center" style={{ width: '555px', marginBottom: '20px' }}>
+                    <div className="d-flex align-items-center">
+                        <small className={`text-${darkMode ? 'light' : 'muted'} me-2`}>Price:<strong> {price} ETH</strong></small>
+                        <Buy 
+                        provider={provider} 
+                        price={price} 
+                        crowdsale={crowdsale} 
+                        setIsLoading={setIsLoading}
+                        navbarVersion={true}
+                        darkMode={darkMode}
+                        />
+                    </div>
                     </div>
                 )}
                 </div>
-                </Navbar.Collapse>
-                {/* Progress bar at the bottom of navbar, full width */}
-                </Container> {/* Close the main container */}
+            </Container> {/* Close the main container */}
 
+                {/* Progress bar at the bottom of navbar, full width */}
                 {isConnected && !isLoading && maxTokens && tokensSold && (
                 <div 
                     className="position-absolute" 
@@ -208,52 +279,95 @@ const Navigation = ({
                     maxWidth: '1000px'
                     }}
                 >
-                <div className="progress" style={{ height: '20px', borderRadius: '10px' }}>
-                    <div 
-                        className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-                        role="progressbar" 
-                        style={{ 
-                        width: `${(tokensSold / maxTokens) * 100}%`, 
-                        borderRadius: (tokensSold / maxTokens) * 100 < 100 ? '10px 0 0 10px' : '10px'
-                        }}
-                        aria-valuenow={(tokensSold / maxTokens) * 100}
-                        aria-valuemin="0" 
-                        aria-valuemax="100"
-                    >
-                        <span style={{ 
-                        position: 'absolute', 
-                        width: '100%', 
-                        left: 0, 
-                        fontWeight: 'bold',
-                        fontSize: '12px',
-                        textAlign: 'center',
-                        lineHeight: '20px',
-                        color: 'black',
-                        letterSpacing: '0.7px',
-                        textShadow: '1px 1px 4px rgba(255,255,255,0.9)' // Increased blur radius and opacity
+                    {/* Progress bar */}
+                    <div className="progress" style={{ 
+                        height: '20px', 
+                        borderRadius: '10px', 
+                        position: 'relative', 
+                        overflow: 'hidden',
+                        backgroundColor: darkMode ? '#3a4149' : '' // Add dark grey background in dark mode
+                    }}>                        
+                        <div 
+                            className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                            role="progressbar" 
+                            style={{ 
+                            width: `${(tokensSold / maxTokens) * 100}%`, 
+                            borderRadius: (tokensSold / maxTokens) * 100 < 100 ? '10px 0 0 10px' : '10px'
+                            }}
+                            aria-valuenow={(tokensSold / maxTokens) * 100}
+                            aria-valuemin="0" 
+                            aria-valuemax="100"
+                        ></div>
+                        
+                        {/* White text (visible over the blue part) */}
+                        <div style={{ 
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            clipPath: `inset(0 ${100 - (tokensSold / maxTokens) * 100}% 0 0)`
                         }}>
-                        Sale Progress: {tokensSold} / {maxTokens} Tokens Sold
-                        </span>
-                    </div>
-                    {/* Add percentage label inside the progress bar */}
-                    <span style={{
-                    position: 'absolute',
-                    right: '10px',
-                    top: '0',
-                    lineHeight: '20px',
-                    fontWeight: 'bold',
-                    fontSize: '12px',
-                    color: 'black',
-                    textShadow: '1px 1px 4px rgba(255,255,255,0.9)' // Increased blur radius and opacity
-                    }}>
-                    {Math.round((tokensSold / maxTokens) * 100)}%
-                    </span>
-                </div>
-                </div>
+                            <span style={{ 
+                                fontWeight: 'bold',
+                                fontSize: '12px',
+                                color: 'white',
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.7)'
+                            }}>
+                                Tokens Sold: {tokensSold} / {maxTokens}
+                            </span>
+                            <span style={{
+                                position: 'absolute',
+                                right: '10px',
+                                fontWeight: 'bold',
+                                fontSize: '12px',
+                                color: 'white',
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.7)'
+                            }}>
+                                {Math.round((tokensSold / maxTokens) * 100)}%
+                            </span>
+                        </div>
 
+                        {/* Black text (visible over the empty part) - change to light gray in dark mode */}
+                        <div style={{ 
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        clipPath: `inset(0 0 0 ${(tokensSold / maxTokens) * 100}%)`
+                        }}>
+                        <span style={{ 
+                            fontWeight: 'bold',
+                            fontSize: '12px',
+                            color: darkMode ? '#e0e0e0' : 'black', // Light gray in dark mode, black in light mode
+                            textShadow: darkMode ? '1px 1px 4px rgba(0,0,0,0.9)' : '1px 1px 4px rgba(255,255,255,0.9)' // Dark shadow in dark mode, light shadow in light mode
+                        }}>
+                            Tokens Sold: {tokensSold} / {maxTokens}
+                        </span>
+                        <span style={{
+                            position: 'absolute',
+                            right: '10px',
+                            fontWeight: 'bold',
+                            fontSize: '12px',
+                            color: darkMode ? '#e0e0e0' : 'black', // Light gray in dark mode, black in light mode
+                            textShadow: darkMode ? '1px 1px 4px rgba(0,0,0,0.9)' : '1px 1px 4px rgba(255,255,255,0.9)' // Dark shadow in dark mode, light shadow in light mode
+                        }}>
+                            {Math.round((tokensSold / maxTokens) * 100)}%
+                        </span>
+                        </div>
+                        </div>
+                    </div>
                 )}
         </Navbar>
     );
 }
+//Add transaction ledger
 
 export default Navigation;

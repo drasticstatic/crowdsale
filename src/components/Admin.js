@@ -5,8 +5,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Form, Button, Card } from 'react-bootstrap';
+import './DarkMode.css';
 
-const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelistStatus }) => {
+const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelistStatus, darkMode }) => {
     const [address, setAddress] = useState('');
     const [isWhitelistEnabled, setIsWhitelistEnabled] = useState(whitelistStatus);
         // ↑ Pass in state from parent component to manage loading state (loadblockchaindata)
@@ -102,7 +103,9 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             //window.location.reload();// Force page reload instead of using loading state
             //document.location.href = document.location.href;// DIRECT FIX: Force a hard reload of the page
             //window.location.href = window.location.pathname + window.location.search;
-            window.location.reload(true); // true forces a reload from the server, not from cache
+            
+            //window.location.reload(true); // true forces a reload from the server, not from cache
+            //↑ now removed b/c causing dark mode state to reload to light-mode
         } catch (error) {
             console.error("Toggle whitelist error:", error);
             
@@ -126,8 +129,12 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
         try {
             const signer = await provider.getSigner();
             const addresses = await crowdsale.connect(signer).getWhitelistedAddresses();
-            setWhitelistedAddresses(addresses);
-            console.log("Fetched whitelisted addresses:", addresses);
+            //setWhitelistedAddresses(addresses);
+            //console.log("Fetched whitelisted addresses:", addresses);
+                // Filter out duplicates:
+                const uniqueAddresses = [...new Set(addresses)];
+                console.log("Fetched whitelisted addresses:", uniqueAddresses);
+                setWhitelistedAddresses(uniqueAddresses);
         } catch (error) {
             console.error("Error fetching whitelisted addresses:", error);
         }
@@ -169,17 +176,18 @@ updateWhitelistStatus();
 }, [provider, crowdsale, setWhitelistStatus]);
 
     return (
-        <Card className="my-4">
-            <Card.Header>Admin Panel - Whitelist Management</Card.Header>
+        <Card className="my-4" bg={darkMode ? "dark" : "light"} text={darkMode ? "white" : "dark"}>
+            <Card.Header className={darkMode ? "border-secondary" : ""}>Admin Panel - Whitelist Management</Card.Header>
             <Card.Body>
                 <Form onSubmit={addToWhitelistHandler}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Investor Address</Form.Label>
+                        <Form.Label className={darkMode ? "text-light" : ""}>Investor's Ethereum Address:</Form.Label>
                         <Form.Control 
                             type="text" 
-                            placeholder="0x..." 
+                            placeholder=" 0x..." 
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            className={`${darkMode ? "bg-dark text-light border-secondary dark-placeholder" : ""}`}
                         />
                     </Form.Group>
 
@@ -190,7 +198,9 @@ updateWhitelistStatus();
                         <Button variant="danger" onClick={removeFromWhitelistHandler}>
                         <strong>REMOVE</strong> <small>from Whitelist</small>
                         </Button>
-                        <hr />
+                        
+                        <hr className={darkMode ? "border-secondary" : ""} />
+
                         {isWhitelistEnabled && (
                             <p className="text-info mb-2">
                                 <small><i className="bi bi-info-circle"></i> <br /><strong>Whitelist</strong> is currently  
@@ -248,7 +258,7 @@ updateWhitelistStatus();
                             )}
                         </Button>
                         <br /><br />
-                        <div className="text-muted mb-2">
+                        <div className={`text-center small ${darkMode ? 'text-light' : 'text-muted'}`}>
                             <p style={{ fontSize: '0.6em' }}><i className="bi bi-info-circle"></i> <em>whitelist=enabled - default state upon deployment</em></p>
                         </div>
                     </div>
