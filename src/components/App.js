@@ -546,18 +546,18 @@ function App() {
         </ul>
         
         <p>Whether you're a developer, student, or curious builder, DAPPU gives you the keys to <em>practice before you launch</em>.</p>
-        
+
         <p className="text-center"><strong>
-          <big>🙅</big>&nbsp;&nbsp;No risk&nbsp;&nbsp;
-          <big>📚</big>&nbsp;&nbsp;All learning&nbsp;&nbsp;
-          <big>🛜</big>&nbsp;&nbsp;Full decentralization&nbsp;&nbsp;
-          <big>🔗</big></strong></p>
+          <span style={{ fontSize: '1.7em' }}>🙅</span>&nbsp;&nbsp;No risk&nbsp;&nbsp;
+          <span style={{ fontSize: '1.7em' }}>📚</span>&nbsp;&nbsp;All learning&nbsp;&nbsp;
+          <span style={{ fontSize: '1.7em' }}>🛜</span>&nbsp;&nbsp;Full decentralization&nbsp;&nbsp;
+          <span style={{ fontSize: '1.7em' }}>🔗</span></strong></p>
         
         <h5 className="text-center">
-          <big>📌</big>&nbsp;&nbsp;Claim your test tokens&nbsp;&nbsp;
-          <big>🤝</big>&nbsp;&nbsp;Join the experiment&nbsp;&nbsp;
-          <big>₿</big>&nbsp;&nbsp;Learn with DAPPU!&nbsp;&nbsp;
-          <big>🧑‍💻</big></h5>
+          <span style={{ fontSize: '1.8em' }}>📌</span>&nbsp;&nbsp;Claim your test tokens&nbsp;&nbsp;
+          <span style={{ fontSize: '1.8em' }}>🤝</span>&nbsp;&nbsp;Join the experiment&nbsp;&nbsp;
+          <span style={{ fontSize: '1.8em' }}>₿</span>&nbsp;&nbsp;Learn with DAPPU!&nbsp;&nbsp;
+          <span style={{ fontSize: '1.8em' }}>🧑‍💻</span></h5>
       </div>
 
       <hr /> {/* Separator line for visual clarity */}

@@ -70,7 +70,7 @@ const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion, darkMode
 
     return (
         <Form onSubmit={buyHandler} style={navbarVersion ? { margin: '0' } : { maxWidth: '800px', margin: '50px auto' }}>
-            <Form.Group as={Row} className="mb-2">
+            <Form.Group as={Row} className="align-items-center mb-2">
                 <Col className='text-center ms-2'>
                 <Form.Control 
                     type="number"
@@ -89,16 +89,16 @@ const Buy = ({ provider, price, crowdsale, setIsLoading, navbarVersion, darkMode
                     variant="danger" // Change from primary to danger (red)
                     type="submit" 
                     style={{ 
-                        width: '100%',
+                        width: '111%',
                         fontWeight: 'bold',
                         boxShadow: darkMode ? '0 4px 8px rgba(255,255,255,0.2)' : '0 4px 8px rgba(0,0,0,0.2)',
                         background: 'linear-gradient(45deg, #ff5e62, #ff9966)', // Gradient background
                         border: 'none',
-                        transform: 'scale(1.2)' // Make it slightly larger
+                        transform: 'scale(1.22)' // Make it slightly larger
                     }}
                     size={navbarVersion ? "sm" : "md"}
                     >
-                    <big>🔥 BUY TOKENS 🔥</big>
+                    <span style={{ fontSize: '1.7em' }}>🔥</span>&nbsp;<big> BUY TOKENS </big>&nbsp;<span style={{ fontSize: '1.7em' }}>🔥</span>
                     </Button>
                 )}
                 </Col>
