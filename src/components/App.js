@@ -617,33 +617,41 @@ function App() {
         )}
 
         {/* This modal at the bottom of your component, next to the disconnect modal */}
-        <Modal show={showWhitelistCheckModal} onHide={() => setShowWhitelistCheckModal(false)}>
-          <Modal.Header closeButton>
+        <Modal 
+          show={showWhitelistCheckModal} 
+          onHide={() => setShowWhitelistCheckModal(false)}
+          contentClassName={darkMode ? "bg-dark text-light" : ""}
+        >
+          <Modal.Header closeButton className={darkMode ? "bg-dark text-light border-secondary" : ""}>
             <Modal.Title>Whitelist Status Check</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className={darkMode ? "bg-dark text-light" : ""}>
             {whitelistCheckResult && (
               <>
                 <p><strong>Your Address:</strong> {whitelistCheckResult.address}</p>
                 <p><strong>Whitelist Status:</strong> {whitelistCheckResult.isWhitelisted ? 
-                  <span className="text-success">✓ You are whitelisted</span> : 
-                  <span className="text-danger">✗ You are not whitelisted</span>}
+                  <span className="text-success"><strong>✓</strong> The connected wallet <strong>IS</strong> whitelisted</span> : 
+                  <span className="text-danger"><strong>✗</strong> The connected wallet is <strong>NOT</strong> whitelisted</span>}
                 </p>
                 <p><strong>Whitelist Feature:</strong> {whitelistCheckResult.whitelistEnabled ? 
-                  <span className="text-success">✓ Currently ENABLED - Only whitelisted addresses can buy tokens</span> : 
-                  <span className="text-warning">✗ Currently DISABLED - Anyone can buy tokens</span>}
+                  <span className="text-success"><strong>✓ ENABLED</strong> - Only whitelisted addresses can buy tokens</span> : 
+                  <span className="text-warning"><strong>✗ DISABLED</strong> - Anyone can buy tokens</span>}
                 </p>
-                <div className="alert alert-info">
+                <div className={`alert ${darkMode ? "alert-dark border-info" : "alert-info"}`}>
                   {whitelistCheckResult.whitelistEnabled && !whitelistCheckResult.isWhitelisted ? 
-                    "The wallet currently connected is NOT able to purchase tokens until added to the whitelist or the whitelist is disabled." : 
-                    "Congrats! You ARE allowed to purchase tokens!"
+                    <>The wallet currently connected is <strong>NOT</strong> able to purchase tokens until added to the whitelist
+                      &nbsp;<span style={{ fontSize: '1.5em' }}>😩</span> or unless the whitelist becomes disabled.
+                      &nbsp;<span style={{ fontSize: '1.5em' }}>👀&nbsp;🤪</span></>:
+                    <><strong>Congrats!
+                      &nbsp;<span style={{ fontSize: '1.5em' }}> 🥳</span>
+                      &nbsp;</strong> You <strong>ARE</strong> allowed to purchase tokens!</>
                   }
                 </div>
               </>
             )}
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowWhitelistCheckModal(false)}>
+          <Modal.Footer className={darkMode ? "bg-dark border-secondary" : ""}>
+            <Button variant={darkMode ? "outline-light" : "secondary"} onClick={() => setShowWhitelistCheckModal(false)}>
               Close
             </Button>
           </Modal.Footer>
@@ -674,16 +682,20 @@ function App() {
         />
       )}
 
-    <Modal show={showDisconnectModal} onHide={() => setShowDisconnectModal(false)}>
-      <Modal.Header closeButton>
+    <Modal 
+      show={showDisconnectModal} 
+      onHide={() => setShowDisconnectModal(false)}
+      contentClassName={darkMode ? "bg-dark text-light" : ""}
+    >
+      <Modal.Header closeButton className={darkMode ? "bg-dark text-light border-secondary" : ""}>
         <Modal.Title>Wallet Disconnected from DApp</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={darkMode ? "bg-dark text-light" : ""}>
         <p style={{ paddingLeft: '55px' }}><strong>Note:</strong></p>
         <p className="text-center">To fully disconnect from MetaMask,<br/>use the MetaMask extension itself.</p>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={() => setShowDisconnectModal(false)}>
+      <Modal.Footer className={darkMode ? "bg-dark border-secondary" : ""}>
+        <Button variant={darkMode ? "outline-light" : "secondary"} onClick={() => setShowDisconnectModal(false)}>
           Close
         </Button>
       </Modal.Footer>

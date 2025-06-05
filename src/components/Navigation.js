@@ -175,20 +175,27 @@ const Navigation = ({
                     </Button>
                 </div>
                 {/* Modal for displaying owner status */}
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Owner Status</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p><strong>Am I the Owner?:</strong> {ownerStatus.isOwner ? 'Yes' : 'No'}</p>
-                        <p><strong>My Address:</strong> {ownerStatus.account}</p>
-                        <p><strong>Owner's Address:</strong> {ownerStatus.owner}</p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>
-                            Close
-                        </Button>
-                    </Modal.Footer>
+                <Modal 
+                    show={showModal} 
+                    onHide={() => setShowModal(false)}
+                    contentClassName={darkMode ? "bg-dark text-light" : ""}
+                >
+                <Modal.Header closeButton className={darkMode ? "bg-dark text-light border-secondary" : ""}>
+                    <Modal.Title>Owner Status</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className={darkMode ? "bg-dark text-light" : ""}>
+                    <p><strong>Am I the Owner?:</strong> {ownerStatus.isOwner ? 
+                    <span className="text-success"><strong>✓ Yes</strong></span> : 
+                    <span className="text-danger"><strong>✗ No</strong></span>}
+                    </p>
+                    <p><strong>Your Address:</strong> {ownerStatus.account}</p>
+                    <p><strong>Owner Address:</strong> {ownerStatus.owner}</p>
+                </Modal.Body>
+                <Modal.Footer className={darkMode ? "bg-dark border-secondary" : ""}>
+                    <Button variant={darkMode ? "outline-light" : "secondary"} onClick={() => setShowModal(false)}>
+                    Close
+                    </Button>
+                </Modal.Footer>
                 </Modal>
 
                 {/* Connect/Disconnect button group - always on the far right */}
@@ -368,6 +375,5 @@ const Navigation = ({
         </Navbar>
     );
 }
-//Add transaction ledger
 
 export default Navigation;

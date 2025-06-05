@@ -262,7 +262,6 @@ updateWhitelistStatus();
                             <p style={{ fontSize: '0.6em' }}><i className="bi bi-info-circle"></i> <em>whitelist=enabled - default state upon deployment</em></p>
                         </div>
                     </div>
-                    <hr />
                     <div className="d-flex justify-content-between mb-2">
                         <Button 
                             variant="outline-secondary" 
