@@ -176,26 +176,26 @@ The application provides clear visual indicators of whitelist status:
   <big><strong>Admin Panel for Whitelist Management:</strong></big></p>
 <p align="center"><small> ( appears below public status indicator & check button ) </small></p>
 <p align="center">
-<table>
-  <tr>
-    <td align="center">
-      <img src="screenshots/whitelist_admin_panel-enabled.png" width="444" alt="Whitelist Enabled">
-      <p>Whitelist <strong><big><span style="color: #28a745;">IS</span></big></strong> active <em>( <span style="color: #28a745;">enabled</span> ) </em>✅</p>
-        <p><strong><img src="screenshots/click.png" width="15" alt="Click-Toggle">
-         Toggle to Disable</strong></p>
-          <p><strong><big>↓</big></strong></p>
-    </td>
-    <td align="center">
-      <img src="screenshots/whitelist_admin_panel-disabled.png" width="444" alt="Whitelist Disabled">
-      <p>Whitelist is <strong><span style="color: #dc3545;">NOT</span></strong> active <em>( <span style="color: #dc3545;">disabled</span> ) </em>❌</p>
-        <p><strong><img src="screenshots/click.png" width="15" alt="Click-Toggle">
-        Toggle to Enable</strong></p>
-          <p><strong><big>↓</big></strong></p>
-    </td>
-  </tr>
-</table>
+  <table border="0" cellspacing="0" cellpadding="10">
+    <tr>
+      <td align="center">
+        <img src="screenshots/whitelist_admin_panel-enabled.png" width="444" alt="Whitelist Enabled">
+        <p>Whitelist <strong><big><span style="color: #28a745;">IS</span></big></strong> active <em>( <span style="color: #28a745;">enabled</span> ) </em>✅</p>
+          <p><strong><img src="screenshots/click.png" width="15" alt="Click-Toggle">
+          Toggle to Disable</strong></p>
+            <p><strong><big>↓</big></strong></p>
+      </td>
+      <td align="center">
+        <img src="screenshots/whitelist_admin_panel-disabled.png" width="444" alt="Whitelist Disabled">
+        <p>Whitelist is <strong><span style="color: #dc3545;">NOT</span></strong> active <em>( <span style="color: #dc3545;">disabled</span> ) </em>❌</p>
+          <p><strong><img src="screenshots/click.png" width="15" alt="Click-Toggle">
+          Toggle to Enable</strong></p>
+            <p><strong><big>↓</big></strong></p>
+      </td>
+    </tr>
+  </table>
 <p align="center">
-  <table align="center">
+  <table border="0" cellspacing="0" cellpadding="10">
     <tr>
       <td align="center">
         <img src="screenshots/whitelist_disabled_alert.png" width="288" alt="Whitelist Disabled">
@@ -215,7 +215,7 @@ The application provides clear visual indicators of whitelist status:
   <strong>Not a whitelisted address?:</strong></p>
 <p align="center"><strong><big>↓</big></strong></p>
 <p align="center">
-  <table>
+  <table border="0" cellspacing="0" cellpadding="10">
     <tr>
       <td align="center">
         <img src="screenshots/whitelist_not-whitelisted.png" width="288" alt="Not Whitelisted">
