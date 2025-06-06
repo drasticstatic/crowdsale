@@ -175,6 +175,7 @@ The application provides clear visual indicators of whitelist status:
 <p align="center">
   <big><strong>Admin Panel for Whitelist Management:</strong></big></p>
 <p align="center"><small> ( appears below public status indicator & check button ) </small></p>
+<p align="center">
 <table>
   <tr>
     <td align="center">
@@ -193,7 +194,6 @@ The application provides clear visual indicators of whitelist status:
     </td>
   </tr>
 </table>
-</br>
 <p align="center">
   <table align="center">
     <tr>
@@ -210,7 +210,7 @@ The application provides clear visual indicators of whitelist status:
     </tr>
   </table>
 </p>
-</br>
+</br></br>
 <p align="center">
   <strong>Not a whitelisted address?:</strong></p>
 <p align="center"><strong><big>↓</big></strong></p>
@@ -223,7 +223,8 @@ The application provides clear visual indicators of whitelist status:
       </td>
     </tr>
   </table>
-
+<p align="center"></p>
+</br>
 </hr>
 
 ## Best Practices
