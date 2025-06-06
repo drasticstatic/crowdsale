@@ -7,6 +7,18 @@ This project implements an Ethereum-based token crowdsale system using Hardhat a
 - React frontend for interacting with the contracts
 - Comprehensive test suites and documentation
 
+## Screenshots
+
+### Main Application
+![DAPPU Crowdsale Main Screen](/screenshots/main-screen.png)
+
+### Admin Panel
+![Admin Whitelist Management](/screenshots/admin-panel.png)
+
+### Dark Mode
+![Application in Dark Mode](/screenshots/dark-mode.png)
+
+
 ## 🔰 Beginner's Guide
 
 **A crowdsale** is a fundraising campaign where people can send Ethereum (ETH) to buy custom tokens. Like selling concert tickets for money.
@@ -31,6 +43,7 @@ This project implements an Ethereum-based token crowdsale system using Hardhat a
   - Direct ETH-to-token purchases
   - Owner-controlled price setting
   - Sale finalization with fund collection
+  - Whitelist functionality for restricted sales
 
 ## Frontend Components
 
@@ -40,8 +53,19 @@ The React frontend includes several components:
 - **Buy.js**: Form for purchasing tokens with ETH
 - **Progress.js**: Visual progress bar showing token sale status
 - **Info.js**: Displays user account and token balance
-- **Navigation.js**: Header with app logo and name
+- **Navigation.js**: Header with app logo, name, and wallet connection
 - **Loading.js**: Loading spinner shown during blockchain operations
+- **Admin.js**: Admin panel for whitelist management (owner only)
+- **TransactionLedger.js**: Displays transaction history for the crowdsale
+
+## New Features
+
+- **Dark Mode**: Toggle between light and dark themes for better user experience
+- **Whitelist Management**: Restrict token purchases to approved addresses
+- **Transaction Ledger**: View all token purchase transactions
+- **Responsive Design**: Optimized for both desktop and mobile devices
+- **Enhanced UI**: Animated progress bar, gradient buttons, and improved visual feedback
+- **Wallet Integration**: Seamless connection with MetaMask and other Web3 wallets
 
 ## Documentation
 
@@ -53,6 +77,7 @@ Each component has detailed documentation in its own README file:
 - **README_Info.js.md**: Account info component documentation
 - **README_Navigation.js.md**: Navigation bar documentation
 - **README_Loading.js.md**: Loading spinner documentation
+- **README_Admin.js.md**: Admin panel and whitelist management documentation
 
 ## Testing
 
@@ -96,9 +121,19 @@ npx hardhat help
 - `/scripts`: Deployment modules (helps put your contracts on the blockchain)
 <em>'scripts' are sometimes referred to as 'ignitition modules'</em>
 
+## Troubleshooting
+
+See the component-specific README files for detailed troubleshooting guides. Common issues include:
+
+- **Whitelist Issues**: If removed addresses still appear in the list, ensure the `getWhitelistedAddresses()` function is properly filtering by current status
+- **UI State Synchronization**: Always refresh data from the blockchain after state-changing operations
+- **MetaMask Connection**: Check for proper account detection and connection status
+- **Dark Mode Persistence**: Dark mode state is stored in memory and will reset on page refresh
+
 ## Common Questions for Beginners
 
-- **Do I need real ETH to test this?** No, Hardhat creates a simulated blockchain, but will need Seoplia ETH for testing
+- **Do I need real ETH to test this?** No, Hardhat creates a simulated blockchain, but will need Sepolia ETH for testing on testnet
 - **What is Hardhat?** A development environment to compile, deploy, test, and debug Ethereum software
 - **What happens when someone buys tokens?** They send ETH to the contract and automatically receive your tokens in return
 - **Can I modify the code?** Yes! This is a template you can customize for your own token sale
+- **What is a whitelist?** A list of approved addresses that are allowed to purchase tokens when whitelist mode is enabled
