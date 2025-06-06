@@ -9,15 +9,14 @@ This project implements an Ethereum-based token crowdsale system using Hardhat a
 
 ## Screenshots
 
-### Main Application
+### Main Application:
 ![DAPPU Crowdsale Main Screen](/screenshots/main-screen.png)
 
-### Admin Panel
+### Admin Panel:
 ![Admin Whitelist Management](/screenshots/admin-panel.png)
 
-### Dark Mode
+### Dark Mode:
 ![Application in Dark Mode](/screenshots/dark-mode.png)
-
 
 ## 🔰 Beginner's Guide
 

@@ -124,7 +124,14 @@ const Navigation = ({
                     <circle cx="125" cy="70" r="60" fill="url(#circleGradient)" filter="url(#shadow)" />
                     
                     {/* Highlight for 3D effect */}
-                    <circle cx="115" cy="44" r="75" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="5" />
+                    <circle 
+                        cx="115" 
+                        cy="44" 
+                        r="75" 
+                        fill="none" 
+                        stroke={darkMode ? "rgba(33,37,41,0.3)" : "rgba(255,255,255,0.3)"} 
+                        strokeWidth="5" 
+                    />
                     
                     {/* DAPPU text */}
                     <text x="125" y="88" fontFamily="Arial" fontSize="25" fontWeight="bold" fill="white" textAnchor="middle">DAPPU</text>
