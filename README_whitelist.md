@@ -172,40 +172,59 @@ The application provides clear visual indicators of whitelist status:
 
 ## Screenshots
 
-<div align="center">
-  <p><big><strong>Admin Panel for Whitelist Management:</strong></big></p>
-  <p><small> ( appears below public status indicator & check button ) </small></p>
-  <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-    <div>
+<p align="center">
+  <big><strong>Admin Panel for Whitelist Management:</strong></big></p>
+<p align="center"><small> ( appears below public status indicator & check button ) </small></p>
+<table>
+  <tr>
+    <td align="center">
       <img src="screenshots/whitelist_admin_panel-enabled.png" width="444" alt="Whitelist Enabled">
       <p>Whitelist <strong><big><span style="color: #28a745;">IS</span></big></strong> active <em>( <span style="color: #28a745;">enabled</span> ) </em>✅</p>
         <p><strong><img src="screenshots/click.png" width="15" alt="Click-Toggle">
          Toggle to Disable</strong></p>
           <p><strong><big>↓</big></strong></p>
-    </div>
-    <div>
+    </td>
+    <td align="center">
       <img src="screenshots/whitelist_admin_panel-disabled.png" width="444" alt="Whitelist Disabled">
       <p>Whitelist is <strong><span style="color: #dc3545;">NOT</span></strong> active <em>( <span style="color: #dc3545;">disabled</span> ) </em>❌</p>
         <p><strong><img src="screenshots/click.png" width="15" alt="Click-Toggle">
         Toggle to Enable</strong></p>
           <p><strong><big>↓</big></strong></p>
-    </div>
-  </div>
-    <div style="display: flex; justify-content: center; gap: 155px; margin-bottom: 20px;">
-    <div>
-      <img src="screenshots/whitelist_disabled_alert.png" width="288" alt="Whitelist Disabled">
-      <p><em>alert:&nbsp;</em><strong><big><span style="color: #dc3545;">DISABLED</span></big></strong></p>
-    </div>
-    <div>
-      <img src="screenshots/whitelist_enabled_alert.png" width="288" alt="Whitelist Enabled">
-      <p><em>alert:&nbsp;</em><strong><big><span style="color: #28a745;">ENABLED</span></big></strong></p>
-    </div>
-  </div>
-  <p><strong>Not a whitelisted address?:</strong></p>
-    <p><strong><big>↓</big></strong></p>
-  <img src="screenshots/whitelist_not-whitelisted.png" width="288" alt="Not Whitelisted">
-  <p><em>alert:&nbsp;</em> User <strong><big>NOT</big></strong> Whitelisted</p>
-</div>
+    </td>
+  </tr>
+</table>
+</br>
+<p align="center">
+  <table align="center">
+    <tr>
+      <td align="center">
+        <img src="screenshots/whitelist_disabled_alert.png" width="288" alt="Whitelist Disabled">
+        <p><em>alert:&nbsp;</em><strong><big><span style="color: #dc3545;">DISABLED</span></big></strong><p>
+      </td>
+      <!-- Add spacing between columns -->
+        <td width="111"></td>
+      <td align="center">
+        <img src="screenshots/whitelist_enabled_alert.png" width="288" alt="Whitelist Enabled">
+        <p><em>alert:&nbsp;</em><strong><big><span style="color: #28a745;">ENABLED</span></big></strong><p>
+      </td>
+    </tr>
+  </table>
+</p>
+</br>
+<p align="center">
+  <strong>Not a whitelisted address?:</strong></p>
+<p align="center"><strong><big>↓</big></strong></p>
+<p align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="screenshots/whitelist_not-whitelisted.png" width="288" alt="Not Whitelisted">
+        <p><em>alert:&nbsp;</em> User <strong><big>NOT</big></strong> Whitelisted</p>
+      </td>
+    </tr>
+  </table>
+
+</hr>
 
 ## Best Practices
 
