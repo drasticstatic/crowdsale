@@ -185,6 +185,8 @@ The application provides clear visual indicators of whitelist status:
           Toggle to Disable</strong></p>
             <p><strong><big>↓</big></strong></p>
       </td>
+        <!-- Add spacing between columns -->
+        <td></td>
       <td align="center">
         <img src="screenshots/whitelist_admin_panel-disabled.png" width="444" alt="Whitelist Disabled">
         <p>Whitelist is <strong><span style="color: #dc3545;">NOT</span></strong> active <em>( <span style="color: #dc3545;">disabled</span> ) </em>❌</p>
@@ -201,8 +203,8 @@ The application provides clear visual indicators of whitelist status:
         <img src="screenshots/whitelist_disabled_alert.png" width="288" alt="Whitelist Disabled">
         <p><em>alert:&nbsp;</em><strong><big><span style="color: #dc3545;">DISABLED</span></big></strong><p>
       </td>
-      <!-- Add spacing between columns -->
-        <td width="111"></td>
+        <!-- Add spacing between columns -->
+        <td></td>
       <td align="center">
         <img src="screenshots/whitelist_enabled_alert.png" width="288" alt="Whitelist Enabled">
         <p><em>alert:&nbsp;</em><strong><big><span style="color: #28a745;">ENABLED</span></big></strong><p>
@@ -216,7 +218,6 @@ The application provides clear visual indicators of whitelist status:
 <p align="center"><strong><big>↓</big></strong></p>
 <p align="center">
 <div align="center">
-  <h3>User Whitelist Status Check</h3>
   <img src="screenshots/whitelist_not-whitelisted.png" width="288" alt="Not Whitelisted">
         <p><em>alert:&nbsp;</em> User <strong><big>NOT</big></strong> Whitelisted</p>
 </div>
