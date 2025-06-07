@@ -215,16 +215,11 @@ The application provides clear visual indicators of whitelist status:
   <strong>Not a whitelisted address?:</strong></p>
 <p align="center"><strong><big>↓</big></strong></p>
 <p align="center">
-  <table border="0" cellspacing="0" cellpadding="10">
-    <tr>
-      <td align="center">
-        <img src="screenshots/whitelist_not-whitelisted.png" width="288" alt="Not Whitelisted">
+<div align="center">
+  <h3>User Whitelist Status Check</h3>
+  <img src="screenshots/whitelist_not-whitelisted.png" width="288" alt="Not Whitelisted">
         <p><em>alert:&nbsp;</em> User <strong><big>NOT</big></strong> Whitelisted</p>
-      </td>
-    </tr>
-  </table>
-<p align="center"></p>
-</br>
+</div>
 </hr>
 
 ## Best Practices
