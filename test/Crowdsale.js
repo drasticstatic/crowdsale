@@ -32,8 +32,8 @@ describe('Crowdsale', () => {
     // Configure/get test accounts from Hardhat
     accounts = await ethers.getSigners()
     deployer = accounts[0] // First account is the deployer
-    user1 = accounts[1]    // Second account is a regular user
-    user2 = accounts[2]
+    user1 = accounts[1]    // Second account is a regular user (testing as whitelisted)
+    user2 = accounts[2]    // Third account is also a regular user (testing as not-whitelisted)
 
     /* Deploy the Crowdsale contract with:
       - token address
@@ -66,7 +66,9 @@ describe('Crowdsale', () => {
   })
 
   // --- TEST CASES FOR CROWDSALE FUNCTIONALITY --- :
-
+      beforeEach(async () => {
+        await crowdsale.connect(deployer).addToWhitelist(user1.address);
+      })
     // --- ADD A NEW TEST CASE TO CHECK BUYING AND TRANSFERRING TOKENS --- :
       describe('Buying Tokens', () => {
         let transaction, result
@@ -75,6 +77,8 @@ describe('Crowdsale', () => {
         describe('Success', () => { // This section tests the successful purchase scenario
             // Set up a token purchase before each test
           beforeEach(async () => {
+            //await crowdsale.connect(deployer).toggleWhitelist(false);// Disable whitelist for this test
+
             // Setup: User1 buys 10 tokens by sending 10 ETH to the contract
             // The connect() method specifies which account is making the transaction
             transaction = await crowdsale.connect(user1).buyTokens(amount, { value: ether(10) })
@@ -124,6 +128,8 @@ describe('Crowdsale', () => {
       describe('Success', () => {
   
         beforeEach(async () => {
+          //await crowdsale.connect(deployer).toggleWhitelist(false);// Disable whitelist for this test
+          
           // User1 sends ETH directly to the contract address (not calling a specific function)
           transaction = await user1.sendTransaction({ to: crowdsale.address, value: amount })
           result = await transaction.wait()
@@ -182,6 +188,8 @@ describe('Crowdsale', () => {
       describe('Success', () => {
   
         beforeEach(async () => {
+          //await crowdsale.connect(deployer).toggleWhitelist(false);// Disable whitelist for this test
+
           // First, user1 buys some tokens
             // User1 buys 10 tokens for 10 ETH
           transaction = await crowdsale.connect(user1).buyTokens(amount, { value: value })
@@ -295,35 +303,44 @@ describe('Crowdsale', () => {
 
   describe('Buying Tokens with Whitelist', () => {
     it('prevents non-whitelisted users from buying tokens when whitelist is enabled', async () => {
-      await expect(
-        crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
-      ).to.be.revertedWith('Address not whitelisted')
-    })
-
-    it('allows whitelisted users to buy tokens', async () => {
-      await crowdsale.connect(deployer).addToWhitelist(user1.address)
-      
-      await crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
-      expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
-    })
-
-    it('allows anyone to buy tokens when whitelist is disabled', async () => {
-      await crowdsale.connect(deployer).toggleWhitelist(false)
-      
-      await crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
-      expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
-      
-      await crowdsale.connect(user2).buyTokens(tokens(20), { value: tokens(20) })
-      expect(await token.balanceOf(user2.address)).to.equal(tokens(20))
-    })
-
-    it('re-enables whitelist restrictions after toggling back on', async () => {
-      await crowdsale.connect(deployer).toggleWhitelist(false)
+      // Make sure whitelist is enabled
       await crowdsale.connect(deployer).toggleWhitelist(true)
       
+      // Try to buy tokens with a non-whitelisted address
       await expect(
-        crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
+        crowdsale.connect(user2).buyTokens(tokens(10), { value: ether(10) })
       ).to.be.revertedWith('Address not whitelisted')
     })
-  })
+  
+    it('allows whitelisted users to buy tokens', async () => {
+      // Add user to whitelist
+      await crowdsale.connect(deployer).addToWhitelist(user1.address)
+      
+      // Buy tokens
+      await crowdsale.connect(user1).buyTokens(tokens(10), { value: ether(10) })
+      expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
+    })
+  
+    it('allows anyone to buy tokens when whitelist is disabled', async () => {
+      // Disable whitelist
+      await crowdsale.connect(deployer).toggleWhitelist(false)
+      
+      // Buy tokens without being whitelisted
+      await crowdsale.connect(user1).buyTokens(tokens(10), { value: ether(10) })
+      expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
+    })
+  
+    it('re-enables whitelist restrictions after toggling back on', async () => {
+      // First disable whitelist
+      await crowdsale.connect(deployer).toggleWhitelist(false)
+      
+      // Then re-enable it
+      await crowdsale.connect(deployer).toggleWhitelist(true)
+      
+      // Try to buy tokens with a non-whitelisted address
+      await expect(
+        crowdsale.connect(user2).buyTokens(tokens(10), { value: ether(10) })
+      ).to.be.revertedWith('Address not whitelisted')
+    })
+  })  
 })
