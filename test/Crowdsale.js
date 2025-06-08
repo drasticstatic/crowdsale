@@ -18,7 +18,7 @@ const ether = tokens
 describe('Crowdsale', () => {
   // Variables to store contract instances and test accounts
   let token, crowdsale
-  let deployer, user1
+  let deployer, user1, user2
 
   // This runs before each test to set up a fresh environment
   beforeEach(async () => {
@@ -33,6 +33,7 @@ describe('Crowdsale', () => {
     accounts = await ethers.getSigners()
     deployer = accounts[0] // First account is the deployer
     user1 = accounts[1]    // Second account is a regular user
+    user2 = accounts[2]
 
     /* Deploy the Crowdsale contract with:
       - token address
@@ -221,5 +222,108 @@ describe('Crowdsale', () => {
   
       })
     })
-  })
   
+/* ==== Whitelisting Tests: ====
+  These tests cover:
+    Whitelist management (adding, removing, toggling)
+    Access control (only owner can manage whitelist)
+    Buying tokens with whitelist enabled/disabled
+    Getting the list of whitelisted addresses*/
+  describe('Whitelist Management', () => {
+    it('app starts with whitelist enabled', async () => {
+      expect(await crowdsale.whitelistEnabled()).to.equal(true)
+    })
+
+    it('allows owner to add addresses to whitelist', async () => {
+      await crowdsale.connect(deployer).addToWhitelist(user1.address)
+      expect(await crowdsale.whitelist(user1.address)).to.equal(true)
+    })
+
+    it('allows owner to remove addresses from whitelist', async () => {
+      await crowdsale.connect(deployer).addToWhitelist(user1.address)
+      expect(await crowdsale.whitelist(user1.address)).to.equal(true)
+      
+      await crowdsale.connect(deployer).removeFromWhitelist(user1.address)
+      expect(await crowdsale.whitelist(user1.address)).to.equal(false)
+    })
+
+    it('prevents non-owners from adding to whitelist', async () => {
+      await expect(
+        crowdsale.connect(user1).addToWhitelist(user2.address)
+      ).to.be.revertedWith('Caller is not and must be the owner')
+    })
+
+    it('prevents non-owners from removing from whitelist', async () => {
+      await crowdsale.connect(deployer).addToWhitelist(user2.address)
+      
+      await expect(
+        crowdsale.connect(user1).removeFromWhitelist(user2.address)
+      ).to.be.revertedWith('Caller is not and must be the owner')
+    })
+
+    it('allows owner to toggle whitelist status', async () => {
+      expect(await crowdsale.whitelistEnabled()).to.equal(true)
+      
+      await crowdsale.connect(deployer).toggleWhitelist(false)
+      expect(await crowdsale.whitelistEnabled()).to.equal(false)
+      
+      await crowdsale.connect(deployer).toggleWhitelist(true)
+      expect(await crowdsale.whitelistEnabled()).to.equal(true)
+    })
+
+    it('returns correct list of whitelisted addresses', async () => {
+      await crowdsale.connect(deployer).addToWhitelist(user1.address)
+      await crowdsale.connect(deployer).addToWhitelist(user2.address)
+      
+      const whitelistedAddresses = await crowdsale.getWhitelistedAddresses()
+      expect(whitelistedAddresses.length).to.equal(2)
+      expect(whitelistedAddresses).to.include(user1.address)
+      expect(whitelistedAddresses).to.include(user2.address)
+    })
+
+    it('returns correct list after removing addresses', async () => {
+      await crowdsale.connect(deployer).addToWhitelist(user1.address)
+      await crowdsale.connect(deployer).addToWhitelist(user2.address)
+      await crowdsale.connect(deployer).removeFromWhitelist(user1.address)
+      
+      const whitelistedAddresses = await crowdsale.getWhitelistedAddresses()
+      expect(whitelistedAddresses.length).to.equal(1)
+      expect(whitelistedAddresses).to.include(user2.address)
+      expect(whitelistedAddresses).to.not.include(user1.address)
+    })
+  })
+
+  describe('Buying Tokens with Whitelist', () => {
+    it('prevents non-whitelisted users from buying tokens when whitelist is enabled', async () => {
+      await expect(
+        crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
+      ).to.be.revertedWith('Address not whitelisted')
+    })
+
+    it('allows whitelisted users to buy tokens', async () => {
+      await crowdsale.connect(deployer).addToWhitelist(user1.address)
+      
+      await crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
+      expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
+    })
+
+    it('allows anyone to buy tokens when whitelist is disabled', async () => {
+      await crowdsale.connect(deployer).toggleWhitelist(false)
+      
+      await crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
+      expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
+      
+      await crowdsale.connect(user2).buyTokens(tokens(20), { value: tokens(20) })
+      expect(await token.balanceOf(user2.address)).to.equal(tokens(20))
+    })
+
+    it('re-enables whitelist restrictions after toggling back on', async () => {
+      await crowdsale.connect(deployer).toggleWhitelist(false)
+      await crowdsale.connect(deployer).toggleWhitelist(true)
+      
+      await expect(
+        crowdsale.connect(user1).buyTokens(tokens(10), { value: tokens(10) })
+      ).to.be.revertedWith('Address not whitelisted')
+    })
+  })
+})
