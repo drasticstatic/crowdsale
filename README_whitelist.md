@@ -186,7 +186,7 @@ The application provides clear visual indicators of whitelist status:
             <p><strong><big>↓</big></strong></p>
       </td>
         <!-- Add spacing between columns -->
-        <td></td>
+        <td width="33"></td>
       <td align="center">
         <img src="screenshots/whitelist_admin_panel-disabled.png" width="444" alt="Whitelist Disabled">
         <p>Whitelist is <strong><span style="color: #dc3545;">NOT</span></strong> active <em>( <span style="color: #dc3545;">disabled</span> ) </em>❌</p>
@@ -204,7 +204,7 @@ The application provides clear visual indicators of whitelist status:
         <p><em>alert:&nbsp;</em><strong><big><span style="color: #dc3545;">DISABLED</span></big></strong><p>
       </td>
         <!-- Add spacing between columns -->
-        <td></td>
+        <td width="333"></td>
       <td align="center">
         <img src="screenshots/whitelist_enabled_alert.png" width="288" alt="Whitelist Enabled">
         <p><em>alert:&nbsp;</em><strong><big><span style="color: #28a745;">ENABLED</span></big></strong><p>
