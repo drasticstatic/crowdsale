@@ -21,8 +21,15 @@ contract Crowdsale {
     uint256 public price; // Price of each token in wei (1 ETH = 10^18 wei)
     uint256 public maxTokens; // Maximum number of tokens available for sale
     uint256 public tokensSold; // Tracks how many tokens have been sold so far
+    // Add whitelist functionality:
     bool public whitelistEnabled; // Flag to enable/disable whitelist functionality
     address[] private allAddresses;// to track all addresses
+    // Add open/closed functionality:
+    bool public isOpen = false;
+    uint256 public openingTime;
+    // Add min/max contribution functionality:
+    uint256 public minContribution;
+    uint256 public maxContribution;
 
     /* More variables to track:
         uint256 public tokensRemaining; // amount of tokens remaining
@@ -56,12 +63,19 @@ contract Crowdsale {
     constructor(
         Token _token, // Address of the token contract
         uint256 _price, // Price per token in wei
-        uint256 _maxTokens // Maximum tokens for sale
+        uint256 _maxTokens, // Maximum tokens for sale
+        uint256 _openingTime, // Opening time of the crowdsale
+        uint256 _minContribution, // Minimum contribution per transaction
+        uint256 _maxContribution // Maximum contribution per transaction
     ) {
         owner = msg.sender; // Set the deployer as the owner
         token = _token; // Store the token contract reference
         price = _price; // Set the initial token price
         maxTokens = _maxTokens; // Set the maximum tokens available
+        whitelistEnabled = true; // Start with whitelist enabled
+        openingTime = _openingTime; // Set the opening time
+        minContribution = _minContribution; // Set the minimum contribution
+        maxContribution = _maxContribution; // Set the maximum contribution
         whitelistEnabled = true; // Start with whitelist enabled
     }
 
@@ -80,7 +94,21 @@ contract Crowdsale {
         // prevents a non-whitelisted address from calling the function
         _; //
     }
-    
+    modifier onlyWhenOpen() {
+        require(isOpen, "Sale is not open");
+        require(block.timestamp >= openingTime, "Sale has not started yet");
+        _;
+    }
+
+    // === Open/Close functionality === to restrict when the crowdsale is active
+    function openSale() public onlyOwner {
+        isOpen = true; // Set the sale to open
+    }
+
+    function closeSale() public onlyOwner {
+        isOpen = false; // Set the sale to closed
+    }
+
     // === Whitelist functionality === to restrict who can buy tokens
         // *** Added this function to allow only owner to add people to whitelist
     function addToWhitelist(address _address) public onlyOwner {
@@ -133,11 +161,18 @@ contract Crowdsale {
     }
 
     // Function to buy tokens by sending ETH
-    function buyTokens(uint256 _amount) public payable onlyWhitelisted { // payable (modifyer) allows to send ether to smart contract
-        // Added modifier: onlyWhitelisted = only whitelisted addresses can call this function
+    function buyTokens(uint256 _amount) public payable onlyWhitelisted onlyWhenOpen { // payable (modifyer) allows to send ether to smart contract
+        // Added modifiers: onlyWhitelisted & onlyWhenOpen
+
+        // Check min/max contribution:
+        require(_amount >= minContribution, "Amount is less than minimum contribution");
+        require(_amount <= maxContribution, "Amount exceeds maximum contribution");
+
+        // Calculate cost
+        uint256 cost = (_amount * price) / 1e18;
     
         // Check that enough ETH was sent:
-        require(msg.value == (_amount / 1e18) * price, "Incorrect ETH amount"); // <-- added error message to require statement
+        require(msg.value >= cost, "Insufficient ETH sent"); // <-- added error message to require statement
             // amount of ether sent in with transaction - must be equal to the amount of tokens bought
         // Check that the contract has enough tokens to sell:
         require(token.balanceOf(address(this)) >= _amount, "Not enough tokens available"); // <-- added error message to require statement
@@ -171,6 +206,9 @@ contract Crowdsale {
         emit Finalize(tokensSold, value);
     }
 }
+
+// ========= END OF CROWDSALE.SOL ==========
+
 /* ---REQUIRE--- statement in Solidity is a critical function that acts as a guard condition:
     It checks if a condition is true before executing the rest of the function.
         If the condition is true, the function continues execution

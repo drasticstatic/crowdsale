@@ -15,13 +15,23 @@ async function main() {
   await token.deployed()
   console.log(`Token deployed to: ${token.address}\n`)
 
+  // Set the opening time to now (or slightly in the past)
+  const openingTime = Math.floor(Date.now() / 1000) - 60; // 1 minute ago
+  
+  // Set min and max contribution
+  const minContribution = hre.ethers.utils.parseUnits('0.01', 'ether'); // 0.01 token minimum
+  const maxContribution = hre.ethers.utils.parseUnits('10000', 'ether'); // 10000 tokens maximum
+
   // Step 2: Deploy Crowdsale Contract
   console.log("Deploying Crowdsale contract...")
   const Crowdsale = await hre.ethers.getContractFactory("Crowdsale")
   const crowdsale = await Crowdsale.deploy(
     token.address,
     PRICE,
-    hre.ethers.utils.parseUnits(MAX_SUPPLY, 'ether')
+    hre.ethers.utils.parseUnits(MAX_SUPPLY, 'ether'),
+    openingTime,
+    minContribution,
+    maxContribution
   )
   await crowdsale.deployed();
   console.log(`Crowdsale deployed to: ${crowdsale.address}\n`)
@@ -42,10 +52,20 @@ async function main() {
   const whitelistTx = await crowdsale.addToWhitelist(deployer.address);// Add the deployer to the whitelist
   await whitelistTx.wait();
   console.log(`Address ${deployer.address} added to whitelist\n`);
+
+  // After adding the deployer to the whitelist, open the sale:
+  console.log("Opening the token sale...");
+  const openSaleTx = await crowdsale.openSale();
+  await openSaleTx.wait();
+  console.log("Token sale is now open!");
 }
 
-main().catch((error) => {
-  console.error("Deployment failed with error:");
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error("Deployment failed with error:");
+    console.error(error);
+    process.exitCode = 1;
+  });
+
+// ========= END OF DEPLOY.JS ==========

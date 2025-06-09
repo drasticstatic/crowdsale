@@ -20,7 +20,10 @@ const Navigation = ({
     tokensSold,
     isLoading,
     darkMode,
-    setDarkMode
+    setDarkMode, 
+    isOpen,
+    minContribution,
+    maxContribution
 }) => {
     //const [isLoading, setIsLoading] = useState(false);
     // 'setAppIsLoading' used for manual reload button
@@ -261,21 +264,26 @@ const Navigation = ({
                 </Navbar.Collapse>
 
                 {/* Force a new line with flex-column */}
-                <div className="d-flex flex-column align-items-center w-100 mt-3">
+                <div className="d-flex flex-column align-items-center w-100 mt-1">
                 {/* Buy Tokens button - centered below everything */}
                 {isConnected && !isLoading && provider && crowdsale && (
-                    <div className="d-flex justify-content-center" style={{ width: '555px', marginBottom: '20px' }}>
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex justify-content-center" style={{ width: '577px', marginBottom: '20px' }}>
+                    <div className="d-flex align-items-center w-100"> {/* Added w-100 to take full width */}
                         <small className={`text-${darkMode ? 'light' : 'muted'} me-2`}>Price:<strong> {price} ETH</strong></small>
-                        <Buy 
-                        provider={provider} 
-                        price={price} 
-                        crowdsale={crowdsale} 
-                        setIsLoading={setIsLoading}
-                        navbarVersion={true}
-                        darkMode={darkMode}
-                        />
-                    </div>
+                        <div style={{ flexGrow: 1 }}> {/* Added wrapper div with flexGrow to take available space */}
+                            <Buy 
+                            provider={provider} 
+                            price={price} 
+                            crowdsale={crowdsale} 
+                            setIsLoading={setIsLoading}
+                            navbarVersion={true}
+                            darkMode={darkMode}
+                            isOpen={isOpen}
+                            minContribution={minContribution}
+                            maxContribution={maxContribution}
+                            />
+                            </div>
+                        </div>
                     </div>
                 )}
                 </div>
@@ -384,3 +392,5 @@ const Navigation = ({
 }
 
 export default Navigation;
+
+// ========== END OF NAVIGATION.JS ==========

@@ -23,7 +23,7 @@
 
     // Note: When making changes to contracts, make sure to update the ABIs in frontend (copy from /artifacts... after deployment)
 
-import { useEffect, useState, useCallback } from 'react'; // React hooks for state and lifecycle management
+import { useEffect, useState, useCallback, useRef } from 'react'; // React hooks for state and lifecycle management
 import { Container, Modal, Button } from 'react-bootstrap'; // UI component from Bootstrap library
 import { ethers } from 'ethers' // Library for interacting with Ethereum
 
@@ -64,6 +64,12 @@ function App() {
   const [maxTokens, setMaxTokens] = useState(0)         // Total tokens available for sale
   const [tokensSold, setTokensSold] = useState(0)       // Number of tokens already sold
   const [whitelistEnabled, setWhitelistEnabled] = useState(null) // Whether the whitelist is enabled or not
+
+  const [isOpen, setIsOpen] = useState(false); // Whether the crowdsale is open or not
+  const [openingTime, setOpeningTime] = useState(0); // Opening time of the crowdsale
+  const [minContribution, setMinContribution] = useState(0); // Minimum contribution per transaction
+  const [maxContribution, setMaxContribution] = useState(0); // Maximum contribution per transaction
+  const isInitialMount = useRef(true); // Ref to track initial mount to prevent unnecessary reloads ESlint dependency array [account, checkOwnerStatus, isConnected] in finally block
   
   // UI state
   const [darkMode, setDarkMode] = useState(false);
@@ -278,6 +284,7 @@ function App() {
             TOKEN_ABI,                         // ABI (interface) of the token contract
             provider                           // Connection to Ethereum
           )
+          console.log("Token loaded:", token.address);
 
         if (!config[configKey].crowdsale || !config[configKey].crowdsale.address) {
           throw new Error(`Missing crowdsale configuration for chainId ${chainId}`);
@@ -322,26 +329,82 @@ function App() {
         setIsOwner(false);
       }
       
-      // Fetch state of whitelist from the crowdsale contract
-      const whitelistStatus = await crowdsale.whitelistEnabled();
-      setWhitelistEnabled(whitelistStatus);
-      console.log(`Whitelist enabled: ${whitelistStatus}`)
+      // Add null checks before accessing contract properties
+      if (crowdsale) {
+        // Fetch state of whitelist from the crowdsale contract
+        try {
+          const whitelistStatus = await crowdsale.whitelistEnabled();
+          setWhitelistEnabled(whitelistStatus);
+          console.log(`Whitelist enabled: ${whitelistStatus}`);
+        } catch (error) {
+          console.error("Error fetching whitelist status:", error);
+        }
 
-      // Get the user's token balance
-      const accountBalance = ethers.utils.formatUnits(await token.balanceOf(account), 18)
-      setAccountBalance(accountBalance)
+        // Get the user's token balance
+        try {
+          const price = ethers.utils.formatUnits(await crowdsale.price(), 18);
+          setPrice(price);
+        } catch (error) {
+          console.error("Error fetching price:", error);
+        }
 
-      // Get token price from the crowdsale contract
-      const price = ethers.utils.formatUnits(await crowdsale.price(), 18)
-      setPrice(price)
+        // Get token price from the crowdsale contract
+        try {
+          const price = ethers.utils.formatUnits(await crowdsale.price(), 18);
+          setPrice(price);
+        } catch (error) {
+          console.error("Error fetching price:", error);
+        }
 
-      // Get maximum tokens available for sale
-      const maxTokens = ethers.utils.formatUnits(await crowdsale.maxTokens(), 18)
-      setMaxTokens(maxTokens)
+        // Get maximum tokens available for sale
+        try {
+          const maxTokens = ethers.utils.formatUnits(await crowdsale.maxTokens(), 18);
+          setMaxTokens(maxTokens);
+        } catch (error) {
+          console.error("Error fetching maxTokens:", error);
+        }
 
-      // Get number of tokens already sold
-      const tokensSold = ethers.utils.formatUnits(await crowdsale.tokensSold(), 18)
-      setTokensSold(tokensSold)
+        // Get number of tokens already sold
+        try {
+          const tokensSold = ethers.utils.formatUnits(await crowdsale.tokensSold(), 18);
+          setTokensSold(tokensSold);
+        } catch (error) {
+          console.error("Error fetching tokensSold:", error);
+        }
+
+        try {
+          const isOpen = await crowdsale.isOpen();
+          console.log(`isOpen: ${isOpen}`);
+          setIsOpen(isOpen);
+        } catch (error) {
+          console.error("Error fetching isOpen:", error);
+          setIsOpen(false); // Default to closed if error
+        }
+    
+        try {
+          const openingTime = await crowdsale.openingTime();
+          setOpeningTime(openingTime.toString());
+        } catch (error) {
+          console.error("Error fetching openingTime:", error);
+          setOpeningTime("0"); // Default to 0 if error
+        }
+    
+        try {
+          const minContribution = await crowdsale.minContribution();
+          setMinContribution(ethers.utils.formatUnits(minContribution, 18));
+        } catch (error) {
+          console.error("Error fetching minContribution:", error);
+          setMinContribution("0"); // Default to 0 if error
+        }
+    
+        try {
+          const maxContribution = await crowdsale.maxContribution();
+          setMaxContribution(ethers.utils.formatUnits(maxContribution, 18));
+        } catch (error) {
+          console.error("Error fetching maxContribution:", error);
+          setMaxContribution("0"); // Default to 0 if error
+        }
+      }
       
   } catch (error) {
     // This catches any error during the connection process
@@ -383,13 +446,21 @@ function App() {
       // It's like an automatic trigger for the 'loadBlockchainData' function
   useEffect(() => {
     if (isLoading && window.ethereum) {
-      console.log("Loading blockchain data...");
-      loadBlockchainData().catch(error => {
-        console.error('Error loading blockchain data:', error)
-        setIsLoading(false) // Stop loading if there's an error
-      });
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+        console.log("Initial loading of blockchain data...");
+        loadBlockchainData().catch(error => {
+          console.error('Error loading blockchain data:', error)
+          setIsLoading(false)
+        });
+      } else if (account) { // Only reload if account is available
+        console.log("Reloading blockchain data due to dependency change...");
+        loadBlockchainData().catch(error => {
+          console.error('Error loading blockchain data:', error) // Stop loading if there's an error
+        });
+      }
     }
-  }, [isLoading, loadBlockchainData]);  // The dependency array - effect runs when these values change
+  }, [isLoading, loadBlockchainData, account]);  // The dependency array - effect runs when these values change
 
   // Event listeners for MetaMask account changes:
   useEffect(() => {
@@ -474,7 +545,7 @@ function App() {
     // (What gets displayed on the webpage)
   return (
     <Container style={{ 
-      paddingTop: '255px',
+      paddingTop: '355px',
       backgroundColor: darkMode ? '#121212' : 'white',
       color: darkMode ? 'white' : 'black',
       minHeight: '100vh',
@@ -498,6 +569,10 @@ function App() {
         tokensSold={tokensSold}
         darkMode={darkMode}
         setDarkMode={setDarkMode}
+        isOpen={isOpen}
+        openingTime={openingTime}
+        minContribution={minContribution}
+        maxContribution={maxContribution}
       />
       <h3 className="text-center mb-3">
       <br/>
