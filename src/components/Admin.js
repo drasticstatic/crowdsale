@@ -9,10 +9,42 @@ import './DarkMode.css';
 
 const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelistStatus, darkMode }) => {
     const [address, setAddress] = useState('');
+    const [isSaleOpen, setIsSaleOpen] = useState(false); // State to hold the sale open status
     const [isWhitelistEnabled, setIsWhitelistEnabled] = useState(whitelistStatus);
         // ↑ Pass in state from parent component to manage loading state (loadblockchaindata)
-
     const [whitelistedAddresses, setWhitelistedAddresses] = useState([]);// State to hold the list of whitelisted addresses
+
+    // Function to toggle the sale status
+    const toggleSaleHandler = async () => {
+        try {
+        setIsLoading(true);
+        const signer = await provider.getSigner();
+        
+        if (isSaleOpen) {
+            // Close the sale
+            const transaction = await crowdsale.connect(signer).closeSale();
+            await transaction.wait();
+            setIsSaleOpen(false);
+        } else {
+            // Open the sale
+            const transaction = await crowdsale.connect(signer).openSale();
+            await transaction.wait();
+            setIsSaleOpen(true);
+        }
+        
+        alert(`\n     Sale is now ${isSaleOpen ? 'CLOSED  🔒 🙅‍♂️' : 'OPEN!  🔓 😃'}`);
+        window.location.reload();// Reload the page to reflect changes
+        } catch (error) {
+        console.error("Toggle sale error:", error);
+        // More detailed error logging
+        if (error.code) console.error(`Error code: ${error.code}`);
+        if (error.message) console.error(`Error message: ${error.message}`);
+        if (error.data) console.error(`Error data:`, error.data);
+        
+        alert(`Failed to toggle sale status: ${error.message}`);
+        setIsLoading(false);
+    }
+    };
 
     const addToWhitelistHandler = async (e) => {
         e.preventDefault();
@@ -139,7 +171,22 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             console.error("Error fetching whitelisted addresses:", error);
         }
     }, [provider, crowdsale]);
-// Call this function when the component mounts or when needed
+
+// Call these functions when the component mounts or when needed via useEffects
+useEffect(() => {
+    const fetchSaleStatus = async () => {
+      try {
+        const isOpen = await crowdsale.isOpen();
+        setIsSaleOpen(isOpen);
+      } catch (error) {
+        console.error("Error fetching sale status:", error);
+      }
+    };
+    
+    fetchSaleStatus();
+  }, [crowdsale]);
+
+// Fetch whitelisted addresses when the component mounts
 useEffect(() => {
     if (provider && crowdsale) {
       fetchWhitelistedAddresses();
@@ -177,7 +224,24 @@ updateWhitelistStatus();
 
     return (
         <Card className="my-4" bg={darkMode ? "dark" : "light"} text={darkMode ? "white" : "dark"}>
-            <Card.Header className={darkMode ? "border-secondary" : ""}>Admin Panel - Whitelist Management</Card.Header>
+            <Card.Header className={darkMode ? "border-secondary" : ""}>Admin Panel - Toggle Sale Status & Whitelist Management</Card.Header>
+            <div className="mt-3">
+                <div className="d-flex justify-content-center align-items-center">
+                <span className={darkMode ? "text-light me-3" : "me-4"}>
+                    Sale is currently:&nbsp;&nbsp;&nbsp;
+                    <strong className={isSaleOpen ? "text-success" : "text-danger"}>
+                        {isSaleOpen ? 'OPEN 😃' : 'CLOSED 🙅‍♂️'}
+                    </strong>
+                </span>
+                    <Button 
+                        variant={isSaleOpen ? "danger" : "success"} 
+                        onClick={toggleSaleHandler}
+                    >
+                        {isSaleOpen ? 'Close Sale 🔒' : 'Open Sale 🔑'}
+                    </Button>
+                </div>
+            </div>
+            <hr className={darkMode ? "border-secondary" : ""} />
             <Card.Body>
                 <Form onSubmit={addToWhitelistHandler}>
                     <Form.Group className="mb-3">

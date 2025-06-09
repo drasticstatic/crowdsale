@@ -197,15 +197,23 @@ const Buy = ({ provider,
                         </Col>
                     </Form.Group>
                     {maxContribution && (
-                        <small className="text-muted d-block mb-2">
+                        <small className={`${darkMode ? "text-light" : "text-muted"} d-block mb-2`}>
                         &nbsp;&nbsp;&nbsp;
                         <em style={{ fontSize: '0.55em' }}>{parseInt(maxContribution).toLocaleString()} MAX tokens/transaction | Min step= 0.001 tokens</em>
                     </small>
                     )}
                 </Form>
             ) : (
-                <div className={`alert ${darkMode ? "alert-dark" : "alert-warning"}`}>
-                <strong>Sale is not open yet</strong>
+                <div className="text-center">
+                    <span className={`alert ${darkMode ? "alert-warning" : "alert-warning"} d-inline-block py-2 px-3`}>
+                        <strong><big>🔒</big>&nbsp;&nbsp;&nbsp;
+                        Sale is curently CLOSED&nbsp;&nbsp;&nbsp;
+                        <big>🔒</big>&nbsp;&nbsp;&nbsp;
+                        |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <big>👀</big>&nbsp;&nbsp;&nbsp;
+                        STAY TUNED!&nbsp;&nbsp;&nbsp;
+                        <big>🤩</big></strong>
+                    </span>
                 </div>
             )}
         </>

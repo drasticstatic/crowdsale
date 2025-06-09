@@ -269,7 +269,9 @@ const Navigation = ({
                 {isConnected && !isLoading && provider && crowdsale && (
                     <div className="d-flex justify-content-center" style={{ width: '577px', marginBottom: '20px' }}>
                     <div className="d-flex align-items-center w-100"> {/* Added w-100 to take full width */}
-                        <small className={`text-${darkMode ? 'light' : 'muted'} me-2`}>Price:<strong> {price} ETH</strong></small>
+                        {isOpen && (
+                            <small className={`text-${darkMode ? 'light' : 'muted'} me-2`}>Price:<strong> {price} ETH</strong></small>
+                        )}
                         <div style={{ flexGrow: 1 }}> {/* Added wrapper div with flexGrow to take available space */}
                             <Buy 
                             provider={provider} 
