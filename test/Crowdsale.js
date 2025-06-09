@@ -431,9 +431,25 @@ describe('Crowdsale', () => {
     it('enforces maximum contribution amount', async () => {
       const maxContribution = await crowdsale.maxContribution()
       const aboveMax = maxContribution.add(1)
-      
+
+      /*const price = await crowdsale.price()
+      // Calculate the correct ETH value based on the token amount
+      const value = aboveMax.mul(price).div(ethers.utils.parseEther('1'))
+      // Add a small buffer to ensure enough ETH is sent
+      const buffer = value.mul(5).div(1000)
+      const valueWithBuffer = value.add(buffer)
       await expect(
-        crowdsale.connect(user1).buyTokens(aboveMax, { value: ethers.utils.parseEther('1000') })
+        crowdsale.connect(user1).buyTokens(aboveMax, { value: valueWithBuffer })
+      ).to.be.revertedWith('Amount exceeds maximum contribution')*/
+      
+      // Use a simpler approach with a fixed multiplier for the value
+      //const value = ether(100000) // Just use a very large amount of ETH
+      
+      // Use a fixed value that's enough to trigger the error but not too large
+      const value = ether(1000) // Just use a very large amount of ETH
+
+      await expect(
+        crowdsale.connect(user1).buyTokens(aboveMax, { value })
       ).to.be.revertedWith('Amount exceeds maximum contribution')
     })
   

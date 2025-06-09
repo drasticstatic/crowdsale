@@ -21,7 +21,7 @@ async function main() {
   
   // Set min and max contribution
   const minContribution = hre.ethers.utils.parseUnits('0.01', 'ether'); // 0.01 token minimum
-  const maxContribution = hre.ethers.utils.parseUnits('10000', 'ether'); // 10000 tokens maximum
+  const maxContribution = hre.ethers.utils.parseUnits('100000', 'ether'); // 100000 tokens maximum
 
   // Step 2: Deploy Crowdsale Contract
   console.log("Deploying Crowdsale contract...")

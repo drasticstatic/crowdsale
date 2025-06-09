@@ -51,14 +51,21 @@ const Buy = ({ provider,
                 /*Moved the min/max checks before formatting the amount
                     Used parseFloat() to compare the actual numeric values instead of comparing BigNumber objects
                     This ensures we catch invalid amounts before even attempting to format them or calculate values*/
+
+                if (!amount || parseFloat(amount) === 0) {
+                    alert(`\n    Minimum contribution is set to: ${minContribution} tokens`);
+                    setIsWaiting(false);
+                    return;
+                }
+
                 if (parseFloat(amount) < parseFloat(minContribution)) {
-                    alert(`Minimum contribution is ${minContribution} tokens`);
+                    alert(`\n    Minimum contribution is set to: ${minContribution} tokens`);
                     setIsWaiting(false);
                     return;
                 }
                 
                 if (parseFloat(amount) > parseFloat(maxContribution)) {
-                    alert(`Maximum contribution is ${maxContribution} tokens`);
+                    alert(`\n    Maximum contribution is set to: ${parseInt(maxContribution).toLocaleString()} tokens`);
                     setIsWaiting(false);
                     return;
                 }
@@ -81,19 +88,19 @@ const Buy = ({ provider,
                 console.log(`Formatted amount: ${ethers.utils.formatUnits(formattedAmount, 'ether')} tokens`)
                 console.log(`Is amount > min? ${parseFloat(amount) > parseFloat(minContribution)}`)
                 
-                /* Check if amount is within limits
+                // Check if amount is within limits
                 const minContribWei = ethers.utils.parseUnits(minContribution.toString(), 'ether');
                 const maxContribWei = ethers.utils.parseUnits(maxContribution.toString(), 'ether');
                 if (formattedAmount.lt(minContribWei)) {
-                    alert(`Minimum contribution is ${minContribution} tokens`);
+                    alert(`\n    Minimum contribution is ${minContribution} tokens`);
                     setIsWaiting(false);
                     return;
                 }
                 if (formattedAmount.gt(maxContribWei)) {
-                    alert(`Maximum contribution is ${maxContribution} tokens`);
+                    alert(`\n    Maximum contribution is set to: ${parseInt(maxContribution).toLocaleString()} tokens`);
                     setIsWaiting(false);
                     return;
-                }*/
+                }
                 console.log(`Buying ${amount} tokens at ${price} ETH each = ${amount * price} ETH total`)
                 console.log(`Token amount in wei: ${formattedAmount.toString()}`)
                 console.log(`ETH value in wei: ${value.toString()}`)
@@ -123,23 +130,37 @@ const Buy = ({ provider,
                 window.location.reload();
         } catch (error) {
             console.error("Purchase error:", error);
-            window.alert('\n Failed to purchase tokens:\n   Transaction reverted: User rejected or not enough funds')
+            //window.alert('\n Failed to purchase tokens:\n   Transaction reverted: User rejected or not enough funds')
             
             // More detailed error handling:
             if (error.code === 4001 || 
                 (error.message && error.message.includes("user rejected")) || 
                 (error.message && error.message.includes("User denied"))) {
-                alert("Transaction rejected by user");
+                alert("\n    Transaction rejected by user");
             } else if (error.message && error.message.includes("insufficient funds")) {
-                alert("Insufficient funds for this transaction");
+                alert("\n    Insufficient funds for this transaction");
             } else if (error.message && error.message.includes("Amount is less than minimum contribution")) {
-                alert(`Minimum contribution is set to: ${minContribution} tokens`);
-            } else if (error.message && error.message.includes("Amount exceeds maximum contribution")) {
-                alert(`Maximum contribution is set to: ${maxContribution} tokens`);
-            } else {
-                alert("Transaction failed. Please check console for details.");
+                alert(`\n    Minimum contribution is set to: ${minContribution} tokens`);
+            } else if (error.message) {
+                // Log the full error message to see what's happening
+                console.log("Full error message:", error.message);
+                
+                // Check for various error message formats
+                if (error.message.includes("Amount exceeds maximum contribution") || 
+                    error.message.includes("Maximum contribution is")) {
+                    alert(`\n    Maximum contribution per purchase is set to: ${parseInt(maxContribution).toLocaleString()} tokens`);
+                } else if (error.message.includes("execution reverted")) {
+                    // This catches generic revert messages
+                    if (parseFloat(amount) > parseFloat(maxContribution)) {
+                        alert(`\n    Maximum contribution per purchase is set to: ${parseInt(maxContribution).toLocaleString()} tokens`);
+                    } else {
+                        alert("\n    Transaction failed: " + error.message);
+                    }
+                } else {
+                    // For any other error message
+                    alert("\n    Transaction failed. Please check console for details.");
+                }
             }
-
             setIsWaiting(false); // Only reset waiting state on error
         }
         // No finally block needed since we're either reloading the page or setting isWaiting to false on error
