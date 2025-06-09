@@ -48,25 +48,33 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
 
     const addToWhitelistHandler = async (e) => {
         e.preventDefault();
-        
         try {
+            setIsLoading(true);
             const signer = await provider.getSigner();
             const transaction = await crowdsale.connect(signer).addToWhitelist(address);
             await transaction.wait();
-            alert(`\n Address ${address} \n     added to whitelist`);
+
+            // Instead of reloading the page, just fetch the updated list
+            await fetchWhitelistedAddresses();
+            
+            // Clear the input field
             setAddress('');
-            window.location.reload();
+            setIsLoading(false);
+
+            // Show success message
+            alert(`\n✓ Address ${address} \n\n     successfully \u00A0\u00A0\u00A0\u00A0✓\u00A0\u00A0ADDED\u00A0\u00A0✓\u00A0\u00A0\u00A0\u00A0 to whitelist`);
+            window.location.reload(); 
         } catch (error) {
-            console.error(error);
-            alert('\n Failed to add address to whitelist');
+            console.error("Add to whitelist error:", error);
+            alert(`\n Failed to add address to whitelist: ${error.message}`);
             setIsLoading(false);
         }
-    };
+        };
 
     const removeFromWhitelistHandler = async (e) => {
         e.preventDefault();
-        
         try {
+            setIsLoading(true);
             const signer = await provider.getSigner();
             const transaction = await crowdsale.connect(signer).removeFromWhitelist(address);
             await transaction.wait();
@@ -74,8 +82,12 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             // Immediately fetch the updated list
             await fetchWhitelistedAddresses();
 
-            alert(`\n Address ${address} \n     removed from whitelist`);
+            // Clear the input field
             setAddress('');
+            setIsLoading(false);
+
+            // Show success message
+            alert(`\n✓ Address ${address} \n\n     successfully \u00A0\u00A0\u00A0\u00A0✗\u00A0\u00A0REMOVED\u00A0\u00A0✗\u00A0\u00A0\u00A0\u00A0 from whitelist`);
             window.location.reload(); 
         } catch (error) {
             console.error(error);

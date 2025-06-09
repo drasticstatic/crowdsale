@@ -72,7 +72,17 @@ function App() {
   const isInitialMount = useRef(true); // Ref to track initial mount to prevent unnecessary reloads ESlint dependency array [account, checkOwnerStatus, isConnected] in finally block
   
   // UI state
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    // Load from localStorage or default to false
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode === 'true';
+  });
+  // Create a function to update darkMode that also saves to localStorage
+  const toggleDarkMode = (value) => {
+    setDarkMode(value);
+    localStorage.setItem('darkMode', value);
+  };
+
   const [isLoading, setIsLoading] = useState(true)      // Controls showing loading spinner
 
   // Add state for modals
@@ -568,7 +578,7 @@ function App() {
         maxTokens={maxTokens}
         tokensSold={tokensSold}
         darkMode={darkMode}
-        setDarkMode={setDarkMode}
+        setDarkMode={toggleDarkMode}
         isOpen={isOpen}
         openingTime={openingTime}
         minContribution={minContribution}
