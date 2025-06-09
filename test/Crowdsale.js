@@ -438,13 +438,22 @@ describe('Crowdsale', () => {
     })
   
     it('allows contributions within limits', async () => {
-      const minContribution = await crowdsale.minContribution()
-      const price = await crowdsale.price()
-      const value = minContribution.div(ethers.utils.parseEther('1')).mul(price)
+      const minContribution = await crowdsale.minContribution();
+      const price = await crowdsale.price();
       
-      await crowdsale.connect(user1).buyTokens(minContribution, { value })
-      expect(await token.balanceOf(user1.address)).to.equal(minContribution)
-    })
+      // Calculate the correct ETH value based on the token amount
+      const value = minContribution.mul(price).div(ethers.utils.parseEther('1'));
+      
+      // Add a small buffer to the value to account for rounding errors (0.5%)
+      const buffer = value.mul(5).div(1000);
+      const valueWithBuffer = value.add(buffer);
+      
+      // Use the buffered value when sending the transaction
+      await crowdsale.connect(user1).buyTokens(minContribution, { value: valueWithBuffer });
+      
+      // Verify the tokens were transferred
+      expect(await token.balanceOf(user1.address)).to.equal(minContribution);
+    });
   })
   
   describe('Time-based Restrictions', () => {
