@@ -378,4 +378,82 @@
     background-color: rgba(33, 37, 41, 0.94) !important;
     box-shadow: 0 5px 20px rgba(19, 105, 204, 0.55);
   }
+
+/* WARNING ANIMATION FOR CLOSED SALE:
+   - Creates an attention-grabbing flashing effect for the "Sale is CLOSED" message
+   - Alternates between normal and warning colors to draw attention
+   - The animation runs continuously to ensure users notice the sale status */
+   @keyframes warning-flash {
+    0%, 100% {
+      color: #dc3545; /* Bootstrap danger red */
+      text-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+    }
+    50% {
+      color: #ffc107; /* Bootstrap warning yellow */
+      text-shadow: 0 0 8px rgba(255, 193, 7, 0.7);
+    }
+  }
+  .warning-text {
+    animation: warning-flash 1.44s ease-in-out infinite;
+    font-weight: bold;
+  }
+  /* LOCK SHAKE ANIMATION:
+     - Creates a subtle shaking effect for the lock emoji
+     - Draws attention to the closed status of the sale
+     - Complements the warning-flash animation */
+  @keyframes lock-shake {
+    0%, 100% { transform: rotate(0); }
+    10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+    20%, 40%, 60%, 80% { transform: rotate(10deg); }
+  }
+  .lock-shake {
+    display: inline-block;
+    animation: lock-shake 3s ease-in-out infinite;
+    animation-delay: 0.5s;
+  }
+
+/* EYES PULSE ANIMATION:
+   - Creates a growing and shrinking effect for the eyes emoji
+   - Draws attention to the "stay tuned" message
+   - Complements the lock shake animation */
+   @keyframes eyes-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+  }
+  .eyes-pulse {
+    display: inline-block;
+    animation: eyes-pulse 2s ease-in-out infinite;
+  }
+  /* STAY TUNED TEXT ANIMATION:
+     - Creates a flashing effect for the "STAY TUNED" text
+     - Uses green colors to indicate positive anticipation
+     - Complements the warning-flash animation */
+  @keyframes tuned-flash {
+    0%, 100% {
+      color: #28a745; /* Bootstrap success green */
+      text-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    }
+    50% {
+      color: #20c997; /* Bootstrap teal */
+      text-shadow: 0 0 8px rgba(32, 201, 151, 0.7);
+    }
+  }
+  .tuned-text {
+    animation: tuned-flash 2s ease-in-out infinite;
+    font-weight: bold;
+  }
   
+  /* KEY SHAKE ANIMATION:
+   - Creates a shaking effect for the key emoji
+   - Draws attention to the "Open Sale" button
+   - Similar to lock-shake but with different timing */
+  @keyframes key-shake {
+    0%, 100% { transform: rotate(0); }
+    10%, 30%, 50%, 70%, 90% { transform: rotate(-15deg); }
+    20%, 40%, 60%, 80% { transform: rotate(15deg); }
+  }
+
+  .key-shake {
+    display: inline-block;
+    animation: key-shake 2.5s ease-in-out infinite;
+  }

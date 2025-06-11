@@ -250,7 +250,7 @@ updateWhitelistStatus();
                         onClick={toggleSaleHandler}
                         className={`toggle-buy-button ${!isSaleOpen ? "pulse-green-button" : ""}`}
                     >
-                        {isSaleOpen ? 'Close Sale 🔒' : 'Open Sale 🔑'}
+                    {isSaleOpen ? <span>Close Sale <span className="lock-shake">🔒</span></span> : <span>Open Sale <span className="key-shake">🔑</span></span>}
                     </Button>
                 </div>
             </div>

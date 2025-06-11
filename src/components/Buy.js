@@ -231,13 +231,13 @@ const Buy = ({ provider,
             ) : (
                 <div className="text-center">
                     <span className={`alert ${darkMode ? "alert-warning" : "alert-warning"} d-inline-block py-2 px-3`}>
-                        <strong><big>🔒</big>&nbsp;&nbsp;&nbsp;
-                        Sale is curently CLOSED&nbsp;&nbsp;&nbsp;
-                        <big>🔒</big>&nbsp;&nbsp;&nbsp;
+                        <strong><big><span className="lock-shake">🔒</span></big>&nbsp;&nbsp;&nbsp;
+                        <span className="warning-text">Sale is curently CLOSED</span>&nbsp;&nbsp;&nbsp;
+                        <big><span className="lock-shake">🔒</span></big>&nbsp;&nbsp;&nbsp;
                         |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <big>👀</big>&nbsp;&nbsp;&nbsp;
-                        STAY TUNED!&nbsp;&nbsp;&nbsp;
-                        <big>🤩</big></strong>
+                        <big><span className="eyes-pulse">👀</span></big>&nbsp;&nbsp;&nbsp;
+                        <span className="tuned-text">STAY TUNED!</span>&nbsp;&nbsp;&nbsp;
+                        <big><span className="eyes-pulse">🤩</span></big></strong>
                     </span>
                 </div>
             )}
