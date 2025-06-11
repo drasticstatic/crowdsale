@@ -44,6 +44,9 @@ import TOKEN_ABI from '../abis/Token.json' // Token contract interface
 // Config - Contains network-specific addresses for our contracts
 import config from '../config.json';
 
+import './DarkMode.css';
+import './Animations&Style.css'
+
 function App() {
   // ===== STATE VARIABLES: =====
     // These variables store data that can change and cause the UI to update
@@ -588,7 +591,7 @@ function App() {
       <br/>
       <br/>
       <h4 className="text-center mb-3">Introducing:</h4>
-      <span style={{ 
+      <span className="bounce-horizontal" style={{ 
           display: 'inline-block',
           background: 'linear-gradient(45deg,rgb(83, 200, 255),rgb(254, 107, 225))',
           color: 'white',
@@ -621,24 +624,24 @@ function App() {
       {/* Introduction text */}
       <div className={`my-4 p-3 border rounded ${darkMode ? 'bg-dark' : 'bg-light'}`}>
         <p className={darkMode ? 'text-light' : ''}>DAPPU is a <strong>test token</strong> designed <em>purely for educational purposes.</em></p>
-        <p style={{ textIndent: '33px' }}>No monetary value, no speculation — just real-world blockchain learning in a safe, controlled environment.</p>
+        <p className="typing-animation typing-delay-1 mb-4" style={{ textIndent: '33px' }}>No monetary value, no speculation — just real-world blockchain learning in a safe, controlled environment.</p>
         <p>Join our <strong>DAPPU crowdsale</strong> to gain hands-on experience in:</p>
         <ul style={{ listStyleType: 'none' }}>
-          <li>✅ Participating in a token launch</li>
-          <li>✅ Understanding smart contracts and wallet interactions</li>
-          <li>✅ Exploring DAO governance, staking mechanics, and tokenomics</li>
-          <li>✅ Testing decentralized tools before going live on mainnet</li>
+          <li className="typing-animation typing-delay-2">✅ Participating in a token launch</li>
+          <li className="typing-animation typing-delay-3">✅ Understanding smart contracts and wallet interactions</li>
+          <li className="typing-animation typing-delay-4">✅ Exploring DAO governance, staking mechanics, and tokenomics</li>
+          <li className="typing-animation typing-delay-5">✅ Testing decentralized tools before going live on mainnet</li>
         </ul>
         
         <p>Whether you're a developer, student, or curious builder, DAPPU gives you the keys to <em>practice before you launch</em>.</p>
 
-        <p className="text-center"><strong>
+        <p className="text-center typing-animation typing-delay-6"><strong>
           <span style={{ fontSize: '1.7em' }}>🙅</span>&nbsp;&nbsp;No risk&nbsp;&nbsp;
           <span style={{ fontSize: '1.7em' }}>📚</span>&nbsp;&nbsp;All learning&nbsp;&nbsp;
           <span style={{ fontSize: '1.7em' }}>🛜</span>&nbsp;&nbsp;Full decentralization&nbsp;&nbsp;
           <span style={{ fontSize: '1.7em' }}>🔗</span></strong></p>
         
-        <h5 className="text-center">
+        <h5 className="text-center typing-animation typing-delay-7">
           <span style={{ fontSize: '1.8em' }}>📌</span>&nbsp;&nbsp;Claim your test tokens&nbsp;&nbsp;
           <span style={{ fontSize: '1.8em' }}>🤝</span>&nbsp;&nbsp;Join the experiment&nbsp;&nbsp;
           <span style={{ fontSize: '1.8em' }}>₿</span>&nbsp;&nbsp;Learn with DAPPU!&nbsp;&nbsp;
@@ -669,7 +672,7 @@ function App() {
             <Button 
               variant="outline-primary" 
               size="sm"
-              className="ms-3"
+              className="pulse-check-whitelist-button ms-3"
               onClick={async () => {
                 try {
                   const signer = await provider.getSigner();

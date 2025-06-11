@@ -1,10 +1,9 @@
-/* Dark Mode Styles */
+/* DARK MODE STYLES */
 
 /* Full page dark mode */
 body {
     transition: background-color 0.3s, color 0.3s;
 }
-
 body.dark-mode {
 background-color: #121212 !important;
 color: #f8f9fa !important;
@@ -15,15 +14,12 @@ input.dark-placeholder::placeholder {
     color: #adb5bd !important;
     opacity: 1;
 }
-
 .dark-placeholder::-webkit-input-placeholder { /* Chrome/Safari/Opera */
     color: #adb5bd !important;
 }
-
 .dark-placeholder::-moz-placeholder { /* Firefox */
     color: #adb5bd !important;
 }
-
 .dark-placeholder:-ms-input-placeholder { /* IE/Edge */
     color: #adb5bd !important;
 }
@@ -47,7 +43,6 @@ input.dark-placeholder::placeholder {
     background-color: #212529 !important;
     border-color: #495057 !important;
 }
-
 /* Card header in dark mode */
 .card.bg-dark .card-header {
     background-color: #343a40 !important;

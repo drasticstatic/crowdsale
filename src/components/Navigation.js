@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar, Container, Button, Modal } from 'react-bootstrap';
 import logo from '../logo.png';
 
@@ -48,9 +48,29 @@ const Navigation = ({
         }
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+          const navbar = document.querySelector('.navbar');
+          if (navbar) {
+            if (window.scrollY > 50) {
+              navbar.classList.add('scrolled');
+            } else {
+              navbar.classList.remove('scrolled');
+            }
+          }
+        };
+      
+        window.addEventListener('scroll', handleScroll);
+        
+        // Clean up event listener
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []);    
+
     return (
         <Navbar 
-            className='my-0 pb-3' // Add padding-bottom (pb-3)
+            className='navbar-scroll my-0 pb-3' // Add padding-bottom (pb-3)
             fixed="top" 
             bg={darkMode ? "dark" : "light"}  // Change bg based on dark mode
             variant={darkMode ? "dark" : "light"}  // Add variant for text color
@@ -67,28 +87,53 @@ const Navigation = ({
                 src={logo}
                 width="40"
                 height="40"
-                className="d-inline-block align-top mx-3"
+                className="d-inline-block align-top mx-3 spin-logo"
             />
             <Container>
-                <Navbar.Brand href="#">
-                <strong>
-                <span style={{ 
-                    color: darkMode ? '#66b3ff' : '#0066cc', // Lighter blue in dark mode
-                    fontWeight: 'bold', 
-                    fontSize: '1.2em',
-                    letterSpacing: '1px',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-                }}>DAPPU</span>
-                <span style={{ 
-                    fontVariant: 'small-caps',
-                    fontSize: '0.9em',
-                    letterSpacing: '1px',
-                    color: darkMode ? '#f8f9fa' : 'inherit' // Light color in dark mode
-                }}> ICO Crowdsale</span>
-                </strong><br />
-                    <small >An <strong>ERC20</strong> Token</small>
-                    <br/><em><small style={{ color: darkMode ? '#66b3ff' : '#00008B' }}>that's revolutionizing Blockchain Learning</small></em>
-                </Navbar.Brand>
+            <Navbar.Brand href="#" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', marginRight: '20px' }}>
+                    {/* DAPPU and ICO Crowdsale stacked */}
+                    <div>
+                        <strong>
+                            <span className="navbar-typing" style={{ 
+                                color: darkMode ? '#66b3ff' : '#0066cc',
+                                fontWeight: 'bold', 
+                                fontSize: '1.2em',
+                                letterSpacing: '1px',
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                            }}>DAPPU</span>
+                        </strong>
+                    </div>
+                    <div style={{ marginTop: '-5px' }}>
+                        <strong>
+                            <span className="navbar-typing" style={{ 
+                                fontVariant: 'small-caps',
+                                fontSize: '0.9em',
+                                letterSpacing: '1px',
+                                color: darkMode ? '#f8f9fa' : 'inherit'
+                            }}> ICO Crowdsale</span>
+                        </strong>
+                    </div>
+                </div>
+                {/* ERC20 Token and revolutionizing text */}
+                <div className="bounce-text" style={{ display: 'flex', flexDirection: 'column', marginLeft: '2px' }}>
+                    <div>
+                        <small className="navbar-typing navbar-typing-delay-1">An <strong>ERC20</strong> Token </small>
+                    </div>
+                    <div style={{ marginTop: '-5px' }}>
+                        <em>
+                            <small className="navbar-typing navbar-typing-delay-1" style={{ 
+                                color: darkMode ? '#66b3ff' : '#00008B',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                width: '0'
+                            }}>
+                                that's revolutionizing Blockchain Learning
+                            </small>
+                        </em>
+                    </div>
+                </div>
+            </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="ms-4">
@@ -124,7 +169,7 @@ const Navigation = ({
                     </linearGradient>
                     
                     {/* Circle background with 3D effect */}
-                    <circle cx="125" cy="70" r="60" fill="url(#circleGradient)" filter="url(#shadow)" />
+                    <circle cx="125" cy="70" r="60" fill="url(#circleGradient)" filter="url(#shadow)" className="pulse-circle" />
                     
                     {/* Highlight for 3D effect */}
                     <circle 
@@ -132,12 +177,22 @@ const Navigation = ({
                         cy="44" 
                         r="75" 
                         fill="none" 
+                        className="spin-circle"
                         stroke={darkMode ? "rgba(33,37,41,0.3)" : "rgba(255,255,255,0.3)"} 
                         strokeWidth="5" 
                     />
                     
                     {/* DAPPU text */}
-                    <text x="125" y="88" fontFamily="Arial" fontSize="25" fontWeight="bold" fill="white" textAnchor="middle">DAPPU</text>
+                    <text
+                        x="125"
+                        y="88"
+                        fontFamily="Arial"
+                        fontSize="25"
+                        fontWeight="bold"
+                        fill="white"
+                        textAnchor="middle"
+                        className="pulse-DAPPU-text"
+                    >DAPPU</text>
                 </svg>
                 </span> </span>
 
@@ -214,12 +269,12 @@ const Navigation = ({
                     <Button 
                     variant="primary" 
                     onClick={connectWallet}
-                    className="ms-2"
+                    className="pulse-connect-button ms-4"
                     >
                     Connect Wallet
                     </Button>
                 ) : (
-                    <div className="d-flex flex-column ms-2">
+                    <div className="d-flex flex-column ms-4">
                     <Button 
                         variant="success" 
                         disabled
@@ -244,7 +299,7 @@ const Navigation = ({
                     <Button
                     variant={darkMode ? "light" : "dark"}
                     size="sm"
-                    className="ms-5"
+                    className="ms-4"
                     onClick={() => setDarkMode(!darkMode)}
                     style={{ display: 'flex', alignItems: 'center' }}
                     >

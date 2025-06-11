@@ -5,7 +5,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Form, Button, Card } from 'react-bootstrap';
-import './DarkMode.css';
 
 const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelistStatus, darkMode }) => {
     const [address, setAddress] = useState('');
@@ -235,8 +234,9 @@ updateWhitelistStatus();
 }, [provider, crowdsale, setWhitelistStatus]);
 
     return (
-        <Card className="my-4" bg={darkMode ? "dark" : "light"} text={darkMode ? "white" : "dark"}>
-            <Card.Header className={darkMode ? "border-secondary" : ""}>Admin Panel - Toggle Sale Status & Whitelist Management</Card.Header>
+        //<Card className="my-4" bg={darkMode ? "dark" : "light"} text={darkMode ? "white" : "dark"}>
+        <Card className={`my-4 admin-card ${darkMode ? "bg-dark text-light" : ""}`}>
+            <Card.Header className={`admin-header ${darkMode ? "border-secondary" : ""}`}>Admin Panel - Toggle Sale Status & Whitelist Management</Card.Header>
             <div className="mt-3">
                 <div className="d-flex justify-content-center align-items-center">
                 <span className={darkMode ? "text-light me-3" : "me-4"}>
@@ -248,6 +248,7 @@ updateWhitelistStatus();
                     <Button 
                         variant={isSaleOpen ? "danger" : "success"} 
                         onClick={toggleSaleHandler}
+                        className={`toggle-buy-button ${!isSaleOpen ? "pulse-green-button" : ""}`}
                     >
                         {isSaleOpen ? 'Close Sale 🔒' : 'Open Sale 🔑'}
                     </Button>
@@ -256,7 +257,7 @@ updateWhitelistStatus();
             <hr className={darkMode ? "border-secondary" : ""} />
             <Card.Body>
                 <Form onSubmit={addToWhitelistHandler}>
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-2">
                         <Form.Label className={darkMode ? "text-light" : ""}>Investor's Ethereum Address:</Form.Label>
                         <Form.Control 
                             type="text" 
@@ -267,8 +268,8 @@ updateWhitelistStatus();
                         />
                     </Form.Group>
 
-                    <div className="text-center">
-                        <Button variant="success" type="submit" className="me-2">
+                    <div className="text-center whitelist-item p-2">
+                        <Button variant="success" type="submit" className="pulse-green-button me-3">
                             <strong>ADD</strong> <small>to Whitelist</small>
                         </Button>
                         <Button variant="danger" onClick={removeFromWhitelistHandler}>
@@ -343,6 +344,7 @@ updateWhitelistStatus();
                             variant="outline-secondary" 
                             size="sm" 
                             onClick={fetchWhitelistedAddresses}
+                            className="mt-2 mb-2"
                         >
                             <big>Force Refresh the Array  </big><small>+ log console</small>
                         </Button>
@@ -350,6 +352,7 @@ updateWhitelistStatus();
                         <Button 
                             variant="outline-info" 
                             size="sm"
+                            className="mt-2 mb-2"
                             onClick={async () => {
                             try {
                                 const signer = await provider.getSigner();

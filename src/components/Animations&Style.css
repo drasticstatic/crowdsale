@@ -1,0 +1,381 @@
+/* SUBTLE ANIMATIONS: */
+
+/* ===== ADMIN PANEL ANIMATIONS ===== */
+
+  /* CARD HOVER EFFECT?:
+    - This creates a subtle "lift" effect when users hover over the admin panel
+    - The card will smoothly rise up by 5 pixels
+      and gain a more pronounced shadow, creating a sense of depth and interactivity
+    - The transition property ensures this happens smoothly over 0.3 seconds*/
+  .admin-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .admin-card:hover {
+    transform: translateY(-5px);
+  }
+  /* Light mode shadow */
+  .admin-card:hover:not(.bg-dark) {
+    box-shadow: 0 10px 20px rgba(42, 4, 194, 0.11);
+  }
+  /* Dark mode shadow */
+  .admin-card.bg-dark:hover {
+    box-shadow: 0 10px 20px rgba(19, 105, 204, 0.33);
+  }
+
+  /* NAVBAR HOVER EFFECT:
+   - Creates a subtle lift effect for the navbar similar to admin cards
+   - Adds depth and interactivity to the navigation bar
+   - Different shadow colors for light and dark modes */
+  .navbar {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .navbar:hover {
+    transform: translateY(-3px); /* Slightly smaller lift than admin cards */
+  }
+  /* Light mode shadow */
+  .navbar:hover:not(.bg-dark) {
+    box-shadow: 0 8px 14px rgba(42, 4, 194, 0.11);
+  }
+  /* Dark mode shadow */
+  .navbar.bg-dark:hover {
+    box-shadow: 0 8px 14px rgba(19, 105, 204, 0.33);
+  }
+  
+  /* WHITELIST SECTION HOVER EFFECT:
+  - This adds a subtle background color change when hovering over whitelist items
+  making the list feel more interactive
+  - The light blue background (with 10% opacity) provides visual feedback without being distracting*/
+  .whitelist-item, .investor-address {
+    transition: background-color 0.3s ease;
+  }
+  .whitelist-item:hover, .investor-address:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+
+  /* GLOBAL BUTTON HOVER EFFECT:
+  - Makes all buttons slightly enlarge when hovered over
+  providing consistent interactive feedback across the entire application that they're clickable
+  - The scale transformation increases the button size by 5% on hover
+  - The subtle scale effect draws attention without being distracting */
+  .btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  }
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  /* Prevent double-scaling for buttons that already have hover effects */
+  .toggle-button:hover {
+    transform: scale(1.05) !important;
+  }
+  /* BUY BUTTON HOVER EFFECT: 
+   - Combines the pulse animation with the hover effect
+     to ensure the pulse remains visible even when hovering
+   - Makes the Buy Tokens button enlarge more than other buttons on hover
+   - Creates a more prominent effect for the primary action button */
+   .buy-tokens-button {
+    transition: transform 0.5s ease-out !important; /* Slower transition with ease-out timing */
+  }  
+   .buy-tokens-button:hover {
+    transform: scale(1.33) !important;
+    animation: pulse-buy 0.7s infinite !important;
+  }
+  
+/* ===== ATTENTION-GRABBING EFFECTS ===== */
+
+  /* PULSING ANIMATION FOR IMPORTANT BUTTONS:
+    - This creates a pulsing glow effect around important buttons
+      (like "Open Sale" when the sale is closed & "ADD to Whitelist")
+    - The animation expands a blue glow outward and then fades it away, repeating every 2 seconds
+    - This draws the user's attention to critical actions they might need to take*/
+  @keyframes pulse-green {
+      0% {
+        box-shadow: 0 0 0 0 rgba(3, 182, 65, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 14px rgba(0, 123, 255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+      }
+    }
+    .pulse-green-button {
+      animation: pulse-green 1.5s infinite;
+    }
+
+    /* PULSING ANIMATION FOR *BUY TOKENS* BUTTON:
+   - Creates a more intense orange pulsing effect for the Buy Tokens button
+   - Uses a larger glow radius and faster animation than the standard pulse
+   - The orange color draws attention to the primary action on the page */
+  @keyframes pulse-buy {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 123, 0, 0.8);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 123, 0, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 123, 0, 0);
+    }
+  }
+  .pulse-buy-button {
+    animation: pulse-buy 1.2s infinite;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* PULSING ANIMATION FOR *CONNECT WALLET* BUTTON:
+   - Creates a blue-purple pulsing effect for the Connect Wallet button
+   - Uses a medium glow radius and moderate animation speed
+   - The blue-purple color matches the app's color scheme */
+@keyframes pulse-connect {
+  0% {
+    box-shadow: 0 0 0 0 rgba(28, 83, 234, 1.0);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(102, 16, 242, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 16, 242, 0);
+  }
+}
+
+.pulse-connect-button {
+  animation: pulse-connect 2s infinite;
+  position: relative;
+  z-index: 1;
+}
+
+/* PULSING ANIMATION FOR *WHITELIST* BUTTON:
+   - Creates a teal-green pulsing effect for the Add to Whitelist button
+   - Uses a subtle glow radius and gentle animation speed
+   - The teal-green color indicates a positive action */
+  @keyframes pulse-check-whitelist {
+    0% {
+      box-shadow: 0 0 0 0 rgba(91, 32, 201, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(32, 201, 151, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(32, 201, 151, 0);
+    }
+  }
+  .pulse-check-whitelist-button {
+    animation: pulse-check-whitelist 2.5s infinite;
+    position: relative;
+    z-index: 1;
+  }
+  
+/* ===== VISUAL STYLING ===== */
+
+  /* GRADIENT HEADER FOR ADMIN PANEL:
+    - This replaces the plain header background with a vibrant blue-to-purple gradient that runs diagonally
+    - The gradient adds visual interest and makes the admin panel look more modern and professional
+    - The white text ensures good contrast against the colorful background in both light & dark states*/
+    .admin-header {
+      background: linear-gradient(45deg, #007bffbb, #6710f28a);
+      color: white !important;
+      border: none !important;
+    }
+
+/* LOGO SPIN ANIMATION:
+   - Creates a slow, continuous 360-degree rotation for the DAPPU circle logo
+   - The animation completes one full rotation every 20 seconds
+   - Adds subtle movement to the page without being distracting */
+   @keyframes spin-circle {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .spin-circle {
+    animation: spin-circle 22s linear infinite;
+    transform-origin: center;
+  }
+  
+  /* LOGO SPIN ANIMATION:
+   - Creates a slow, continuous 360-degree rotation for the DAPPU circle logo
+   - The animation completes one full rotation every 20 seconds
+   - Adds subtle movement to the page without being distracting */
+   @keyframes spin-logo {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .spin-logo {
+    animation: spin-logo 44s linear infinite;
+    transform-origin: center;
+  }
+
+  /* 'DAPPU' & 'BUY TOKENS' TEXT PULSE ANIMATION:
+   - Creates a subtle size pulsing effect for the text
+   - Complements the spinning circle animation
+   - The text slowly enlarges and returns to normal size in a 15-second cycle */
+@keyframes pulse-DAPPU-text {
+  0% {
+    transform: scale(0.88);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(0.88);
+  }
+}
+.pulse-DAPPU-text {
+  animation: pulse-DAPPU-text 11s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* CIRCLE BACKGROUND PULSE ANIMATION:
+   - Creates a subtle size pulsing effect for the main circle background
+   - The circle slowly enlarges and returns to normal size in a 12-second cycle
+   - Adds depth and dimension to the logo */
+   @keyframes pulse-circle {
+    0% {
+      transform: scale(0.99);
+    }
+    50% {
+      transform: scale(1.121);
+    }
+    100% {
+      transform: scale(0.99);
+    }
+  }
+  .pulse-circle {
+    animation: pulse-circle 11s ease-in-out infinite;
+    transform-origin: center;
+  }
+  
+  /* BUY TOKENS TEXT PULSE ANIMATION:
+   - Creates a pulsing effect specifically for the Buy Tokens button text
+   - Text pulses at a faster rate than the logo text for more attention
+   - Complements the button's orange glow effect */
+.pulse-buy-text {
+  animation: pulse-buy-text 2.55s ease-in-out infinite;
+  display: inline-block;
+  transform-origin: center;
+}
+@keyframes pulse-buy-text {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.101);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* TYPING ANIMATION:
+   - Creates a typewriter effect for text
+   - Text appears character by character as if being typed
+   - Creates an engaging introduction experience */
+   @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  /* Individual typing elements */
+  .typing-animation {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid transparent; /* No visible cursor */
+    width: 0;
+    margin: 0 auto;
+    animation: typing 2.2s steps(40, end) forwards;
+  }
+  .typing-delay-1 {
+    animation-delay: 1.1s;
+  }
+  .typing-delay-2 {
+    animation-delay: 1.5s;
+  }
+  .typing-delay-3 {
+    animation-delay: 1.7s;
+  }
+  .typing-delay-4 {
+    animation-delay: 1.9s;
+  }
+  .typing-delay-5 {
+    animation-delay: 2.1s;
+  }
+  .typing-delay-6 {
+    animation-delay: 2.3s;
+  }
+  .typing-delay-7 {
+    animation-delay: 2.5s;
+  }
+  
+  /* NAVBAR TYPING ANIMATION
+  - First types out the text, then starts bouncing
+  - Creates a sequence of animations for a more engaging effect */
+@keyframes typing-navbar {
+ from { width: 0 }
+ to { width: 100% }
+}
+@keyframes bounce-text {
+ 0% { transform: translateX(0); }
+ 50% { transform: translateX(10px); }
+ 100% { transform: translateX(0); }
+}
+.navbar-typing {
+ overflow: hidden;
+ white-space: nowrap;
+ width: 0;
+ display: inline-block;
+ animation: typing-navbar 1s steps(30, end) forwards;
+}
+.navbar-typing-delay-1 {
+ animation-delay: 1s;
+}
+.bounce-text {
+ display: inline-block;
+ animation: 
+   typing-navbar 1.5s steps(30, end) forwards,
+   bounce-text 3s ease-in-out infinite 1.5s;
+}
+
+/* HORIZONTAL BOUNCE ANIMATION:
+   - Creates a bouncing effect that moves text back and forth horizontally
+   - Adds playful movement to highlight important phrases (ie: A Learning-by-Doing Crypto Asset!)
+   - The text smoothly moves left and right with a slight bounce at each end */
+   @keyframes bounce-horizontal {
+    0%, 100% {
+      transform: translateX(-55px);
+      animation-timing-function: cubic-bezier(0, 0, 0.33, 1);
+    }
+    50% {
+      transform: translateX(55px);
+      animation-timing-function: cubic-bezier(0, 0, 0.33, 1);
+    }
+  }
+  .bounce-horizontal {
+    animation: bounce-horizontal 11s infinite;
+    display: inline-block;
+  }
+
+/* NAVBAR SCROLL EFFECT:
+   - Changes navbar appearance when scrolling down the page
+   - Adds shadow and slight background opacity for better readability
+   - Smooth transition between states */
+   .navbar-scroll {
+    transition: all 0.3s ease;
+  }
+  /* Light mode scroll effect */
+  .navbar-scroll.scrolled:not(.bg-dark) {
+    background-color: rgba(255, 255, 255, 0.88) !important;
+    box-shadow: 0 5px 20px rgba(42, 4, 194, 0.33);
+  }
+  /* Dark mode scroll effect */
+  .navbar-scroll.scrolled.bg-dark {
+    background-color: rgba(33, 37, 41, 0.94) !important;
+    box-shadow: 0 5px 20px rgba(19, 105, 204, 0.55);
+  }
+  

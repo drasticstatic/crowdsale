@@ -136,9 +136,9 @@ const Buy = ({ provider,
             if (error.code === 4001 || 
                 (error.message && error.message.includes("user rejected")) || 
                 (error.message && error.message.includes("User denied"))) {
-                alert("\n    Transaction rejected by user");
+                alert("\n    Transaction reverted:\n              ↓\n         Request rejected by user");
             } else if (error.message && error.message.includes("insufficient funds")) {
-                alert("\n    Insufficient funds for this transaction");
+                alert("\n    Transaction reverted:\n              ↓\n         Insufficient funds");
             } else if (error.message && error.message.includes("Amount is less than minimum contribution")) {
                 alert(`\n    Minimum contribution is set to: ${minContribution} tokens`);
             } else if (error.message) {
@@ -201,7 +201,8 @@ const Buy = ({ provider,
                         ) : (
                             <Button 
                             variant="danger" // Change from primary to danger (red)
-                            type="submit" 
+                            type="submit"
+                            className="pulse-buy-button buy-tokens-button"
                             style={{ 
                                 width: '111%',
                                 fontWeight: 'bold',
@@ -212,7 +213,10 @@ const Buy = ({ provider,
                             }}
                             size={navbarVersion ? "sm" : "md"}
                             >
-                            <span style={{ fontSize: '1.7em' }}>🔥</span>&nbsp;<big> BUY TOKENS </big>&nbsp;<span style={{ fontSize: '1.7em' }}>🔥</span>
+                            <span className="pulse-buy-text">
+                            <span style={{ fontSize: '1.7em' }}>🔥</span>&nbsp;
+                            <big> BUY TOKENS </big>&nbsp;
+                            <span style={{ fontSize: '1.7em' }}>🔥</span></span>
                             </Button>
                         )}
                         </Col>
