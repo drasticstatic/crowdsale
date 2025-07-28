@@ -91,9 +91,9 @@ Each component receives the darkMode state as a prop and applies conditional sty
 Form elements receive special treatment to ensure visibility in dark mode:
 
 ```jsx
-<Form.Control 
-  type="text" 
-  placeholder="Enter value" 
+<Form.Control
+  type="text"
+  placeholder="Enter value"
   className={darkMode ? "bg-dark text-light border-secondary dark-placeholder" : ""}
 />
 ```
@@ -113,10 +113,10 @@ The progress bar required special handling to ensure text remains visible in bot
 
 ```jsx
 {/* White text (visible over the blue part) */}
-<div style={{ 
+<div style={{
   clipPath: `inset(0 ${100 - (tokensSold / maxTokens) * 100}% 0 0)`
 }}>
-  <span style={{ 
+  <span style={{
     color: 'white',
     textShadow: '1px 1px 2px rgba(0,0,0,0.7)'
   }}>
@@ -125,10 +125,10 @@ The progress bar required special handling to ensure text remains visible in bot
 </div>
 
 {/* Black/light text (visible over the empty part) */}
-<div style={{ 
+<div style={{
   clipPath: `inset(0 0 0 ${(tokensSold / maxTokens) * 100}%)`
 }}>
-  <span style={{ 
+  <span style={{
     color: darkMode ? '#f0f0f0' : 'black',
     textShadow: darkMode ? '1px 1px 4px rgba(0,0,0,0.9)' : '1px 1px 4px rgba(255,255,255,0.9)'
   }}>

@@ -6,11 +6,11 @@ import Buy from './Buy'; //moved to nav bar
 //import Progress from './Progress'; //moved to nav bar
 
 const Navigation = ({
-    account, 
-    isConnected, 
-    connectWallet, 
-    disconnectWallet, 
-    setAppIsLoading, 
+    account,
+    isConnected,
+    connectWallet,
+    disconnectWallet,
+    setAppIsLoading,
     checkOwnerStatus,
     price,
     provider,
@@ -20,7 +20,7 @@ const Navigation = ({
     tokensSold,
     isLoading,
     darkMode,
-    setDarkMode, 
+    setDarkMode,
     isOpen,
     minContribution,
     maxContribution
@@ -59,19 +59,19 @@ const Navigation = ({
             }
           }
         };
-      
+
         window.addEventListener('scroll', handleScroll);
-        
+
         // Clean up event listener
         return () => {
           window.removeEventListener('scroll', handleScroll);
         };
-      }, []);    
+      }, []);
 
     return (
-        <Navbar 
+        <Navbar
             className='navbar-scroll my-0 pb-3' // Add padding-bottom (pb-3)
-            fixed="top" 
+            fixed="top"
             bg={darkMode ? "dark" : "light"}  // Change bg based on dark mode
             variant={darkMode ? "dark" : "light"}  // Add variant for text color
             expand="lg"
@@ -95,9 +95,9 @@ const Navigation = ({
                     {/* DAPPU and ICO Crowdsale stacked */}
                     <div>
                         <strong>
-                            <span className="navbar-typing" style={{ 
+                            <span className="navbar-typing" style={{
                                 color: darkMode ? '#66b3ff' : '#0066cc',
-                                fontWeight: 'bold', 
+                                fontWeight: 'bold',
                                 fontSize: '1.2em',
                                 letterSpacing: '1px',
                                 textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
@@ -106,7 +106,7 @@ const Navigation = ({
                     </div>
                     <div style={{ marginTop: '-5px' }}>
                         <strong>
-                            <span className="navbar-typing" style={{ 
+                            <span className="navbar-typing" style={{
                                 fontVariant: 'small-caps',
                                 fontSize: '0.9em',
                                 letterSpacing: '1px',
@@ -122,7 +122,7 @@ const Navigation = ({
                     </div>
                     <div style={{ marginTop: '-5px' }}>
                         <em>
-                            <small className="navbar-typing navbar-typing-delay-1" style={{ 
+                            <small className="navbar-typing navbar-typing-delay-1" style={{
                                 color: darkMode ? '#66b3ff' : '#00008B',
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
@@ -138,13 +138,13 @@ const Navigation = ({
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="ms-4">
 
-                <span style={{ 
-                color: '#0066cc', 
-                fontWeight: 'bold', 
+                <span style={{
+                color: '#0066cc',
+                fontWeight: 'bold',
                 fontSize: '1.5em',
                 letterSpacing: '1px',
                 textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-                }}> <span style={{ 
+                }}> <span style={{
                 display: 'inline-block',
                 marginBottom: '10px'
                 }}>
@@ -161,27 +161,27 @@ const Navigation = ({
                         <feMergeNode in="SourceGraphic" />
                     </feMerge>
                     </filter>
-                    
+
                     {/* Gradient for 3D effect */}
                     <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#0088ff" />
                     <stop offset="100%" stopColor="#004488" />
                     </linearGradient>
-                    
+
                     {/* Circle background with 3D effect */}
                     <circle cx="125" cy="70" r="60" fill="url(#circleGradient)" filter="url(#shadow)" className="pulse-circle" />
-                    
+
                     {/* Highlight for 3D effect */}
-                    <circle 
-                        cx="115" 
-                        cy="44" 
-                        r="75" 
-                        fill="none" 
+                    <circle
+                        cx="115"
+                        cy="44"
+                        r="75"
+                        fill="none"
                         className="spin-circle"
-                        stroke={darkMode ? "rgba(33,37,41,0.3)" : "rgba(255,255,255,0.3)"} 
-                        strokeWidth="5" 
+                        stroke={darkMode ? "rgba(33,37,41,0.3)" : "rgba(255,255,255,0.3)"}
+                        strokeWidth="5"
                     />
-                    
+
                     {/* DAPPU text */}
                     <text
                         x="125"
@@ -197,11 +197,11 @@ const Navigation = ({
                 </span> </span>
 
                 <div>{/*button to manually reload blackchain data*/}
-                    <Button 
-                        variant="outline-warning" 
+                    <Button
+                        variant="outline-warning"
                         size="sm"
-                        style={{ 
-                            whiteSpace: 'normal', 
+                        style={{
+                            whiteSpace: 'normal',
                             maxWidth: '120px',
                             fontSize: '0.75rem',
                             padding: '4px 8px'
@@ -225,11 +225,11 @@ const Navigation = ({
 
                 {/* Add a button for checking owner status */}
                 <div className="ms-2"> {/* ms-2 adds margin-left */}
-                    <Button 
-                        variant="outline-info" 
+                    <Button
+                        variant="outline-info"
                         size="sm"
-                        style={{ 
-                            whiteSpace: 'normal', 
+                        style={{
+                            whiteSpace: 'normal',
                             maxWidth: '120px',
                             fontSize: '0.8rem',
                             padding: '4px 8px'
@@ -240,8 +240,8 @@ const Navigation = ({
                     </Button>
                 </div>
                 {/* Modal for displaying owner status */}
-                <Modal 
-                    show={showModal} 
+                <Modal
+                    show={showModal}
                     onHide={() => setShowModal(false)}
                     contentClassName={darkMode ? "bg-dark text-light" : ""}
                 >
@@ -249,8 +249,8 @@ const Navigation = ({
                     <Modal.Title>Owner Status</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className={darkMode ? "bg-dark text-light" : ""}>
-                    <p><strong>Am I the Owner?:</strong> {ownerStatus.isOwner ? 
-                    <span className="text-success"><strong>✓ Yes</strong></span> : 
+                    <p><strong>Am I the Owner?:</strong> {ownerStatus.isOwner ?
+                    <span className="text-success"><strong>✓ Yes</strong></span> :
                     <span className="text-danger"><strong>✗ No</strong></span>}
                     </p>
                     <p><strong>Your Address:</strong> {ownerStatus.account}</p>
@@ -266,8 +266,8 @@ const Navigation = ({
                 {/* Connect/Disconnect button group - always on the far right */}
                 <div className="d-flex align-items-center">
                 {!isConnected ? (
-                    <Button 
-                    variant="primary" 
+                    <Button
+                    variant="primary"
                     onClick={connectWallet}
                     className="pulse-connect-button ms-4"
                     >
@@ -275,8 +275,8 @@ const Navigation = ({
                     </Button>
                 ) : (
                     <div className="d-flex flex-column ms-4">
-                    <Button 
-                        variant="success" 
+                    <Button
+                        variant="success"
                         disabled
                         className="mb-1"
                         size="sm"
@@ -286,15 +286,15 @@ const Navigation = ({
                         {/*Added 'account ? ' prefix and 'Loading...' */}
                         {/*To help prevent wallet connect button from NOT showing "connected" status when connected=true*/}
                     </Button>
-                    <Button 
-                        variant="outline-danger" 
+                    <Button
+                        variant="outline-danger"
                         size="sm"
                         onClick={disconnectWallet}
                     >
                         Disconnect
                     </Button>
                 </div>
-            )} 
+            )}
                     {/* Dark mode toggle button */}
                     <Button
                     variant={darkMode ? "light" : "dark"}
@@ -328,10 +328,10 @@ const Navigation = ({
                             <small className={`text-${darkMode ? 'light' : 'muted'} me-2`}>Price:<strong> {price} ETH</strong></small>
                         )}
                         <div style={{ flexGrow: 1 }}> {/* Added wrapper div with flexGrow to take available space */}
-                            <Buy 
-                            provider={provider} 
-                            price={price} 
-                            crowdsale={crowdsale} 
+                            <Buy
+                            provider={provider}
+                            price={price}
+                            crowdsale={crowdsale}
                             setIsLoading={setIsLoading}
                             navbarVersion={true}
                             darkMode={darkMode}
@@ -348,38 +348,38 @@ const Navigation = ({
 
                 {/* Progress bar at the bottom of navbar, full width */}
                 {isConnected && !isLoading && maxTokens && tokensSold && (
-                <div 
-                    className="position-absolute" 
-                    style={{ 
-                    bottom: '-10px', 
-                    left: '50%', 
-                    transform: 'translateX(-50%)', 
-                    width: '80%', 
+                <div
+                    className="position-absolute"
+                    style={{
+                    bottom: '-10px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '80%',
                     maxWidth: '1000px'
                     }}
                 >
                     {/* Progress bar */}
-                    <div className="progress" style={{ 
-                        height: '20px', 
-                        borderRadius: '10px', 
-                        position: 'relative', 
+                    <div className="progress" style={{
+                        height: '20px',
+                        borderRadius: '10px',
+                        position: 'relative',
                         overflow: 'hidden',
                         backgroundColor: darkMode ? '#3a4149' : '' // Add dark grey background in dark mode
-                    }}>                        
-                        <div 
+                    }}>
+                        <div
                             className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-                            role="progressbar" 
-                            style={{ 
-                            width: `${(tokensSold / maxTokens) * 100}%`, 
+                            role="progressbar"
+                            style={{
+                            width: `${(tokensSold / maxTokens) * 100}%`,
                             borderRadius: (tokensSold / maxTokens) * 100 < 100 ? '10px 0 0 10px' : '10px'
                             }}
                             aria-valuenow={(tokensSold / maxTokens) * 100}
-                            aria-valuemin="0" 
+                            aria-valuemin="0"
                             aria-valuemax="100"
                         ></div>
-                        
+
                         {/* White text (visible over the blue part) */}
-                        <div style={{ 
+                        <div style={{
                             position: 'absolute',
                             top: 0,
                             left: 0,
@@ -390,7 +390,7 @@ const Navigation = ({
                             justifyContent: 'center',
                             clipPath: `inset(0 ${100 - (tokensSold / maxTokens) * 100}% 0 0)`
                         }}>
-                            <span style={{ 
+                            <span style={{
                                 fontWeight: 'bold',
                                 fontSize: '12px',
                                 color: 'white',
@@ -411,7 +411,7 @@ const Navigation = ({
                         </div>
 
                         {/* Black text (visible over the empty part) - change to light gray in dark mode */}
-                        <div style={{ 
+                        <div style={{
                         position: 'absolute',
                         top: 0,
                         left: 0,
@@ -422,7 +422,7 @@ const Navigation = ({
                         justifyContent: 'center',
                         clipPath: `inset(0 0 0 ${(tokensSold / maxTokens) * 100}%)`
                         }}>
-                        <span style={{ 
+                        <span style={{
                             fontWeight: 'bold',
                             fontSize: '12px',
                             color: darkMode ? '#e0e0e0' : 'black', // Light gray in dark mode, black in light mode

@@ -13,19 +13,19 @@ const reportWebVitals = onPerfEntry => {
     // Import the web-vitals library only when needed (lazy loading)
     import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
       // Each of these functions measures a different metric:
-      
+
       getCLS(onPerfEntry);  // Cumulative Layout Shift: measures visual stability
                            // (how much elements move around while loading)
-      
+
       getFID(onPerfEntry);  // First Input Delay: measures interactivity
                            // (time from first click to response)
-      
+
       getFCP(onPerfEntry);  // First Contentful Paint: measures loading performance
                            // (time until first text/image appears)
-      
+
       getLCP(onPerfEntry);  // Largest Contentful Paint: measures loading performance
                            // (time until main content has loaded)
-      
+
       getTTFB(onPerfEntry); // Time to First Byte: measures server response time
                            // (how fast the server sends back the first byte of data)
     });

@@ -27,7 +27,7 @@ root.render(
 
 /* To start measuring performance metrics in app:
     Pass a function here to handle the metrics data/log results
-    You can send this data to an analytics endpoint or log it to the console  
+    You can send this data to an analytics endpoint or log it to the console
       For example: reportWebVitals(console.log) would log metrics to the console
     Learn more: https://bit.ly/CRA-vitals*/
 reportWebVitals();

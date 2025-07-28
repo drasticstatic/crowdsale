@@ -89,7 +89,7 @@ The component includes comprehensive error handling for:
 1. **Whitelist Toggle Not Working**
    - **Issue**: Toggle button changes appearance but doesn't affect purchase restrictions
    - **Solution**: Ensure the `onlyWhitelisted` modifier in Crowdsale.sol checks `whitelistEnabled` before enforcing restrictions
-   - **Code Fix**: 
+   - **Code Fix**:
      ```solidity
      modifier onlyWhitelisted() {
          if (whitelistEnabled) {
@@ -109,7 +109,7 @@ The component includes comprehensive error handling for:
      await transaction.wait();
      // Refresh the whitelist addresses list upon toggle
      await fetchWhitelistedAddresses();
-     
+
      // In removeFromWhitelistHandler:
      await transaction.wait();
      // Immediately fetch the updated list
@@ -128,4 +128,3 @@ The component includes comprehensive error handling for:
      const updatedState = await crowdsale.whitelistEnabled();
      setIsWhitelistEnabled(updatedState);
      ```
-     

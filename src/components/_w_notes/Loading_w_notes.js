@@ -20,7 +20,7 @@ const Loading = () => {
             {/* The Spinner component with "grow" animation style */}
             {/* This creates a pulsing circle animation */}
             <Spinner animation="grow" />
-            
+
             {/* A paragraph with the loading message */}
             {/* 'my-2' adds a small margin above and below the text */}
             <p className='my-2'>Loading Data...</p>

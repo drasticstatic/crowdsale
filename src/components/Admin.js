@@ -18,7 +18,7 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
         try {
         setIsLoading(true);
         const signer = await provider.getSigner();
-        
+
         if (isSaleOpen) {
             // Close the sale
             const transaction = await crowdsale.connect(signer).closeSale();
@@ -30,7 +30,7 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             await transaction.wait();
             setIsSaleOpen(true);
         }
-        
+
         alert(`\n     Sale is now ${isSaleOpen ? 'CLOSED  🔒 🙅‍♂️' : 'OPEN!  🔓 😃'}`);
         window.location.reload();// Reload the page to reflect changes
         } catch (error) {
@@ -39,7 +39,7 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
         if (error.code) console.error(`Error code: ${error.code}`);
         if (error.message) console.error(`Error message: ${error.message}`);
         if (error.data) console.error(`Error data:`, error.data);
-        
+
         alert(`Failed to toggle sale status: ${error.message}`);
         setIsLoading(false);
     }
@@ -55,7 +55,7 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
 
             // Instead of reloading the page, just fetch the updated list
             await fetchWhitelistedAddresses();
-            
+
             // Clear the input field
             setAddress('');
             setIsLoading(false);
@@ -100,14 +100,14 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             // Get the current state from the contract first
             const currentState = await crowdsale.whitelistEnabled();
             console.log(`Current whitelist state: ${currentState}`);
-            
+
             // Toggle to the opposite state
             const newState = !currentState; // new state to be !-opposite
             console.log(`Toggling to: ${newState}`);
-            
+
             const signer = await provider.getSigner();
             //const transaction = await crowdsale.connect(signer).toggleWhitelist(newState);
-            
+
             // Add gas limit and price to avoid circuit breaker issues
             /*const gasEstimate = await crowdsale.estimateGas.toggleWhitelist(newState);
             const gasLimit = gasEstimate.mul(120).div(100); // Add 20% buffer
@@ -118,10 +118,10 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             const transaction = await crowdsale.connect(signer).toggleWhitelist(newState, {
                 gasLimit: 200000 // Set a fixed gas limit instead of estimating
             });
-            
+
             console.log("Transaction sent:", transaction.hash);
             alert(`\n Transaction sent!\n   Please wait for confirmation...`);
-            
+
             // Wait for transaction to be mined
             await transaction.wait();
             console.log("Transaction confirmed");
@@ -129,14 +129,14 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             // Read the new state directly from the contract
             const updatedState = await crowdsale.whitelistEnabled();
             console.log(`Updated contract whitelist state: ${updatedState}`);
-            
+
             // Update both local and parent state based on the contract's state
             setIsWhitelistEnabled(updatedState);
             setWhitelistStatus(updatedState);
 
             // Refresh the whitelist addresses list
             await fetchWhitelistedAddresses();
-            
+
             alert(`\n Whitelist is now ${updatedState ? 'ENABLED' : 'DISABLED'}`);
             // Reload data but don't leave in loading state
             /*setIsLoading(true);
@@ -146,17 +146,17 @@ const Admin = ({ provider, crowdsale, setIsLoading, whitelistStatus, setWhitelis
             //window.location.reload();// Force page reload instead of using loading state
             //document.location.href = document.location.href;// DIRECT FIX: Force a hard reload of the page
             //window.location.href = window.location.pathname + window.location.search;
-            
+
             //window.location.reload(true); // true forces a reload from the server, not from cache
             //↑ now removed b/c causing dark mode state to reload to light-mode
         } catch (error) {
             console.error("Toggle whitelist error:", error);
-            
+
             // More detailed error logging
             if (error.code) console.error(`Error code: ${error.code}`);
             if (error.message) console.error(`Error message: ${error.message}`);
             if (error.data) console.error(`Error data:`, error.data);
-            
+
             // Suggest solutions based on error
             if (error.message.includes('circuit breaker')) {
                 alert('\n Network error:\n   Please try again in a few moments or restart your Hardhat node');
@@ -193,7 +193,7 @@ useEffect(() => {
         console.error("Error fetching sale status:", error);
       }
     };
-    
+
     fetchSaleStatus();
   }, [crowdsale]);
 
@@ -218,7 +218,7 @@ const updateWhitelistStatus = async () => {
         // Get the current whitelist status directly from the contract
         const contractWhitelistStatus = await crowdsale.whitelistEnabled();
         console.log("Contract whitelist status:", contractWhitelistStatus);
-        
+
         // Update both local and parent state
         setIsWhitelistEnabled(contractWhitelistStatus);
         if (setWhitelistStatus) {
@@ -245,8 +245,8 @@ updateWhitelistStatus();
                         {isSaleOpen ? 'OPEN 😃' : 'CLOSED 🙅‍♂️'}
                     </strong>
                 </span>
-                    <Button 
-                        variant={isSaleOpen ? "danger" : "success"} 
+                    <Button
+                        variant={isSaleOpen ? "danger" : "success"}
                         onClick={toggleSaleHandler}
                         className={`toggle-buy-button ${!isSaleOpen ? "pulse-green-button" : ""}`}
                     >
@@ -259,9 +259,9 @@ updateWhitelistStatus();
                 <Form onSubmit={addToWhitelistHandler}>
                     <Form.Group className="mb-2">
                         <Form.Label className={darkMode ? "text-light" : ""}>Investor's Ethereum Address:</Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            placeholder=" 0x..." 
+                        <Form.Control
+                            type="text"
+                            placeholder=" 0x..."
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             className={`${darkMode ? "bg-dark text-light border-secondary dark-placeholder" : ""}`}
@@ -275,7 +275,7 @@ updateWhitelistStatus();
                         <Button variant="danger" onClick={removeFromWhitelistHandler}>
                         <strong>REMOVE</strong> <small>from Whitelist</small>
                         </Button>
-                        
+
                         <hr className={darkMode ? "border-secondary" : ""} />
 
                         {isWhitelistEnabled && (
@@ -298,7 +298,7 @@ updateWhitelistStatus();
                             <p className="text-danger mt-2">
                                 <small><i className="bi bi-exclamation-triangle"></i> <br /><em><u><strong>WARNING</strong></u>
                                 <strong>: </strong></em> 
-                                <strong>Whitelist</strong> is currently <strong><span style={{ 
+                                <strong>Whitelist</strong> is currently <strong><span style={{
                                     color: '#f00', 
                                     textShadow: '0.5px 0.5px 0.5px rgba(0,0,0,0.5)',
                                     fontWeight: 'bold'
@@ -309,7 +309,7 @@ updateWhitelistStatus();
                                 <span style={{ fontSize: '0.9em' }}> can buy tokens</span></small>
                             </p>
                         )}
-                        <Button 
+                        <Button
                             variant={isWhitelistEnabled ? "warning" : "primary"}
                             className="mt-3"
                             // ternary operator: warning=yellow, primary=blue
@@ -318,8 +318,8 @@ updateWhitelistStatus();
                             {isWhitelistEnabled ? (
                                 <>Toggle <strong style={{ letterSpacing: '2px' }}><small>WHITELIST</small></strong>
                                 Feature<br /><strong style={{ letterSpacing: '5px' }}><big>- OFF -</big></strong>
-                                <br /><em style={{ 
-                                    color: '#f00', 
+                                <br /><em style={{
+                                    color: '#f00',
                                     textShadow: '0.5px 0.5px 0.5px rgba(0,0,0,0.5)',
                                 }}>
                                     <small>warning: <u>anyone</u> will be able to purchase tokens</small>
@@ -328,7 +328,7 @@ updateWhitelistStatus();
                                 <>Toggle <strong style={{ letterSpacing: '2px' }}><small>WHITELIST</small></strong>
                                 Feature<br /><strong style={{ letterSpacing: '5px' }}><big>- ON -</big></strong>
                                 <br /><em style={{
-                                    color: '#00ff00', 
+                                    color: '#00ff00',
                                     textShadow: '0.5px 0.5px 0.5px rgba(0,0,0,0.5)',
                                 }}>
                                     <small>resume | re-enable whitelist</small></em></>
@@ -340,17 +340,17 @@ updateWhitelistStatus();
                         </div>
                     </div>
                     <div className="d-flex justify-content-between mb-2">
-                        <Button 
-                            variant="outline-secondary" 
-                            size="sm" 
+                        <Button
+                            variant="outline-secondary"
+                            size="sm"
                             onClick={fetchWhitelistedAddresses}
                             className="mt-2 mb-2"
                         >
                             <big>Force Refresh the Array  </big><small>+ log console</small>
                         </Button>
-                        
-                        <Button 
-                            variant="outline-info" 
+
+                        <Button
+                            variant="outline-info"
                             size="sm"
                             className="mt-2 mb-2"
                             onClick={async () => {
@@ -359,7 +359,7 @@ updateWhitelistStatus();
                                 const signerAddress = await signer.getAddress();
                                 const owner = await crowdsale.owner();
                                 const isOwner = signerAddress.toLowerCase() === owner.toLowerCase();
-                                
+
                                 alert(`Owner check: ${isOwner ? 'Yes' : 'No'}\nYour address: ${signerAddress}\nOwner address: ${owner}`);
                                 console.log(`Owner check: ${isOwner ? 'Yes' : 'No'}\nYour address: ${signerAddress}\nOwner address: ${owner}`);
                             } catch (error) {
@@ -384,7 +384,7 @@ updateWhitelistStatus();
                     ) : (
                         <p className="text-muted"><small>No addresses whitelisted yet</small></p>
                     )}
-                </div>               
+                </div>
                 </Form>
             </Card.Body>
         </Card>

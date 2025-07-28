@@ -49,7 +49,7 @@ describe('Crowdsale', () => {
       - price of 1 ETH per token
       - maximum of 1,000,000 tokens for sale */
     crowdsale = await Crowdsale.deploy(token.address, ether(1), tokens('1000000'), // <-- 1 token = 1 ether, 1000000 max tokens
-      openingTime, minContribution, maxContribution) 
+      openingTime, minContribution, maxContribution)
 
     // Transfer all tokens to the Crowdsale contract to be sold
     let transaction = await token.connect(deployer).transfer(crowdsale.address, tokens(1000000))
@@ -83,7 +83,7 @@ describe('Crowdsale', () => {
       describe('Buying Tokens', () => {
         let transaction
         let amount = tokens(10) // Define amount of tokens to buy (10 tokens)
-    
+
         describe('Success', () => { // This section tests the successful purchase scenario
             // Set up a token purchase before each test
           beforeEach(async () => {
@@ -96,7 +96,7 @@ describe('Crowdsale', () => {
             transaction = await crowdsale.connect(user1).buyTokens(amount, { value: ether(10) })
             await transaction.wait()
           })
-    
+
           it('transfers tokens', async () => {
             // Test 1: Check that tokens were transferred correctly
               // Crowdsale contract should have 10 fewer tokens (999990 instead of 1000000)
@@ -105,13 +105,13 @@ describe('Crowdsale', () => {
               // Check that the user received tokens in exchange for their ETH
             expect(await token.balanceOf(user1.address)).to.equal(amount)
           })
-    
+
           it('updates tokensSold', async () => { // <-- Check that the tokensSold variable is updated correctly
             // Test 2: Check that the contract's internal counter is updated
               // The tokensSold variable tracks how many tokens have been sold
             expect(await crowdsale.tokensSold()).to.equal(amount)
           })
-    
+
           it('emits a buy event', async () => {
             // Test 3: Check that the contract emitted the correct event
               // Events are important for frontend applications and tracking activity
@@ -120,9 +120,9 @@ describe('Crowdsale', () => {
               .withArgs(amount, user1.address)// <-- Check that the event was emitted with the correct arguments
           })
         })
-  
+
       describe('Failure', () => { // This section tests scenarios where the purchase should fail
-  
+
         it('rejects insufficent ETH', async () => {
           // Test: Ensure the contract rejects purchases with insufficient ETH
             // Here we try to buy 10 tokens but send 0 ETH, which should fail
@@ -136,24 +136,24 @@ describe('Crowdsale', () => {
     describe('Sending ETH', () => {
       let transaction
       let amount = ether(10)
-  
+
       describe('Success', () => {
-  
+
         beforeEach(async () => {
           //await crowdsale.connect(deployer).toggleWhitelist(false);// Disable whitelist for this test
 
           await crowdsale.connect(deployer).openSale();// Open the sale
-          
+
           // User1 sends ETH directly to the contract address (not calling a specific function)
           transaction = await user1.sendTransaction({ to: crowdsale.address, value: amount })
           await transaction.wait()
         })
-  
+
         it('updates contracts ether balance', async () => {
         // Check that the contract's ETH balance increased by the amount sent
           expect(await ethers.provider.getBalance(crowdsale.address)).to.equal(amount)
         })
-  
+
         it('updates user token balance', async () => {
         // Check that the user received tokens in exchange for their ETH
         // The exchange rate is determined by the contract's price setting
@@ -161,29 +161,29 @@ describe('Crowdsale', () => {
         })
       })
     })
-  
+
     // --- TEST CASE FOR UPDATING TOKEN PRICE --- :
       // Only the contract owner should be able to change the price
     describe('Updating Price', () => {
       let transaction
       let price = ether(2) // New price: 2 ETH per token
-  
+
       describe('Success', () => {
-  
+
         beforeEach(async () => {
         // The deployer (owner) updates the price to 2 ETH per token
           transaction = await crowdsale.connect(deployer).setPrice(ether(2))
           await transaction.wait() // Wait for transaction to be mined
         })
-  
+
         it('updates the price', async () => {
         // Check that the price was updated correctly
           expect(await crowdsale.price()).to.equal(ether(2))
         })
       })
-  
+
       describe('Failure', () => {
-  
+
         it('prevents non-owner from updating price', async () => {
         // Check that a regular user (non-owner) cannot update the price
           // The transaction should be reverted (fail)
@@ -198,9 +198,9 @@ describe('Crowdsale', () => {
       let transaction
       let amount = tokens(10) // 10 tokens to buy
       let value = ether(10) // 10 ETH to spend
-  
+
       describe('Success', () => {
-  
+
         beforeEach(async () => {
           //await crowdsale.connect(deployer).toggleWhitelist(false);// Disable whitelist for this test
 
@@ -210,11 +210,11 @@ describe('Crowdsale', () => {
             // User1 buys 10 tokens for 10 ETH
           transaction = await crowdsale.connect(user1).buyTokens(amount, { value: value })
           await transaction.wait()// Wait for transaction to be mined
-  
+
           transaction = await crowdsale.connect(deployer).finalize()
           await transaction.wait()// Wait for transaction to be mined
         })
-  
+
         it('transfers remaining tokens to owner', async () => {
           // Check that all remaining tokens were transferred to the owner
             // Check that the Crowdsale contract has 0 tokens left
@@ -222,12 +222,12 @@ describe('Crowdsale', () => {
           expect(await token.balanceOf(crowdsale.address)).to.equal(0)
           expect(await token.balanceOf(deployer.address)).to.equal(tokens(999990))
         })
-  
+
         it('transfers ETH balance to owner', async () => {
         // Check that all ETH collected was transferred to the owner
           expect(await ethers.provider.getBalance(crowdsale.address)).to.equal(0)
         })
-  
+
         it('emits Finalize event', async () => {
         // Check that the Finalize event was emitted with correct parameters
           // --> https://hardhat.org/hardhat-chai-matchers/docs/reference#.emit
@@ -235,18 +235,18 @@ describe('Crowdsale', () => {
             .withArgs(amount, value)
         })
       })
-  
+
       describe('Failure', () => {
-  
+
         it('prevents non-owner from finalizing', async () => {
         // Check that a regular user (non-owner) cannot finalize the sale
           // The transaction should be reverted (fail)
           await expect(crowdsale.connect(user1).finalize()).to.be.reverted
         })
-  
+
       })
     })
-  
+
 /* ==== WHITELISTING TESTS: ====
   These tests cover:
     - Whitelist management (adding, removing, toggling)
@@ -266,7 +266,7 @@ describe('Crowdsale', () => {
     it('allows owner to remove addresses from whitelist', async () => {
       await crowdsale.connect(deployer).addToWhitelist(user1.address)
       expect(await crowdsale.whitelist(user1.address)).to.equal(true)
-      
+
       await crowdsale.connect(deployer).removeFromWhitelist(user1.address)
       expect(await crowdsale.whitelist(user1.address)).to.equal(false)
     })
@@ -279,7 +279,7 @@ describe('Crowdsale', () => {
 
     it('prevents non-owners from removing from whitelist', async () => {
       await crowdsale.connect(deployer).addToWhitelist(user2.address)
-      
+
       await expect(
         crowdsale.connect(user1).removeFromWhitelist(user2.address)
       ).to.be.revertedWith('Caller is not and must be the owner')
@@ -287,10 +287,10 @@ describe('Crowdsale', () => {
 
     it('allows owner to toggle whitelist status', async () => {
       expect(await crowdsale.whitelistEnabled()).to.equal(true)
-      
+
       await crowdsale.connect(deployer).toggleWhitelist(false)
       expect(await crowdsale.whitelistEnabled()).to.equal(false)
-      
+
       await crowdsale.connect(deployer).toggleWhitelist(true)
       expect(await crowdsale.whitelistEnabled()).to.equal(true)
     })
@@ -298,7 +298,7 @@ describe('Crowdsale', () => {
     it('returns correct list of whitelisted addresses', async () => {
       await crowdsale.connect(deployer).addToWhitelist(user1.address)
       await crowdsale.connect(deployer).addToWhitelist(user2.address)
-      
+
       const whitelistedAddresses = await crowdsale.getWhitelistedAddresses()
       expect(whitelistedAddresses.length).to.equal(2)
       expect(whitelistedAddresses).to.include(user1.address)
@@ -309,7 +309,7 @@ describe('Crowdsale', () => {
       await crowdsale.connect(deployer).addToWhitelist(user1.address)
       await crowdsale.connect(deployer).addToWhitelist(user2.address)
       await crowdsale.connect(deployer).removeFromWhitelist(user1.address)
-      
+
       const whitelistedAddresses = await crowdsale.getWhitelistedAddresses()
       expect(whitelistedAddresses.length).to.equal(1)
       expect(whitelistedAddresses).to.include(user2.address)
@@ -325,44 +325,44 @@ describe('Crowdsale', () => {
     it('prevents non-whitelisted users from buying tokens when whitelist is enabled', async () => {
       // Make sure whitelist is enabled
       await crowdsale.connect(deployer).toggleWhitelist(true)
-      
+
       // Try to buy tokens with a non-whitelisted address
       await expect(
         crowdsale.connect(user2).buyTokens(tokens(10), { value: ether(10) })
       ).to.be.revertedWith('Address not whitelisted')
     })
-  
+
     it('allows whitelisted users to buy tokens', async () => {
       // Add user to whitelist
       await crowdsale.connect(deployer).addToWhitelist(user1.address)
-      
+
       // Buy tokens
       await crowdsale.connect(user1).buyTokens(tokens(10), { value: ether(10) })
       expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
     })
-  
+
     it('allows anyone to buy tokens when whitelist is disabled', async () => {
       // Disable whitelist
       await crowdsale.connect(deployer).toggleWhitelist(false)
-      
+
       // Buy tokens without being whitelisted
       await crowdsale.connect(user1).buyTokens(tokens(10), { value: ether(10) })
       expect(await token.balanceOf(user1.address)).to.equal(tokens(10))
     })
-  
+
     it('re-enables whitelist restrictions after toggling back on', async () => {
       // First disable whitelist
       await crowdsale.connect(deployer).toggleWhitelist(false)
-      
+
       // Then re-enable it
       await crowdsale.connect(deployer).toggleWhitelist(true)
-      
+
       // Try to buy tokens with a non-whitelisted address
       await expect(
         crowdsale.connect(user2).buyTokens(tokens(10), { value: ether(10) })
       ).to.be.revertedWith('Address not whitelisted')
     })
-  })  
+  })
 
 /* ==== SALE STATUS MANAGEMENT TESTS: ====
   These tests cover:
@@ -379,55 +379,55 @@ describe('Crowdsale', () => {
     it('starts with sale closed', async () => {
       expect(await crowdsale.isOpen()).to.equal(false)
     })
-  
+
     it('allows owner to open the sale', async () => {
       await crowdsale.connect(deployer).openSale()
       expect(await crowdsale.isOpen()).to.equal(true)
     })
-  
+
     it('allows owner to close the sale', async () => {
       await crowdsale.connect(deployer).openSale()
       expect(await crowdsale.isOpen()).to.equal(true)
-      
+
       await crowdsale.connect(deployer).closeSale()
       expect(await crowdsale.isOpen()).to.equal(false)
     })
-  
+
     it('prevents non-owners from opening the sale', async () => {
       await expect(
         crowdsale.connect(user1).openSale()
       ).to.be.revertedWith('Caller is not and must be the owner')
     })
-  
+
     it('prevents non-owners from closing the sale', async () => {
       await crowdsale.connect(deployer).openSale()
-      
+
       await expect(
         crowdsale.connect(user1).closeSale()
       ).to.be.revertedWith('Caller is not and must be the owner')
     })
   })
-  
+
   describe('Contribution Limits', () => {
     beforeEach(async () => {
       // Open the sale and disable whitelist for these tests
       await crowdsale.connect(deployer).openSale()
       await crowdsale.connect(deployer).toggleWhitelist(false)
     })
-  
+
     it('enforces minimum contribution amount', async () => {
       const minContribution = await crowdsale.minContribution()
       const belowMin = minContribution.sub(1)
       const price = await crowdsale.price();
-  
+
       // Calculate the correct ETH value based on the token amount
       const value = belowMin.mul(price).div(ethers.utils.parseEther('1'));
-      
+
       await expect(
         crowdsale.connect(user1).buyTokens(belowMin, { value })
       ).to.be.revertedWith('Amount is less than minimum contribution')
     })
-  
+
     it('enforces maximum contribution amount', async () => {
       const maxContribution = await crowdsale.maxContribution()
       const aboveMax = maxContribution.add(1)
@@ -441,10 +441,10 @@ describe('Crowdsale', () => {
       await expect(
         crowdsale.connect(user1).buyTokens(aboveMax, { value: valueWithBuffer })
       ).to.be.revertedWith('Amount exceeds maximum contribution')*/
-      
+
       // Use a simpler approach with a fixed multiplier for the value
       //const value = ether(100000) // Just use a very large amount of ETH
-      
+
       // Use a fixed value that's enough to trigger the error but not too large
       const value = ether(1000) // Just use a very large amount of ETH
 
@@ -452,57 +452,57 @@ describe('Crowdsale', () => {
         crowdsale.connect(user1).buyTokens(aboveMax, { value })
       ).to.be.revertedWith('Amount exceeds maximum contribution')
     })
-  
+
     it('allows contributions within limits', async () => {
       const minContribution = await crowdsale.minContribution();
       const price = await crowdsale.price();
-      
+
       // Calculate the correct ETH value based on the token amount
       const value = minContribution.mul(price).div(ethers.utils.parseEther('1'));
-      
+
       // Add a small buffer to the value to account for rounding errors (0.5%)
       const buffer = value.mul(5).div(1000);
       const valueWithBuffer = value.add(buffer);
-      
+
       // Use the buffered value when sending the transaction
       await crowdsale.connect(user1).buyTokens(minContribution, { value: valueWithBuffer });
-      
+
       // Verify the tokens were transferred
       expect(await token.balanceOf(user1.address)).to.equal(minContribution);
     });
   })
-  
+
   describe('Time-based Restrictions', () => {
     beforeEach(async () => {
       await crowdsale.connect(deployer).toggleWhitelist(false)// Disable whitelist for these tests
     })
-  
+
     it('prevents purchases when sale is closed', async () => {
       // Sale is closed by default
       await expect(
         crowdsale.connect(user1).buyTokens(tokens(10), { value: ether(10) })
       ).to.be.revertedWith('Sale is not open')
     })
-  
+
     it('prevents purchases before opening time', async () => {
       const openingTime = await crowdsale.openingTime()// Get the opening time
-      
+
       // If opening time is in the future, this test will pass
       if (openingTime.gt(Math.floor(Date.now() / 1000))) {
         await crowdsale.connect(deployer).openSale()
-        
+
         await expect(
           crowdsale.connect(user1).buyTokens(tokens(10), { value: ether(10) })
         ).to.be.revertedWith('Sale has not started yet')
       }
     })
-  
+
     it('allows purchases when sale is open and after opening time', async () => {
       // This test assumes the opening time is in the past or now
       // Adjusted the deployment in beforeEach to set a past timestamp
-      
+
       await crowdsale.connect(deployer).openSale()
-      
+
       // If opening time is in the past, purchases should be allowed:
       const openingTime = await crowdsale.openingTime()
       if (openingTime.lte(Math.floor(Date.now() / 1000))) {

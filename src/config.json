@@ -11,14 +11,14 @@
         "crowdsale": {
             "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
         }
-    },  
-    
+    },
+
     "localDevelopmentNetwork": {
     "": " ↑ Network ID for local development was changed from '31337' to 'localDevelopmentNetwork' to improve readability and maintainability.",
         "chainId": 31337,
         "": " ↑ The chain ID '31337' is commonly used for local Ethereum development networks like Hardhat or Ganache",
         "token": {
-            "address": "${TOKEN_ADDRESS}" 
+            "address": "${TOKEN_ADDRESS}"
         },
         "": " ↑ The token address: '0x5FbDB2315678afecb367f032d93F642f64180aa3' was hardcoded",
             "": "If this is environment-specific, consider externalizing it into environment variables or a .env file for better configurability.",

@@ -50,18 +50,18 @@ import './Animations&Style.css'
 function App() {
   // ===== STATE VARIABLES: =====
     // These variables store data that can change and cause the UI to update
-  
+
   // Blockchain connection states
   const [provider, setProvider] = useState(null)          // Connection to Ethereum network
   const [crowdsale, setCrowdsale] = useState(null)        // Crowdsale contract instance
-  
+
   // User account states
   const [account, setAccount] = useState("")              // User's Ethereum address
     // Changed to empty string vs 'null' for better handling in the UI
       // account is used to display the user's address and balance
       // setAccount is used to update the account state when the user connects their wallet
   const [accountBalance, setAccountBalance] = useState(0) // User's token balance
-  
+
   // Token sale states
   const [price, setPrice] = useState(0)                 // Price per token in ETH
   const [maxTokens, setMaxTokens] = useState(0)         // Total tokens available for sale
@@ -73,7 +73,7 @@ function App() {
   const [minContribution, setMinContribution] = useState(0); // Minimum contribution per transaction
   const [maxContribution, setMaxContribution] = useState(0); // Maximum contribution per transaction
   const isInitialMount = useRef(true); // Ref to track initial mount to prevent unnecessary reloads ESlint dependency array [account, checkOwnerStatus, isConnected] in finally block
-  
+
   // UI state
   const [darkMode, setDarkMode] = useState(() => {
     // Load from localStorage or default to false
@@ -105,7 +105,7 @@ function App() {
 
       // Add a small delay to ensure MetaMask is ready
       //await new Promise(resolve => setTimeout(resolve, 100));
-  
+
       // Request/fetch access to user's MetaMask account AFTER creating the provider
         // This will prompt the user to connect their wallet if not already connected
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts'});
@@ -121,7 +121,7 @@ function App() {
         //setIsLoading(true);
         loadBlockchainData(); // Directly call loadBlockchainData instead
       }
-      
+
       setIsConnected(true);
       setIsLoading(true); // This will trigger loadBlockchainData
     } catch (error) {
@@ -141,17 +141,17 @@ function App() {
       setIsOwner(false);
       setCrowdsale(null);
       setProvider(null);
-      
+
       // Clear any cached connection data
       localStorage.removeItem('isWalletConnected');
-      
+
       console.log("Wallet disconnected from application");
-      
+
       // Optional: Show a message to the user about how to fully disconnect in MetaMask
       //alert("\n Disconnected from app.\n Note:  To fully disconnect from MetaMask, \n    use the MetaMask extension itself.");
       // Show modal instead of alert
       setShowDisconnectModal(true);
-      
+
     } catch (error) {
       console.error("Error disconnecting wallet:", error);
     }
@@ -163,7 +163,7 @@ function App() {
     Informs the user that they've been disconnected from the app
     Explains that to fully disconnect from MetaMask, they need to use the MetaMask extension
   Since MetaMask doesn't provide a programmatic way to fully disconnect*/
-  
+
   // *** Add state for checking if user is owner
   const [isOwner, setIsOwner] = useState(false);
 
@@ -202,7 +202,7 @@ function App() {
     // This function connxects to the blockchain and loads all necessary data
   const loadBlockchainData = useCallback(async () => {
     console.log("Loading blockchain data...");
-    try {        
+    try {
       // ↓ Instantiate Provider AFTER reuesting accounts to connect to Ethereum via MetaMask or other web3 provider
       const provider = new ethers.providers.Web3Provider(window.ethereum) // Creates a new provider instance
       // ↑ window.ethereum is injected by MetaMask allowing us to interact with the user's wallet and Ethereum network
@@ -219,7 +219,7 @@ function App() {
       const account = ethers.utils.getAddress(accounts[0])  // Get the first account and format it
       setAccount(account)
       console.log (`account: ${account}`) // Log the user's account address to the console for debugging
-      
+
       // Fetch the current network/chain ID to use the correct contract addresses
         const { chainId } = await provider.getNetwork()
         console.log (`chainId: ${chainId}`) // Log the chain ID to the console for debugging
@@ -233,19 +233,19 @@ function App() {
           console.log("Crowdsale config:", config[chainId].crowdsale);
           console.log("Crowdsale address:", config[chainId].crowdsale?.address);
 }
-        let configKey = chainId.toString();        
+        let configKey = chainId.toString();
         // Use 'localDevelopmentNetwork' for chainId 31337
         /*let configKey = "localDevelopmentNetwork";
         if (chainId !== 31337) {
           configKey = chainId.toString();
         }*/
         // !== strict inequality check (type and value)
-        
+
         // Reverted to using chainId as string
         // Placeholders like ${TOKEN_ADDRESS} & ${CROWDSALE_ADDRESS} in config.json became problematic
         // when using the config in a React app, because they are not replaced with actual values
         // This is because React does not process template literals in JSON files- they're just treated as regular strings
-        // Instead, we use the chainId directly as a string to access the config object 
+        // Instead, we use the chainId directly as a string to access the config object
         // This also allows us to use the same config for both local and test networks
         console.log(`Using config key: ${configKey}`);
 
@@ -270,7 +270,7 @@ function App() {
           setIsLoading(false);
           return;
         }
-      
+
       // Check if MetaMask is connected to the correct network:
       /*await window.ethereum.request({ method: 'eth_chainId' });
       if (configKey !== config[configKey].configKey) {
@@ -291,7 +291,7 @@ function App() {
         if (!config[configKey] || !config[configKey].token || !config[configKey].token.address) {
           throw new Error(`Missing token configuration for chainId ${chainId}`);
         }
-      
+
           const token = new ethers.Contract(
             config[configKey].token.address,     // Address of token contract on this network
             TOKEN_ABI,                         // ABI (interface) of the token contract
@@ -302,7 +302,7 @@ function App() {
         if (!config[configKey].crowdsale || !config[configKey].crowdsale.address) {
           throw new Error(`Missing crowdsale configuration for chainId ${chainId}`);
         }
-        
+
           const crowdsale = new ethers.Contract(
             config[configKey].crowdsale.address, // Address of crowdsale contract
             CROWDSALE_ABI,                     // ABI (interface) of the crowdsale contract
@@ -341,7 +341,7 @@ function App() {
         console.error("Error checking owner status:", error);
         setIsOwner(false);
       }
-      
+
       // Add null checks before accessing contract properties
       if (crowdsale) {
         // Fetch state of whitelist from the crowdsale contract
@@ -393,7 +393,7 @@ function App() {
           console.error("Error fetching isOpen:", error);
           setIsOpen(false); // Default to closed if error
         }
-    
+
         try {
           const openingTime = await crowdsale.openingTime();
           setOpeningTime(openingTime.toString());
@@ -401,7 +401,7 @@ function App() {
           console.error("Error fetching openingTime:", error);
           setOpeningTime("0"); // Default to 0 if error
         }
-    
+
         try {
           const minContribution = await crowdsale.minContribution();
           setMinContribution(ethers.utils.formatUnits(minContribution, 18));
@@ -409,7 +409,7 @@ function App() {
           console.error("Error fetching minContribution:", error);
           setMinContribution("0"); // Default to 0 if error
         }
-    
+
         try {
           const maxContribution = await crowdsale.maxContribution();
           setMaxContribution(ethers.utils.formatUnits(maxContribution, 18));
@@ -418,7 +418,7 @@ function App() {
           setMaxContribution("0"); // Default to 0 if error
         }
       }
-      
+
   } catch (error) {
     // This catches any error during the connection process
     console.error("Error:", error);
@@ -511,7 +511,7 @@ function App() {
         console.log("Auto-resetting loading state after timeout");
         setIsLoading(false);
       }, 5000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [isLoading]);
@@ -566,11 +566,11 @@ function App() {
     }}
   >
       {/* 'Navigation' component - bar always shows at the top */}
-      {/* padding to the top of content so it's not hidden behind the frozen navbar */}      
-      <Navigation 
-        account={account} 
-        isConnected={isConnected} 
-        connectWallet={connectWallet} 
+      {/* padding to the top of content so it's not hidden behind the frozen navbar */}
+      <Navigation
+        account={account}
+        isConnected={isConnected}
+        connectWallet={connectWallet}
         disconnectWallet={disconnectWallet}
         setAppIsLoading={setIsLoading} // Pass the App's setIsLoading function
         checkOwnerStatus={checkOwnerStatus}
@@ -591,7 +591,7 @@ function App() {
       <br/>
       <br/>
       <h4 className="text-center mb-3">Introducing:</h4>
-      <span className="bounce-horizontal" style={{ 
+      <span className="bounce-horizontal" style={{
           display: 'inline-block',
           background: 'linear-gradient(45deg,rgb(83, 200, 255),rgb(254, 107, 225))',
           color: 'white',
@@ -605,15 +605,15 @@ function App() {
         }}>
           <big>🚀</big> A Learning-by-Doing Crypto Asset! <big>🚀</big>
         </span>
-        <br/>        
+        <br/>
       </h3>
       {/* ↑ h3 header with margin for spacing - centered title */}
 
           {/* 'Cancel Loading' button - only show if loading is in progress */}
           <div className="text-center mb-3">
             {isLoading && (
-              <button 
-                className="btn btn-warning" 
+              <button
+                className="btn btn-warning"
                 onClick={() => setIsLoading(false)}
               >
                 Cancel Loading
@@ -632,7 +632,7 @@ function App() {
           <li className="typing-animation typing-delay-4">✅ Exploring DAO governance, staking mechanics, and tokenomics</li>
           <li className="typing-animation typing-delay-5">✅ Testing decentralized tools before going live on mainnet</li>
         </ul>
-        
+
         <p>Whether you're a developer, student, or curious builder, DAPPU gives you the keys to <em>practice before you launch</em>.</p>
 
         <p className="text-center typing-animation typing-delay-6"><strong>
@@ -640,7 +640,7 @@ function App() {
           <span style={{ fontSize: '1.7em' }}>📚</span>&nbsp;&nbsp;All learning&nbsp;&nbsp;
           <span style={{ fontSize: '1.7em' }}>🛜</span>&nbsp;&nbsp;Full decentralization&nbsp;&nbsp;
           <span style={{ fontSize: '1.7em' }}>🔗</span></strong></p>
-        
+
         <h5 className="text-center typing-animation typing-delay-7">
           <span style={{ fontSize: '1.8em' }}>📌</span>&nbsp;&nbsp;Claim your test tokens&nbsp;&nbsp;
           <span style={{ fontSize: '1.8em' }}>🤝</span>&nbsp;&nbsp;Join the experiment&nbsp;&nbsp;
@@ -661,16 +661,16 @@ function App() {
         {isConnected && crowdsale ? (
             <div className="d-flex justify-content-center align-items-center mb-3">
               {/* Show whitelist status and check button on the same line as status indicator */}
-            <span 
+            <span
               className={`py-2 px-4 rounded ${whitelistEnabled ? 'bg-warning text-black' : 'bg-success text-white'}`}
             >
-              <strong>Current Status:</strong> {whitelistEnabled ? 
-                'Whitelist ENABLED - Must be a whitelisted address to buy tokens' : 
+              <strong>Current Status:</strong> {whitelistEnabled ?
+                'Whitelist ENABLED - Must be a whitelisted address to buy tokens' :
                 'Whitelist DISABLED - Anyone can buy tokens! - Live for public sale!'}
             </span>
         {/* Adds modal check after the whitelist status display */}
-            <Button 
-              variant="outline-primary" 
+            <Button
+              variant="outline-primary"
               size="sm"
               className="pulse-check-whitelist-button ms-3"
               onClick={async () => {
@@ -695,7 +695,7 @@ function App() {
           </div>
         ) : (
           <div className="text-center">
-            <span 
+            <span
               className="d-inline-block py-2 px-4 rounded bg-info text-white"
               style={{ margin: '10px auto' }}
               >
@@ -705,8 +705,8 @@ function App() {
         )}
 
         {/* This modal at the bottom of your component, next to the disconnect modal */}
-        <Modal 
-          show={showWhitelistCheckModal} 
+        <Modal
+          show={showWhitelistCheckModal}
           onHide={() => setShowWhitelistCheckModal(false)}
           contentClassName={darkMode ? "bg-dark text-light" : ""}
         >
@@ -717,16 +717,16 @@ function App() {
             {whitelistCheckResult && (
               <>
                 <p><strong>Your Address:</strong> {whitelistCheckResult.address}</p>
-                <p><strong>Whitelist Status:</strong> {whitelistCheckResult.isWhitelisted ? 
-                  <span className="text-success"><strong>✓</strong> The connected wallet <strong>IS</strong> whitelisted</span> : 
+                <p><strong>Whitelist Status:</strong> {whitelistCheckResult.isWhitelisted ?
+                  <span className="text-success"><strong>✓</strong> The connected wallet <strong>IS</strong> whitelisted</span> :
                   <span className="text-danger"><strong>✗</strong> The connected wallet is <strong>NOT</strong> whitelisted</span>}
                 </p>
-                <p><strong>Whitelist Feature:</strong> {whitelistCheckResult.whitelistEnabled ? 
-                  <span className="text-success"><strong>✓ ENABLED</strong> - Only whitelisted addresses can buy tokens</span> : 
+                <p><strong>Whitelist Feature:</strong> {whitelistCheckResult.whitelistEnabled ?
+                  <span className="text-success"><strong>✓ ENABLED</strong> - Only whitelisted addresses can buy tokens</span> :
                   <span className="text-warning"><strong>✗ DISABLED</strong> - Anyone can buy tokens</span>}
                 </p>
                 <div className={`alert ${darkMode ? "alert-dark border-info" : "alert-info"}`}>
-                  {whitelistCheckResult.whitelistEnabled && !whitelistCheckResult.isWhitelisted ? 
+                  {whitelistCheckResult.whitelistEnabled && !whitelistCheckResult.isWhitelisted ?
                     <>The wallet currently connected is <strong>NOT</strong> able to purchase tokens until added to the whitelist
                       &nbsp;<span style={{ fontSize: '1.5em' }}>😩</span> or unless the whitelist becomes disabled.
                       &nbsp;<span style={{ fontSize: '1.5em' }}>👀&nbsp;🤪</span></>:
@@ -747,9 +747,9 @@ function App() {
 
       {/* *** Add 'Admin' component - only show if user is the owner of the crowdsale contract */}
       {isOwner && account && crowdsale && (
-        <Admin 
-          provider={provider} 
-          crowdsale={crowdsale} 
+        <Admin
+          provider={provider}
+          crowdsale={crowdsale}
           setIsLoading={setIsLoading}
           whitelistStatus={whitelistEnabled}
           setWhitelistStatus={setWhitelistEnabled}
@@ -757,12 +757,12 @@ function App() {
         />
       )}
     {/* ↑ Admin component allows the owner to manage the whitelist */}
-    
+
     <hr />
 
       {/* Add Transaction Ledger */}
       {isConnected && crowdsale && (
-        <TransactionLedger 
+        <TransactionLedger
           provider={provider}
           crowdsale={crowdsale}
           account={account}
@@ -770,8 +770,8 @@ function App() {
         />
       )}
 
-    <Modal 
-      show={showDisconnectModal} 
+    <Modal
+      show={showDisconnectModal}
       onHide={() => setShowDisconnectModal(false)}
       contentClassName={darkMode ? "bg-dark text-light" : ""}
     >

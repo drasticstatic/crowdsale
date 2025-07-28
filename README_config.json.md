@@ -84,7 +84,7 @@ During development, you can use JSON5 format which supports comments:
 {
   // This is the token contract address
   "tokenAddress": "0x...",
-  
+
   // This is the crowdsale contract address
   "crowdsaleAddress": "0x..."
 }

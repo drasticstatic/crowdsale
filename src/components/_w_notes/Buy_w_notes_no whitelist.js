@@ -4,7 +4,7 @@
     It handles connecting to the user's wallet and sending the transaction to the blockchain
         The `Buy` component creates a FORM where users can:
             1. Enter the amount of tokens they want to buy
-            2. Click a button to purchase those tokens with ETH (Ethereum) 
+            2. Click a button to purchase those tokens with ETH (Ethereum)
         Browser wallet (like MetaMask) will open and ask to confirm sending ETH to buy tokens.*/
 
 // Import React features and UI components:
@@ -70,7 +70,7 @@ const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
             <Form.Group as={Row}>
                 <Col>
                     {/* Input field where user enters amount of tokens to buy */}
-                    <Form.Control 
+                    <Form.Control
                         type="number" // Input type is number
                         min="1" // Minimum value is 1
                         placeholder="Enter amount"

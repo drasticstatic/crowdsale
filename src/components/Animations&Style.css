@@ -40,7 +40,7 @@
   .navbar.bg-dark:hover {
     box-shadow: 0 8px 14px rgba(19, 105, 204, 0.33);
   }
-  
+
   /* WHITELIST SECTION HOVER EFFECT:
   - This adds a subtle background color change when hovering over whitelist items
   making the list feel more interactive
@@ -68,19 +68,19 @@
   .toggle-button:hover {
     transform: scale(1.05) !important;
   }
-  /* BUY BUTTON HOVER EFFECT: 
+  /* BUY BUTTON HOVER EFFECT:
    - Combines the pulse animation with the hover effect
      to ensure the pulse remains visible even when hovering
    - Makes the Buy Tokens button enlarge more than other buttons on hover
    - Creates a more prominent effect for the primary action button */
    .buy-tokens-button {
     transition: transform 0.5s ease-out !important; /* Slower transition with ease-out timing */
-  }  
+  }
    .buy-tokens-button:hover {
     transform: scale(1.33) !important;
     animation: pulse-buy 0.7s infinite !important;
   }
-  
+
 /* ===== ATTENTION-GRABBING EFFECTS ===== */
 
   /* PULSING ANIMATION FOR IMPORTANT BUTTONS:
@@ -166,7 +166,7 @@
     position: relative;
     z-index: 1;
   }
-  
+
 /* ===== VISUAL STYLING ===== */
 
   /* GRADIENT HEADER FOR ADMIN PANEL:
@@ -195,7 +195,7 @@
     animation: spin-circle 22s linear infinite;
     transform-origin: center;
   }
-  
+
   /* LOGO SPIN ANIMATION:
    - Creates a slow, continuous 360-degree rotation for the DAPPU circle logo
    - The animation completes one full rotation every 20 seconds
@@ -252,7 +252,7 @@
     animation: pulse-circle 11s ease-in-out infinite;
     transform-origin: center;
   }
-  
+
   /* BUY TOKENS TEXT PULSE ANIMATION:
    - Creates a pulsing effect specifically for the Buy Tokens button text
    - Text pulses at a faster rate than the logo text for more attention
@@ -312,7 +312,7 @@
   .typing-delay-7 {
     animation-delay: 2.5s;
   }
-  
+
   /* NAVBAR TYPING ANIMATION
   - First types out the text, then starts bouncing
   - Creates a sequence of animations for a more engaging effect */
@@ -337,7 +337,7 @@
 }
 .bounce-text {
  display: inline-block;
- animation: 
+ animation:
    typing-navbar 1.5s steps(30, end) forwards,
    bounce-text 3s ease-in-out infinite 1.5s;
 }
@@ -442,7 +442,7 @@
     animation: tuned-flash 2s ease-in-out infinite;
     font-weight: bold;
   }
-  
+
   /* KEY SHAKE ANIMATION:
    - Creates a shaking effect for the key emoji
    - Draws attention to the "Open Sale" button

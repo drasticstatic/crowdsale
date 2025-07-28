@@ -15,7 +15,7 @@ module.exports = {
       - Chain ID 1 = Ethereum Mainnet
   - Currency Symbol: ETH
   - Block Explorer URL: http://
-  
+
   - Add a custom token:
     - Token Contract Address: 0x...
     - Token Symbol: DAPPU

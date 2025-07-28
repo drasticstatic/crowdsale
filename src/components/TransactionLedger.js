@@ -18,7 +18,7 @@ const TransactionLedger = ({ provider, crowdsale, account, darkMode }) => {
         const formattedTransactions = await Promise.all(buyEvents.map(async (event) => {
           const block = await event.getBlock();
           const timestamp = new Date(block.timestamp * 1000).toLocaleString();
-          
+
           return {
             txHash: event.transactionHash,
             from: event.args[1],
@@ -76,9 +76,9 @@ const TransactionLedger = ({ provider, crowdsale, account, darkMode }) => {
                   </td>
                   <td>{tx.amount} DAPPU</td>
                   <td>
-                    <a 
-                      href={`https://sepolia.etherscan.io/tx/${tx.txHash}`} 
-                      target="_blank" 
+                    <a
+                      href={`https://sepolia.etherscan.io/tx/${tx.txHash}`}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className={darkMode ? "text-info" : "text-primary"}
                     >

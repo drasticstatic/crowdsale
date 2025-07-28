@@ -7,14 +7,14 @@ import Spinner from 'react-bootstrap/Spinner';
 import { ethers } from 'ethers';
 import './DarkMode.css';
 
-const Buy = ({ provider, 
-    price, 
-    crowdsale, 
-    setIsLoading, 
-    navbarVersion, 
-    darkMode, 
-    isOpen, 
-    minContribution, 
+const Buy = ({ provider,
+    price,
+    crowdsale,
+    setIsLoading,
+    navbarVersion,
+    darkMode,
+    isOpen,
+    minContribution,
     maxContribution
 }) => {
     const [amount, setAmount] = useState('0')
@@ -29,7 +29,7 @@ const Buy = ({ provider,
         try {
             // Get signer first, so it's available for both whitelist check and transaction
             const signer = await provider.getSigner()
-            
+
             // Check if whitelist is enabled and if user is whitelisted:
             const whitelistEnabled = await crowdsale.whitelistEnabled();
             console.log("Whitelist enabled:", whitelistEnabled);
@@ -38,7 +38,7 @@ const Buy = ({ provider,
                 // Only check whitelist if it's enabled
                 const address = await signer.getAddress();
                 const isWhitelisted = await crowdsale.whitelist(address);
-                
+
                 if (!isWhitelisted) {
                     alert("\n You are NOT whitelisted\n   &  therefore cannot purchase tokens.");
                     setIsWaiting(false);
@@ -63,7 +63,7 @@ const Buy = ({ provider,
                     setIsWaiting(false);
                     return;
                 }
-                
+
                 if (parseFloat(amount) > parseFloat(maxContribution)) {
                     alert(`\n    Maximum contribution is set to: ${parseInt(maxContribution).toLocaleString()} tokens`);
                     setIsWaiting(false);
@@ -73,7 +73,7 @@ const Buy = ({ provider,
                 // Round the amount to an integer if the contract doesn't support decimals
                 //const roundedAmount = Math.floor(parseFloat(amount))
                 //console.log(`Original amount: ${amount}, Rounded amount: ${roundedAmount}`)
-                
+
                 // Continue with purchase:
                 //const value = ethers.utils.parseUnits((amount * price).toString(), 'ether')
                 const formattedAmount = ethers.utils.parseUnits(amount.toString(), 'ether')
@@ -87,7 +87,7 @@ const Buy = ({ provider,
                 console.log(`Minimum contribution: ${minContribution} tokens`)
                 console.log(`Formatted amount: ${ethers.utils.formatUnits(formattedAmount, 'ether')} tokens`)
                 console.log(`Is amount > min? ${parseFloat(amount) > parseFloat(minContribution)}`)
-                
+
                 // Check if amount is within limits
                 const minContribWei = ethers.utils.parseUnits(minContribution.toString(), 'ether');
                 const maxContribWei = ethers.utils.parseUnits(maxContribution.toString(), 'ether');
@@ -120,7 +120,7 @@ const Buy = ({ provider,
                         Token amount in wei: 111000000000000000
                         BETH value in wei: 2775000000000000
                         Value with buffer: 2788875000000000*/
-                
+
                 // Execute transaction (with the buffered value):
                 const transaction = await crowdsale.connect(signer).buyTokens(formattedAmount, { value: valueWithBuffer })
                 await transaction.wait()
@@ -131,10 +131,10 @@ const Buy = ({ provider,
         } catch (error) {
             console.error("Purchase error:", error);
             //window.alert('\n Failed to purchase tokens:\n   Transaction reverted: User rejected or not enough funds')
-            
+
             // More detailed error handling:
-            if (error.code === 4001 || 
-                (error.message && error.message.includes("user rejected")) || 
+            if (error.code === 4001 ||
+                (error.message && error.message.includes("user rejected")) ||
                 (error.message && error.message.includes("User denied"))) {
                 alert("\n    Transaction reverted:\n              ↓\n         Request rejected by user");
             } else if (error.message && error.message.includes("insufficient funds")) {
@@ -144,9 +144,9 @@ const Buy = ({ provider,
             } else if (error.message) {
                 // Log the full error message to see what's happening
                 console.log("Full error message:", error.message);
-                
+
                 // Check for various error message formats
-                if (error.message.includes("Amount exceeds maximum contribution") || 
+                if (error.message.includes("Amount exceeds maximum contribution") ||
                     error.message.includes("Maximum contribution is")) {
                     alert(`\n    Maximum contribution per purchase is set to: ${parseInt(maxContribution).toLocaleString()} tokens`);
                 } else if (error.message.includes("execution reverted")) {
@@ -185,7 +185,7 @@ const Buy = ({ provider,
                 <Form onSubmit={buyHandler} style={navbarVersion ? { margin: '0' } : { maxWidth: '800px', margin: '50px auto' }}>
                     <Form.Group as={Row} className="align-items-center mb-2">
                         <Col className='text-center ms-2' style={{ flex: '1.33' }}> {/*Added flex to make it wider */}
-                        <Form.Control 
+                        <Form.Control
                             type="number"
                             min="0.01" // Changed from "1" to "0.01" to allow fractional tokens
                             step="0.001" // Added step attribute to control increment size
@@ -199,11 +199,11 @@ const Buy = ({ provider,
                         {isWaiting ? (
                             <Spinner animation="border" size={navbarVersion ? "sm" : "md"} />
                         ) : (
-                            <Button 
+                            <Button
                             variant="danger" // Change from primary to danger (red)
                             type="submit"
                             className="pulse-buy-button buy-tokens-button"
-                            style={{ 
+                            style={{
                                 width: '111%',
                                 fontWeight: 'bold',
                                 boxShadow: darkMode ? '0 4px 8px rgba(255,255,255,0.2)' : '0 4px 8px rgba(0,0,0,0.2)',

@@ -29,23 +29,23 @@ import config from '../config.json';
 function App() {
   // ===== STATE VARIABLES: =====
     // These variables store data that can change and cause the UI to update
-  
+
   // Blockchain connection states
   const [provider, setProvider] = useState(null)          // Connection to Ethereum network
   const [crowdsale, setCrowdsale] = useState(null)        // Crowdsale contract instance
-  
+
   // User account states
   const [account, setAccount] = useState("")              // User's Ethereum address
     // Changed to empty string vs 'null' for better handling in the UI
       // account is used to display the user's address and balance
       // setAccount is used to update the account state when the user connects their wallet
   const [accountBalance, setAccountBalance] = useState(0) // User's token balance
-  
+
   // Token sale states
   const [price, setPrice] = useState(0)                 // Price per token in ETH
   const [maxTokens, setMaxTokens] = useState(0)         // Total tokens available for sale
   const [tokensSold, setTokensSold] = useState(0)       // Number of tokens already sold
-  
+
   // UI state
   const [isLoading, setIsLoading] = useState(true)      // Controls showing loading spinner
 
@@ -73,10 +73,10 @@ function App() {
       }
 
       // Request account access:
-      await window.ethereum.request({ 
-        method: 'eth_requestAccounts' 
+      await window.ethereum.request({
+        method: 'eth_requestAccounts'
       })
-        
+
         // Check if MetaMask is connected:
         await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length === 0) {
@@ -101,7 +101,7 @@ function App() {
       TOKEN_ABI,                         // ABI (interface) of the token contract
       provider                           // Connection to Ethereum
     )
-    
+
     const crowdsale = new ethers.Contract(
       config[chainId].crowdsale.address, // Address of crowdsale contract
       CROWDSALE_ABI,                     // ABI (interface) of the crowdsale contract
@@ -128,7 +128,7 @@ function App() {
     } else {
       console.log('User is NOT the owner of the crowdsale contract');
     }
-    
+
     // Get the user's token balance
     const accountBalance = ethers.utils.formatUnits(await token.balanceOf(account), 18)
     setAccountBalance(accountBalance)
@@ -175,15 +175,15 @@ function App() {
         <>
           {/* Token price display */}
           <p className='text-center'><strong>Current Price:</strong> {price} ETH</p>
-          
+
           {/* 'Buy component' - allows users to purchase tokens */}
-          <Buy 
-            provider={provider} 
-            price={price} 
-            crowdsale={crowdsale} 
-            setIsLoading={setIsLoading} 
+          <Buy
+            provider={provider}
+            price={price}
+            crowdsale={crowdsale}
+            setIsLoading={setIsLoading}
           />
-          
+
           {/* 'Progress' component - bar showing token sale status */}
           <Progress maxTokens={maxTokens} tokensSold={tokensSold} />
         </>
@@ -198,10 +198,10 @@ function App() {
 
       {/* *** Add 'Admin' component - only show if user is the owner of the crowdsale contract */}
       {isOwner && (
-        <Admin 
-          provider={provider} 
-          crowdsale={crowdsale} 
-          setIsLoading={setIsLoading} 
+        <Admin
+          provider={provider}
+          crowdsale={crowdsale}
+          setIsLoading={setIsLoading}
         />
       )}
     {/* ↑ Admin component allows the owner to manage the whitelist */}

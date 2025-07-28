@@ -2,7 +2,7 @@
 
 /* This component shows a progress bar that visualizes how many tokens have been sold
     To help users understand how much of the token sale is complete
-    
+
 HOW THIS WORKS:
     1. The parent component passes in the current values for maxTokens and tokensSold
     2. This component calculates what percentage of tokens have been sold
@@ -24,11 +24,11 @@ const Progress = ({ maxTokens, tokensSold }) => {
             {/* The ProgressBar component with:
                 - 'now' prop: Sets how full the bar is (calculated as a percentage)
                 - 'label' prop: The text shown on the progress bar */}
-            <ProgressBar 
+            <ProgressBar
                 now={((tokensSold / maxTokens) * 100)} // Calculate percentage of tokens sold
                 label={`${(tokensSold / maxTokens) * 100}%`} // Show percentage as text on the bar
             />
-            
+
             {/* A paragraph showing the exact numbers below the progress bar
                 - 'text-center' centers the text horizontally
                 - 'my-3' adds margin above and below the text */}

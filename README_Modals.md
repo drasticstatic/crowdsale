@@ -82,8 +82,8 @@ The DAPPU Crowdsale application uses several modal dialogs to enhance user exper
 All modals support dark mode through conditional styling:
 
 ```jsx
-<Modal 
-  show={showModal} 
+<Modal
+  show={showModal}
   onHide={() => setShowModal(false)}
   contentClassName={darkMode ? "bg-dark text-light" : ""}
 >
@@ -107,8 +107,8 @@ Status indicators use color-coded text and symbols for better user experience:
 
 ```jsx
 {/* Example of status indicator */}
-<p><strong>Status:</strong> {isActive ? 
-  <span className="text-success"><strong>✓ Active</strong></span> : 
+<p><strong>Status:</strong> {isActive ?
+  <span className="text-success"><strong>✓ Active</strong></span> :
   <span className="text-danger"><strong>✗ Inactive</strong></span>}
 </p>
 ```

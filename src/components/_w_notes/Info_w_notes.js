@@ -15,7 +15,7 @@ const Info = ({ account, accountBalance }) => {
             {/* Display the user's Ethereum wallet address
                 The <strong> tag makes "Account:" appear in bold */}
             <p><strong>Account:</strong> {account}</p>
-            
+
             {/* Display how many tokens the user owns
                 The {accountBalance} displays the actual number passed in from the parent */}
             <p><strong>Tokens Owned:</strong> {accountBalance}</p>
