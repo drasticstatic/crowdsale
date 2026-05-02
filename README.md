@@ -1,5 +1,7 @@
 # Crowdsale Smart Contract Project
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)](https://github.com/drasticstatic/.github)
+
 This project implements an Ethereum-based token crowdsale system using Hardhat and React. It includes:
 
 - A custom ERC-20 compatible token contract
