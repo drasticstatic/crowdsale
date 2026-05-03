@@ -46,6 +46,7 @@ import config from '../config.json';
 
 import './DarkMode.css';
 import './Animations&Style.css'
+import GHPagesBanner from './GHPagesBanner';
 
 function App() {
   // ===== STATE VARIABLES: =====
@@ -561,7 +562,9 @@ function App() {
   // ===== USER INTERFACE =====
     // (What gets displayed on the webpage)
   return (
-    <Container style={{ 
+    <>
+    <GHPagesBanner />
+    <Container style={{
       paddingTop: '355px',
       backgroundColor: darkMode ? '#121212' : 'white',
       color: darkMode ? 'white' : 'black',
@@ -794,6 +797,7 @@ function App() {
     </Modal>
 
     </Container>
+    </>
   );
 }
 
