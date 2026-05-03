@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom/client';// ReactDOM - Handles rendering React co
 import './index.css';// CSS files for styling
 import 'bootstrap/dist/css/bootstrap.css'// Bootstrap - A popular CSS framework for styling
 import App from './components/App';// App - Your main application component
+import DAppGuard from './components/DAppGuard';
 import reportWebVitals from './reportWebVitals';// Performance monitoring tool
 
 // Create the root element where your React app will live:
@@ -21,7 +22,9 @@ root.render(
   <React.StrictMode>
     {/* StrictMode is a development tool that highlights potential problems */}
     {/* App is your main component that contains all other components */}
-    <App />
+    <DAppGuard>
+      <App />
+    </DAppGuard>
   </React.StrictMode>
 );
 

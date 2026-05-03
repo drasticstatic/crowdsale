@@ -204,7 +204,9 @@ function App() {
     console.log("Loading blockchain data...");
     try {
       // ↓ Instantiate Provider AFTER reuesting accounts to connect to Ethereum via MetaMask or other web3 provider
-      const provider = new ethers.providers.Web3Provider(window.ethereum) // Creates a new provider instance
+      const provider = window.ethereum // Creates a new provider instance
+        ? new ethers.providers.Web3Provider(window.ethereum)
+        : new ethers.providers.JsonRpcProvider('https://rpc.sepolia.org')
       // ↑ window.ethereum is injected by MetaMask allowing us to interact with the user's wallet and Ethereum network
       setProvider(provider)
       // ↑ Set the provider in the state so we can use it later
