@@ -7,16 +7,10 @@ function GHPagesBanner() {
     const isGHPages =
       window.location.hostname.endsWith('github.io') ||
       window.location.hostname.endsWith('githubusercontent.com');
-    const dismissed = sessionStorage.getItem('ghpages-banner-dismissed');
-    if (isGHPages && !dismissed) {
+    if (isGHPages) {
       setVisible(true);
     }
   }, []);
-
-  const dismiss = () => {
-    sessionStorage.setItem('ghpages-banner-dismissed', 'true');
-    setVisible(false);
-  };
 
   if (!visible) return null;
 
@@ -51,12 +45,26 @@ function GHPagesBanner() {
           This app is hosted as a <strong style={{ color: '#fff' }}>portfolio showcase</strong>.
           Smart contracts run on a local Hardhat network — live blockchain interaction isn't available here.
         </p>
-        <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, fontSize: '13px', marginBottom: '32px' }}>
+        <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, fontSize: '13px', marginBottom: '16px' }}>
           You can explore the full UI and connect MetaMask, but transactions and on-chain reads
           require the local Hardhat node running on your own machine.
         </p>
+        <p style={{
+          color: 'rgba(255, 200, 100, 0.85)',
+          lineHeight: 1.6,
+          fontSize: '13px',
+          marginBottom: '32px',
+          background: 'rgba(255,200,100,0.08)',
+          borderRadius: '8px',
+          padding: '10px 14px',
+        }}>
+          ⚠️ <strong style={{ color: 'rgba(255,220,120,1)' }}>Safari is not Web3-compatible.</strong>{' '}
+          For wallet connectivity, use <strong style={{ color: '#fff' }}>Chrome</strong>,{' '}
+          <strong style={{ color: '#fff' }}>Firefox</strong>, or{' '}
+          <strong style={{ color: '#fff' }}>Brave</strong> with MetaMask installed.
+        </p>
         <button
-          onClick={dismiss}
+          onClick={() => setVisible(false)}
           style={{
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             border: 'none',

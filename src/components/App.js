@@ -753,7 +753,7 @@ function App() {
         </Modal>
 
       {/* *** Add 'Admin' component - only show if user is the owner of the crowdsale contract */}
-      {isOwner && account && crowdsale && (
+      {account && (isOwner || !crowdsale) && (
         <Admin
           provider={provider}
           crowdsale={crowdsale}
