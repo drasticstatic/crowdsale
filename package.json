@@ -40,7 +40,7 @@
     ]
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@nomicfoundation/hardhat-toolbox": "^7.0.0",
     "hardhat": "^2.10.1"
   },
   "homepage": "https://drasticstatic.github.io/crowdsale"
