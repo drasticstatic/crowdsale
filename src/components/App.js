@@ -255,7 +255,9 @@ function App() {
         // Check if this network exists in config
         if (!config[configKey]) {
           console.error(`\n Network configuration not found for chain ID ${chainId}`);
-          alert(`\n Unsupported network (${chainId}).\n   Please connect to a supported network.`);
+          if (!window.location.hostname.endsWith('github.io')) {
+            alert(`\n Unsupported network (${chainId}).\n   Please connect to a supported network.`);
+          }
           setIsLoading(false);
           return;
         }
