@@ -474,6 +474,8 @@ function App() {
           console.error('Error loading blockchain data:', error) // Stop loading if there's an error
         });
       }
+    } else if (isLoading && !window.ethereum) {
+      setIsLoading(false)
     }
   }, [isLoading, loadBlockchainData, account]);  // The dependency array - effect runs when these values change
 
