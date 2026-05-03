@@ -145,7 +145,7 @@ function GHPagesBanner() {
               onMouseOver={e => e.target.style.color = 'rgba(255,255,255,0.8)'}
               onMouseOut={e => e.target.style.color = 'rgba(255,255,255,0.45)'}
             >
-              View source on GitHub →
+              View source on GitHub ↗
             </a>
           </p>
 
