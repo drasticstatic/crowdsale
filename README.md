@@ -1,6 +1,11 @@
 # Crowdsale Smart Contract Project
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=flat)](https://drasticstatic.github.io/crowdsale)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)](https://github.com/drasticstatic/.github)
+
+**[→ View Live Demo](https://drasticstatic.github.io/crowdsale)**
+
+> **Note:** The live demo runs against a local Hardhat node. Token purchases require the local node running with contracts deployed. The full UI including the admin whitelist panel is explorable with a connected wallet.
 
 This project implements an Ethereum-based token crowdsale system using Hardhat and React. It includes:
 
