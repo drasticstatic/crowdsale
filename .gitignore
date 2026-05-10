@@ -73,6 +73,7 @@ gws-credentials*
 !.eslintrc.json
 !.prettierrc.json
 !hardhat.config.json
+!graphify-out/graph.json
 
 
 # -----------------------------------------------
@@ -239,3 +240,9 @@ __snapshots__/
 .claude/*
 !.claude/skills/
 !.claude/skills-ran-through-makemyskill.com/
+!.claude/settings.json
+
+# Graphify — local-only outputs (graph.json, GRAPH_REPORT.md, graph.html are committed)
+graphify-out/manifest.json
+graphify-out/cost.json
+graphify-out/cache/
