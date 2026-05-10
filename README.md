@@ -2,6 +2,7 @@
 
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=flat)](https://drasticstatic.github.io/crowdsale)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)](https://github.com/drasticstatic/.github)
+[![Deploy](https://github.com/drasticstatic/crowdsale/actions/workflows/deploy.yml/badge.svg)](https://github.com/drasticstatic/crowdsale/actions/workflows/deploy.yml)
 
 **[→ View Live Demo](https://drasticstatic.github.io/crowdsale)**
 
