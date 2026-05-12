@@ -1,5 +1,20 @@
 name: Build and Deploy to GitHub Pages
 
+# NOTE: This repo uses GitHub Pages deploy workflow (not sync-public).
+# Example: crowdsale (this repo) — builds React app and deploys to GitHub Pages
+#
+# Other repos use sync-public.yml for private-to-public mirroring:
+# - divorce-custody-assistant (ALLOWLIST logic)
+# - trading-assistant (DENYLIST logic)
+# - anthropas-argus-alfred (DENYLIST logic)
+# - pir-devine-news (DENYLIST logic)
+# - wilson-lawn-ai-assist (DENYLIST logic)
+# - trading-bot_arbitrage_DAPPUv3_hardhat_UNI-CAKE (DENYLIST logic)
+#
+# .nojekyll: Store in my-template repo until needed. Only add when Jekyll processing
+# interferes with content (files with underscores, certain directory names, etc.).
+# React/Vite sites like this one don't need it. Add on as-needed basis.
+
 on:
   push:
     branches: ["main"]
