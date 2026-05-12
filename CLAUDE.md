@@ -20,6 +20,7 @@
 - Memory files live in `~/.claude/projects/.../memory/` — MEMORY.md auto-loaded each session
 - AGENT-SYNC is private — never reference its contents in public-facing files
 - Cross-repo privacy firewall: Alfred does not pass trading or divorce-custody data between repos without explicit instruction
+- **Commit footer:** every commit includes `Co-Authored-By: [agent] · Claude · [model] <noreply@anthropic.com>` — full model key in `memory/feedback_commit_footer.md`
 
 ---
 
