@@ -20,7 +20,14 @@
 - Memory files live in `~/.claude/projects/.../memory/` — MEMORY.md auto-loaded each session
 - AGENT-SYNC is private — never reference its contents in public-facing files
 - Cross-repo privacy firewall: Alfred does not pass trading or divorce-custody data between repos without explicit instruction
-- **Commit footer:** `Co-Authored-By: Alfred · ClaudeCodeCLI · Anthropic [Sonnet-5/Opus-#/Haiku-#]` (or `· ClaudeCodeCLI · NVIDIA NIM [model]` on NIM) — see `anthropas-argus-alfred/sandbox/AGENT_IDENTITY_REFERENCE.md`
+- **Commit footer:** full fleet convention, shown regardless of whether this repo currently has an Augment Intent workspace pairing or NIM in active use — see `anthropas-argus-alfred/sandbox/AGENT_IDENTITY_REFERENCE.md` and `INTENT_WORKTREE_LEGEND.md` for the full rule:
+  - Alfred-Anthropic: `Co-Authored-By: Alfred · ClaudeCodeCLI · Anthropic [Sonnet-5/Opus-#/Haiku-#]`
+  - Alfred-NIM: `Co-Authored-By: Alfred · ClaudeCodeCLI · NVIDIA NIM [model]`
+  - Kavanah-AugmentIntentUI-AuggieLogin: `Co-Authored-By: Kavanah · AugmentIntent · [model]`
+  - Kavanah-AugmentIntentUI-AnthropicLogin ("ClaudeMent"): `Co-Authored-By: Kavanah · ClaudeMent · Anthropic [model]`
+  - Kavanah-TerminalUI(macOS/Intent/VSCode standard terminal instance)-AnthropicLogin: `Co-Authored-By: Kavanah · ClaudeCodeCLI · Anthropic [model]`
+  - Mystarch (app-level, cross-workspace reach): same engine options as Kavanah, swap the agent name
+  - Auggie (native Augment CLI — hibernating, may return): `Co-Authored-By: Auggie · AugmentCLI · [model]`
 
 ---
 
