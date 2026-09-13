@@ -51,7 +51,9 @@ the commit-attribution hook stays inert until this clone is pointed at `.githook
 - Cross-repo privacy firewall: Alfred does not pass trading or divorce-custody data between repos without explicit instruction
 - **Commit footer:** full fleet convention, shown regardless of whether this repo currently has an Augment Intent workspace pairing or NIM in active use — see `anthropas-argus-alfred/sandbox/AGENT_IDENTITY_REFERENCE.md` and `INTENT_WORKTREE_LEGEND.md` for the full rule:
   - Alfred-Anthropic: `Co-Authored-By: Alfred · ClaudeCodeCLI · Anthropic [Sonnet-5/Opus-#/Haiku-#]`
-  - Alfred-NIM: `Co-Authored-By: Alfred · ClaudeCodeCLI · NVIDIA NIM [model]`
+  - Alfred-NIM: `Co-Authored-By: Alfred-NIM · ClaudeCodeCLI · NVIDIA NIM · Z.ai [GLM-4.7]`
+  (gateway then provider — `NVIDIA NIM` routes, `Z.ai` makes GLM; `Moonshot AI` for Kimi,
+  `MiniMax` for MiniMax. Only those three have ever served through the proxy.)
   - Kavanah-AugmentIntentUI-AuggieLogin: `Co-Authored-By: Kavanah · AugmentIntent · [model]`
   - Kavanah-AugmentIntentUI-AnthropicLogin ("ClaudeMent"): `Co-Authored-By: Kavanah · ClaudeMent · Anthropic [model]`
   - Kavanah-TerminalUI(macOS/Intent/VSCode standard terminal instance)-AnthropicLogin: `Co-Authored-By: Kavanah · ClaudeCodeCLI · Anthropic [model]`
@@ -89,11 +91,17 @@ See `AGENT-SYNC/CROSS_REPO_RULES.md` in `trading-assistant` for full governance.
 Every commit must carry two git trailers:
 
 ```
-Co-Authored-By: <Agent> · <Engine> · <Provider> [<Model>]
+Co-Authored-By: <Agent> · <Engine> · <Provider> [<Model>]                  # direct
+Co-Authored-By: <Agent> · <Engine> · <Gateway> · <Provider> [<Model>]      # proxied
 <Platform>-Session: <full session URL>
 ```
 
-Four fields, model in **square brackets**, separator is U+00B7 MIDDLE DOT ( · ). The session
+Model in **square brackets**, separator is U+00B7 MIDDLE DOT ( · ). Add `<Gateway>` **only when
+inference is proxied** — it names what *routed* the request (`NVIDIA NIM`, `OpenRouter`), never who
+made the model (`Z.ai`, `Moonshot AI`, `MiniMax`). The field order mirrors the `/model` selector
+string, so `anthropic/nvidia_nim/z-ai/glm4.7` transcribes to `NVIDIA NIM · Z.ai [GLM-4.7]` —
+read it left to right rather than memorising it. Local runtimes (`Ollama`, `llama.cpp`,
+`LM Studio`) have no gateway: the weights ran on your machine, so the runtime is the Provider. The session
 trailer is a **separate** line — folding it onto the `Co-Authored-By:` line breaks git trailer
 parsing. Use the full session URL, never a truncated prefix. Key varies by platform:
 `Claude-Session:` for Claude Code CLI, `Cosmos-Session:` for Cosmos.
@@ -104,5 +112,5 @@ parsing. Use the full session URL, never a truncated prefix. Key varies by platf
 sh scripts/install-hooks.sh
 ```
 
-Human-only commits: `git commit --no-verify`. Canonical convention and rationale:
+Human-only commits: `git commit --no-verify`. **Canonical spec — single source of truth. Do not restate the field table locally; link it:**
 [`my-template/AGENT-SYNC/README.md`](https://github.com/drasticstatic/my-template/blob/main/AGENT-SYNC/README.md)
