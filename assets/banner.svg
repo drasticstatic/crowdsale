@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-labelledby="t d">
+  <title id="t">crowdsale</title>
+  <desc id="d">Token, sale contract, React frontend, tests The picture: a 4-sided figure draws itself and its corners arrive one by one. With reduced motion, the finished picture shows at once.</desc>
+  <style>
+    /* Motion only for readers who have not asked for less. Outside this block everything is in its finished state. */
+    @media (prefers-reduced-motion: no-preference) {
+      .draw { stroke-dasharray: 100; animation: draw 2.6s cubic-bezier(.4,0,.2,1) both; }
+      .arrive { animation: arrive .5s ease-out both; }
+      .breathe { transform-box: fill-box; transform-origin: center; animation: breathe 8s steps(48) 3s infinite; }
+      .halo { transform-box: fill-box; transform-origin: center; animation: halo 5s steps(60) 3.6s infinite; }
+    }
+    @keyframes draw { from { stroke-dashoffset: 100 } to { stroke-dashoffset: 0 } }
+    @keyframes arrive { from { opacity: 0 } to { opacity: 1 } }
+    @keyframes breathe { 0%, 100% { transform: scale(1) } 50% { transform: scale(1.07) } }
+    @keyframes halo { 0% { opacity: .55; transform: scale(1) } 70%, 100% { opacity: 0; transform: scale(2.1) } }
+    .halo { opacity: 0 }
+  </style>
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a2230"/><stop offset="1" stop-color="#101622"/></linearGradient>
+    <linearGradient id="line" gradientUnits="userSpaceOnUse" x1="668" y1="0" x2="1160" y2="0"><stop offset="0.00" stop-color="#8a6a2a"/><stop offset="0.50" stop-color="#d9a441"/><stop offset="1.00" stop-color="#e6d1a6"/></linearGradient>
+    <linearGradient id="fade" gradientUnits="userSpaceOnUse" x1="620" y1="0" x2="1200" y2="0"><stop offset="0" stop-color="#d9a441" stop-opacity="0"/><stop offset=".35" stop-color="#d9a441"/><stop offset="1" stop-color="#e6d1a6"/></linearGradient>
+    <clipPath id="card"><rect width="1200" height="260" rx="18"/></clipPath>
+  </defs>
+  <g clip-path="url(#card)">
+    <!-- an opaque ground: the same picture on GitHub's light and dark themes -->
+    <rect width="1200" height="260" fill="url(#ground)"/>
+    <path d="M1015.9 171.1 L941.7 153.1 L959.6 78.9 L1033.9 96.9Z" fill="#403c33" fill-opacity=".35" stroke="#705c38" stroke-width="1.5"/>
+    <path d="M987.8 125.0L1075.3 146.2" stroke="#403c33" stroke-width="1"/>
+    <path d="M987.8 125.0L966.6 212.5" stroke="#403c33" stroke-width="1"/>
+    <path d="M987.8 125.0L900.3 103.8" stroke="#403c33" stroke-width="1"/>
+    <path d="M987.8 125.0L1008.9 37.5" stroke="#403c33" stroke-width="1"/>
+    <path class="draw" pathLength="100" d="M1075.3 146.2 L966.6 212.5 L900.3 103.8 L1008.9 37.5Z" fill="none" stroke="url(#line)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:0.30s"/>
+    <circle class="arrive" style="animation-delay:0.35s" cx="1075.3" cy="146.2" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
+    <circle class="arrive" style="animation-delay:1.07s" cx="966.6" cy="212.5" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
+    <circle class="arrive" style="animation-delay:1.80s" cx="900.3" cy="103.8" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
+    <circle class="arrive" style="animation-delay:2.52s" cx="1008.9" cy="37.5" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
+    <circle class="halo" cx="987.8" cy="125.0" r="12" fill="none" stroke="#e6d1a6" stroke-width="2"/>
+    <circle class="breathe" cx="987.8" cy="125.0" r="10" fill="#d9a441"/>
+    <rect x="0.0" y="248" width="300.5" height="12" fill="#334155"/><rect x="300.0" y="248" width="300.5" height="12" fill="#8a6a2a"/><rect x="600.0" y="248" width="300.5" height="12" fill="#d9a441"/><rect x="900.0" y="248" width="300.5" height="12" fill="#f1f5f9"/>
+    <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif"><text x="56" y="72.0" fill="#d9a441" font-size="15" font-weight="700" letter-spacing=".6">DappU mentorship</text><text x="56" y="137.6" fill="#f1f5f9" font-size="60" font-weight="700" letter-spacing="-.5">crowdsale</text><text x="56" y="181.4" fill="#d3d7dd" font-size="23">Token, sale contract, React frontend, tests</text></g>
+  </g>
+</svg>
