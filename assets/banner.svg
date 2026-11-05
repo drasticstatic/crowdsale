@@ -16,27 +16,29 @@
     .halo { opacity: 0 }
   </style>
   <defs>
-    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a2230"/><stop offset="1" stop-color="#101622"/></linearGradient>
-    <linearGradient id="line" gradientUnits="userSpaceOnUse" x1="668" y1="0" x2="1160" y2="0"><stop offset="0.00" stop-color="#8a6a2a"/><stop offset="0.50" stop-color="#d9a441"/><stop offset="1.00" stop-color="#e6d1a6"/></linearGradient>
-    <linearGradient id="fade" gradientUnits="userSpaceOnUse" x1="620" y1="0" x2="1200" y2="0"><stop offset="0" stop-color="#d9a441" stop-opacity="0"/><stop offset=".35" stop-color="#d9a441"/><stop offset="1" stop-color="#e6d1a6"/></linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a1a2e"/><stop offset="1" stop-color="#0f3460"/></linearGradient>
+    <linearGradient id="line" gradientUnits="userSpaceOnUse" x1="668" y1="0" x2="1160" y2="0"><stop offset="0.00" stop-color="#804c5a"/><stop offset="0.50" stop-color="#b87082"/><stop offset="1.00" stop-color="#ddb5bf"/></linearGradient>
+    <linearGradient id="fade" gradientUnits="userSpaceOnUse" x1="620" y1="0" x2="1200" y2="0"><stop offset="0" stop-color="#b87082" stop-opacity="0"/><stop offset=".35" stop-color="#b87082"/><stop offset="1" stop-color="#ddb5bf"/></linearGradient>
     <clipPath id="card"><rect width="1200" height="260" rx="18"/></clipPath>
+    <radialGradient id="ember" gradientUnits="userSpaceOnUse" cx="962" cy="124" r="390"><stop offset="0" stop-color="#800020" stop-opacity=".8"/><stop offset=".6" stop-color="#5c1a2b" stop-opacity=".45"/><stop offset="1" stop-color="#5c1a2b" stop-opacity="0"/></radialGradient>
   </defs>
   <g clip-path="url(#card)">
     <!-- an opaque ground: the same picture on GitHub's light and dark themes -->
     <rect width="1200" height="260" fill="url(#ground)"/>
-    <path d="M1015.9 171.1 L941.7 153.1 L959.6 78.9 L1033.9 96.9Z" fill="#403c33" fill-opacity=".35" stroke="#705c38" stroke-width="1.5"/>
-    <path d="M987.8 125.0L1075.3 146.2" stroke="#403c33" stroke-width="1"/>
-    <path d="M987.8 125.0L966.6 212.5" stroke="#403c33" stroke-width="1"/>
-    <path d="M987.8 125.0L900.3 103.8" stroke="#403c33" stroke-width="1"/>
-    <path d="M987.8 125.0L1008.9 37.5" stroke="#403c33" stroke-width="1"/>
+    <rect width="1200" height="260" fill="url(#ember)"/>
+    <path d="M1015.9 171.1 L941.7 153.1 L959.6 78.9 L1033.9 96.9Z" fill="#3a2b3f" fill-opacity=".35" stroke="#614154" stroke-width="1.5"/>
+    <path d="M987.8 125.0L1075.3 146.2" stroke="#3a2b3f" stroke-width="1"/>
+    <path d="M987.8 125.0L966.6 212.5" stroke="#3a2b3f" stroke-width="1"/>
+    <path d="M987.8 125.0L900.3 103.8" stroke="#3a2b3f" stroke-width="1"/>
+    <path d="M987.8 125.0L1008.9 37.5" stroke="#3a2b3f" stroke-width="1"/>
     <path class="draw" pathLength="100" d="M1075.3 146.2 L966.6 212.5 L900.3 103.8 L1008.9 37.5Z" fill="none" stroke="url(#line)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:0.30s"/>
-    <circle class="arrive" style="animation-delay:0.35s" cx="1075.3" cy="146.2" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
-    <circle class="arrive" style="animation-delay:1.07s" cx="966.6" cy="212.5" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
-    <circle class="arrive" style="animation-delay:1.80s" cx="900.3" cy="103.8" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
-    <circle class="arrive" style="animation-delay:2.52s" cx="1008.9" cy="37.5" r="7" fill="#101622" stroke="#e6d1a6" stroke-width="2.5"/>
-    <circle class="halo" cx="987.8" cy="125.0" r="12" fill="none" stroke="#e6d1a6" stroke-width="2"/>
-    <circle class="breathe" cx="987.8" cy="125.0" r="10" fill="#d9a441"/>
-    <rect x="0.0" y="248" width="300.5" height="12" fill="#334155"/><rect x="300.0" y="248" width="300.5" height="12" fill="#8a6a2a"/><rect x="600.0" y="248" width="300.5" height="12" fill="#d9a441"/><rect x="900.0" y="248" width="300.5" height="12" fill="#f1f5f9"/>
-    <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif"><text x="56" y="72.0" fill="#d9a441" font-size="15" font-weight="700" letter-spacing=".6">DappU mentorship</text><text x="56" y="137.6" fill="#f1f5f9" font-size="60" font-weight="700" letter-spacing="-.5">crowdsale</text><text x="56" y="181.4" fill="#d3d7dd" font-size="23">Token, sale contract, React frontend, tests</text></g>
+    <circle class="arrive" style="animation-delay:0.35s" cx="1075.3" cy="146.2" r="7" fill="#121424" stroke="#ddb5bf" stroke-width="2.5"/>
+    <circle class="arrive" style="animation-delay:1.07s" cx="966.6" cy="212.5" r="7" fill="#121424" stroke="#ddb5bf" stroke-width="2.5"/>
+    <circle class="arrive" style="animation-delay:1.80s" cx="900.3" cy="103.8" r="7" fill="#121424" stroke="#ddb5bf" stroke-width="2.5"/>
+    <circle class="arrive" style="animation-delay:2.52s" cx="1008.9" cy="37.5" r="7" fill="#121424" stroke="#ddb5bf" stroke-width="2.5"/>
+    <circle class="halo" cx="987.8" cy="125.0" r="12" fill="none" stroke="#ddb5bf" stroke-width="2"/>
+    <circle class="breathe" cx="987.8" cy="125.0" r="10" fill="#b87082"/>
+    <rect x="0.0" y="248" width="300.5" height="12" fill="#1a1a2e"/><rect x="300.0" y="248" width="300.5" height="12" fill="#5c1a2b"/><rect x="600.0" y="248" width="300.5" height="12" fill="#800020"/><rect x="900.0" y="248" width="300.5" height="12" fill="#fbeef1"/>
+    <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif"><text x="56" y="72.0" fill="#c78f9d" font-size="15" font-weight="700" letter-spacing=".6">DappU mentorship</text><text x="56" y="137.6" fill="#fbeef1" font-size="60" font-weight="700" letter-spacing="-.5">crowdsale</text><text x="56" y="181.4" fill="#dcd0d6" font-size="23">Token, sale contract, React frontend, tests</text></g>
   </g>
 </svg>

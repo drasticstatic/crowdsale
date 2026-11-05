@@ -5,10 +5,10 @@
 
 # Crowdsale Smart Contract Project
 
-![Status](https://img.shields.io/badge/Status-class_project-d9a441?style=flat-square)
+![Status](https://img.shields.io/badge/Status-class_project-800020?style=flat-square)
 ![For](https://img.shields.io/badge/For-Web3_learners-64748b?style=flat-square)
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=flat)](https://drasticstatic.github.io/crowdsale)
-[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)](https://github.com/drasticstatic/.github)
+[![Live Demo](https://img.shields.io/badge/demo-live-5c1a2b?style=flat)](https://drasticstatic.github.io/crowdsale)
+[![License: MIT](https://img.shields.io/badge/license-MIT-1a1a2e?style=flat)](https://github.com/drasticstatic/.github)
 [![Deploy](https://github.com/drasticstatic/crowdsale/actions/workflows/deploy.yml/badge.svg)](https://github.com/drasticstatic/crowdsale/actions/workflows/deploy.yml)
 
 <img src="assets/icons/map-pin.svg" width="16" height="16" alt=""> **You are here:** drasticstatic lab › DappU coursework › `crowdsale` · public · `main` is the working branch
