@@ -48,7 +48,7 @@ the commit-attribution hook stays inert until this clone is pointed at `.githook
 
 - Memory files live in `~/.claude/projects/.../memory/` — MEMORY.md auto-loaded each session
 - AGENT-SYNC is private — never reference its contents in public-facing files
-- Cross-repo privacy firewall: Alfred does not pass trading or divorce-custody data between repos without explicit instruction
+- Cross-repo privacy firewall: Alfred does not pass trading or family-matters data between repos without explicit instruction
 - **Commit footer:** full fleet convention, shown regardless of whether this repo currently has an Augment Intent workspace pairing or NIM in active use — see `anthropas-argus-alfred/sandbox/AGENT_IDENTITY_REFERENCE.md` and `INTENT_WORKTREE_LEGEND.md` for the full rule:
   - Alfred-Anthropic: `Co-Authored-By: Alfred · ClaudeCodeCLI · Anthropic [Sonnet-5/Opus-#/Haiku-#]`
   - Alfred-NIM: `Co-Authored-By: Alfred-NIM · ClaudeCodeCLI · NVIDIA NIM · Z.ai [GLM-4.7]`
